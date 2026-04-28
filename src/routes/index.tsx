@@ -112,7 +112,7 @@ function ChordGenerator() {
         const endString = Math.max(dragStart.string, dragEnd.string);
         setBarres(prev => {
           const filtered = prev.filter(b => b.fret !== fret);
-          return [...filtered, { fret, startString, endString }];
+          return [...filtered, { fret, startString, endString, color: markerColor, label: "" }];
         });
       } else {
         const existingBarre = barres.find(b => b.fret === dragStart.fret && dragStart.string >= b.startString && dragStart.string <= b.endString);
