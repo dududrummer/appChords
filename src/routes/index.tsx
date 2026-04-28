@@ -300,7 +300,7 @@ function ChordGenerator() {
         {lines}{nutElements}{barreElements}{interactiveElements}{stringNameElements}
         {startingFret > 1 && (
           <text x={fretLabelX} y={fretLabelY} textAnchor={isVertical ? "end" : "middle"} dominantBaseline={isVertical ? "middle" : "auto"} fill={primaryColor} style={{ fontSize: fontSize[0] * 0.8 }}>
-            {startingFret}fr
+            {startingFret}ª
           </text>
         )}
       </svg>
@@ -320,7 +320,7 @@ function ChordGenerator() {
         {lines}{nutElements}{barreElements}{interactiveElements}{stringNameElements}
         {startingFret > 1 && (
           <text x={fretLabelX} y={fretLabelY} textAnchor={isVertical ? "end" : "middle"} dominantBaseline={isVertical ? "middle" : "auto"} fill={primaryColor} style={{ fontSize: fontSize[0] * 0.8 }}>
-            {startingFret}fr
+            {startingFret}ª
           </text>
         )}
       </svg>
@@ -373,7 +373,11 @@ function ChordGenerator() {
               </div>
               <div className="space-y-4">
                 <Label>Tamanho Fonte ({fontSize}px)</Label>
-                <Slider value={fontSize} onValueChange={setFontSize} min={8} max={24} step={1} />
+                <Slider value={fontSize} onValueChange={setFontSize} min={8} max={36} step={1} />
+              </div>
+              <div className="space-y-4">
+                <Label>Fonte no Marcador ({labelFontSize}px)</Label>
+                <Slider value={labelFontSize} onValueChange={setLabelFontSize} min={6} max={24} step={1} />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2"><Label>Cor Principal</Label><Input type="color" value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} className="h-10 p-1" /></div>
