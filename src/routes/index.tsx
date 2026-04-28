@@ -346,10 +346,14 @@ function ChordGenerator() {
               <div className="space-y-2"><Label>Cordas</Label><Input type="number" value={stringCount} onChange={(e) => setStringCount(Number(e.target.value))} /></div>
               
               <div className="space-y-2">
-                <Label>Orientação</Label>
-                <ToggleGroup type="single" value={orientation} onValueChange={(v) => v && setOrientation(v as any)} className="justify-start">
-                  <ToggleGroupItem value="vertical" className="px-3">Vertical</ToggleGroupItem>
-                  <ToggleGroupItem value="horizontal" className="px-3">Horizontal</ToggleGroupItem>
+                <Label>Orientação do Diagrama</Label>
+                <ToggleGroup type="single" value={orientation} onValueChange={(v) => v && setOrientation(v as any)} className="justify-start border p-1 rounded-md w-fit">
+                  <ToggleGroupItem value="vertical" className="px-3 gap-2" title="Vertical">
+                    <Rows className="h-4 w-4" /> <span>Vertical</span>
+                  </ToggleGroupItem>
+                  <ToggleGroupItem value="horizontal" className="px-3 gap-2" title="Horizontal">
+                    <Columns className="h-4 w-4" /> <span>Horizontal</span>
+                  </ToggleGroupItem>
                 </ToggleGroup>
               </div>
               <div className="space-y-4">
