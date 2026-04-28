@@ -234,7 +234,7 @@ function ChordGenerator() {
           if (marker) {
             interactiveElements.push(
               <g key={`cell-${s}-${f}`}>
-                {renderShape(false, marker.color || primaryColor)}
+                {renderShape(false, marker.color || markerColor)}
                 <text x={x} y={y} textAnchor="middle" dominantBaseline="central" fill={bgColor} style={{ fontSize: labelFontSize[0], fontWeight: 'bold' }}>{marker.label}</text>
               </g>
             );
