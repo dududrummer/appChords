@@ -21,6 +21,12 @@ interface NutIndicator {
   type: "none" | "open" | "muted";
 }
 
+interface Barre {
+  fret: number;
+  startString: number;
+  endString: number;
+}
+
 export const Route = createFileRoute("/")({
   component: ChordGenerator,
 });
@@ -39,6 +45,9 @@ function ChordGenerator() {
   const [markers, setMarkers] = useState<Marker[]>([]);
   const [markerShape, setMarkerShape] = useState("circle");
   const [nutIndicators, setNutIndicators] = useState<NutIndicator[]>([]);
+  const [barres, setBarres] = useState<Barre[]>([]);
+  const [dragStart, setDragStart] = useState<{ fret: number; string: number } | null>(null);
+  const [dragEnd, setDragEnd] = useState<{ fret: number; string: number } | null>(null);
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
@@ -66,6 +75,7 @@ function ChordGenerator() {
   };
 
   const toggleMarker = (stringIndex: number, fretIndex: number) => {
+    // If it's a simple click (no drag), toggle marker
     setMarkers((prev) => {
       const exists = prev.find((m) => m.string === stringIndex && m.fret === fretIndex);
       if (exists) {
@@ -73,6 +83,44 @@ function ChordGenerator() {
       }
       return [...prev, { string: stringIndex, fret: fretIndex }];
     });
+  };
+
+  const onMouseDown = (stringIndex: number, fretIndex: number) => {
+    setDragStart({ string: stringIndex, fret: fretIndex });
+    setDragEnd({ string: stringIndex, fret: fretIndex });
+  };
+
+  const onMouseEnter = (stringIndex: number, fretIndex: number) => {
+    if (dragStart) {
+      setDragEnd({ string: stringIndex, fret: fretIndex });
+    }
+  };
+
+  const onMouseUp = () => {
+    if (dragStart && dragEnd && dragStart.fret === dragEnd.fret) {
+      if (dragStart.string !== dragEnd.string) {
+        // Created a barre
+        const fret = dragStart.fret;
+        const startString = Math.min(dragStart.string, dragEnd.string);
+        const endString = Math.max(dragStart.string, dragEnd.string);
+        
+        setBarres(prev => {
+          // Remove any existing barre on the same fret
+          const filtered = prev.filter(b => b.fret !== fret);
+          return [...filtered, { fret, startString, endString }];
+        });
+      } else {
+        // Simple click - check if we clicked an existing barre to remove it
+        const existingBarre = barres.find(b => b.fret === dragStart.fret && dragStart.string >= b.startString && dragStart.string <= b.endString);
+        if (existingBarre) {
+          setBarres(prev => prev.filter(b => b !== existingBarre));
+        } else {
+          toggleMarker(dragStart.string, dragStart.fret);
+        }
+      }
+    }
+    setDragStart(null);
+    setDragEnd(null);
   };
 
   const svgWidth = 300;
@@ -157,6 +205,50 @@ function ChordGenerator() {
       );
     }
 
+    // Barres
+    const barreElements = [];
+    barres.forEach((barre, idx) => {
+      const xStart = margin + barre.startString * stringDistance;
+      const xEnd = margin + barre.endString * stringDistance;
+      const y = margin + (barre.fret - 0.5) * fretDistance;
+      const height = (markerSize[0] / 200) * Math.min(stringDistance, fretDistance) * 2;
+      
+      barreElements.push(
+        <rect
+          key={`barre-${idx}`}
+          x={xStart - height / 2}
+          y={y - height / 2}
+          width={xEnd - xStart + height}
+          height={height}
+          rx={height / 2}
+          fill={primaryColor}
+          className="cursor-pointer"
+        />
+      );
+    });
+
+    // Preview barre while dragging
+    if (dragStart && dragEnd && dragStart.fret === dragEnd.fret && dragStart.string !== dragEnd.string) {
+      const xStart = margin + Math.min(dragStart.string, dragEnd.string) * stringDistance;
+      const xEnd = margin + Math.max(dragStart.string, dragEnd.string) * stringDistance;
+      const y = margin + (dragStart.fret - 0.5) * fretDistance;
+      const height = (markerSize[0] / 200) * Math.min(stringDistance, fretDistance) * 2;
+      
+      barreElements.push(
+        <rect
+          key="barre-preview"
+          x={xStart - height / 2}
+          y={y - height / 2}
+          width={xEnd - xStart + height}
+          height={height}
+          rx={height / 2}
+          fill={primaryColor}
+          fillOpacity="0.4"
+          style={{ pointerEvents: 'none' }}
+        />
+      );
+    }
+
     // Hitboxes and Markers
     const interactiveElements = [];
     for (let s = 0; s < stringCount; s++) {
@@ -185,14 +277,19 @@ function ChordGenerator() {
         };
 
         interactiveElements.push(
-          <g key={`cell-${s}-${f}`} className="cursor-pointer group">
+          <g 
+            key={`cell-${s}-${f}`} 
+            className="cursor-pointer group"
+            onMouseDown={() => onMouseDown(s, f)}
+            onMouseEnter={() => onMouseEnter(s, f)}
+            onMouseUp={onMouseUp}
+          >
             <rect
               x={x - stringDistance / 2}
               y={margin + (f - 1) * fretDistance}
               width={stringDistance}
               height={fretDistance}
               fill="transparent"
-              onClick={() => toggleMarker(s, f)}
             />
             
             {!marker && renderShape(true)}
@@ -247,6 +344,7 @@ function ChordGenerator() {
       >
         {lines}
         {nutElements}
+        {barreElements}
         {interactiveElements}
         {chordTitle && (
           <text
@@ -286,6 +384,9 @@ function ChordGenerator() {
     markers,
     markerShape,
     nutIndicators,
+    barres,
+    dragStart,
+    dragEnd,
     stringDistance,
     fretDistance,
     chartWidth,
