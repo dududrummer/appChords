@@ -326,7 +326,7 @@ function ChordGenerator() {
         )}
       </svg>
     );
-  }, [chordTitle, startingFret, fretCount, stringCount, markerSize, strokeWidth, fontSize, primaryColor, bgColor, markers, markerShape, nutIndicators, barres, stringNames, orientation, taper]);
+  }, [chordTitle, startingFret, fretCount, stringCount, markerSize, strokeWidth, fontSize, primaryColor, markerColor, bgColor, markers, markerShape, nutIndicators, barres, stringNames, orientation, taper]);
 
   const downloadFilename = (chordTitle || "chord").toLowerCase().replace(/[^a-z0-9]/g, "-");
 
