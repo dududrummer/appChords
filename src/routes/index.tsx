@@ -380,10 +380,49 @@ function ChordGenerator() {
                 <Label>Fonte no Marcador ({labelFontSize}px)</Label>
                 <Slider value={labelFontSize} onValueChange={setLabelFontSize} min={6} max={24} step={1} />
               </div>
-              <div className="grid grid-cols-3 gap-4">
-                <div className="space-y-2"><Label>Cor Principal</Label><Input type="color" value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} className="h-10 p-1 w-full" /></div>
-                <div className="space-y-2"><Label>Cor Forma</Label><Input type="color" value={markerColor} onChange={(e) => setMarkerColor(e.target.value)} className="h-10 p-1 w-full" /></div>
-                <div className="space-y-2"><Label>Cor Fundo</Label><Input type="color" value={bgColor} onChange={(e) => setBgColor(e.target.value)} className="h-10 p-1 w-full" /></div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="space-y-2">
+                  <Label>Cor Principal</Label>
+                  <div className="flex flex-wrap gap-1">
+                    {["#000000", "#3b82f6", "#22c55e", "#a855f7", "#f97316", "#eab308"].map((c) => (
+                      <button
+                        key={c}
+                        className={`w-8 h-8 rounded-full border-2 transition-transform hover:scale-110 ${primaryColor === c ? "border-primary" : "border-transparent"}`}
+                        style={{ backgroundColor: c }}
+                        onClick={() => setPrimaryColor(c)}
+                        title={c}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label>Cor Forma</Label>
+                  <div className="flex flex-wrap gap-1">
+                    {["#000000", "#3b82f6", "#22c55e", "#a855f7", "#f97316", "#eab308"].map((c) => (
+                      <button
+                        key={c}
+                        className={`w-8 h-8 rounded-full border-2 transition-transform hover:scale-110 ${markerColor === c ? "border-primary" : "border-transparent"}`}
+                        style={{ backgroundColor: c }}
+                        onClick={() => setMarkerColor(c)}
+                        title={c}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label>Cor Fundo</Label>
+                  <div className="flex flex-wrap gap-1">
+                    {["#ffffff", "#f8fafc", "#f1f5f9", "#e2e8f0", "#000000", "#1a1a1a"].map((c) => (
+                      <button
+                        key={c}
+                        className={`w-8 h-8 rounded-full border-2 transition-transform hover:scale-110 ${bgColor === c ? "border-primary" : "border-transparent"}`}
+                        style={{ backgroundColor: c }}
+                        onClick={() => setBgColor(c)}
+                        title={c}
+                      />
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
             <div className="space-y-2">
