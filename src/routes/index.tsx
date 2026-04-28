@@ -112,7 +112,7 @@ function ChordGenerator() {
         } else {
           const exists = markers.find(m => m.string === dragStart.string && m.fret === dragStart.fret);
           if (!exists) {
-            setMarkers(prev => [...prev, { string: dragStart.string, fret: dragStart.fret, label: "", color: primaryColor }]);
+            setMarkers(prev => [...prev, { string: dragStart.string, fret: dragStart.fret, label: "", color: markerColor }]);
           }
         }
       }
