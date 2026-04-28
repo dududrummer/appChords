@@ -198,12 +198,12 @@ function ChordGenerator() {
     barres.forEach((barre, idx) => {
       const pStart = getCoords(barre.startString, barre.fret - 0.5);
       const pEnd = getCoords(barre.endString, barre.fret - 0.5);
-      const height = (markerSize[0] / 200) * Math.min(stringDistance, fretDistance) * 2;
+      const thickness = (markerSize[0] / 200) * Math.min(stringDistance, fretDistance) * 2;
       
       if (isVertical) {
-        barreElements.push(<rect key={`barre-${idx}`} x={pStart.x - height / 2} y={pStart.y - height / 2} width={pEnd.x - pStart.x + height} height={height} rx={height / 2} fill={primaryColor} />);
+        barreElements.push(<rect key={`barre-${idx}`} x={pStart.x - thickness / 2} y={pStart.y - thickness / 2} width={pEnd.x - pStart.x + thickness} height={thickness} rx={thickness / 2} fill={primaryColor} />);
       } else {
-        barreElements.push(<rect key={`barre-${idx}`} x={pStart.x - height / 2} y={pStart.y - height / 2} width={pEnd.x - pStart.x + height} height={height} rx={height / 2} fill={primaryColor} transform={`rotate(90 ${pStart.x} ${pStart.y})`} />);
+        barreElements.push(<rect key={`barre-${idx}`} x={pStart.x - thickness / 2} y={pStart.y - thickness / 2} width={thickness} height={pEnd.y - pStart.y + thickness} rx={thickness / 2} fill={primaryColor} />);
       }
     });
 
