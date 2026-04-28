@@ -6,10 +6,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Circle, Square, Triangle } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 interface Marker {
   string: number;
   fret: number;
+  label?: string;
+}
+
+interface NutIndicator {
+  string: number;
+  type: "none" | "open" | "muted";
 }
 
 export const Route = createFileRoute("/")({
@@ -28,10 +37,32 @@ function ChordGenerator() {
   const [primaryColor, setPrimaryColor] = useState("#000000");
   const [bgColor, setBgColor] = useState("#ffffff");
   const [markers, setMarkers] = useState<Marker[]>([]);
+  const [markerShape, setMarkerShape] = useState("circle");
+  const [nutIndicators, setNutIndicators] = useState<NutIndicator[]>([]);
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
     document.documentElement.classList.toggle("dark");
+  };
+
+  const toggleNutIndicator = (stringIndex: number) => {
+    setNutIndicators((prev) => {
+      const existing = prev.find((n) => n.string === stringIndex);
+      if (!existing) return [...prev, { string: stringIndex, type: "open" }];
+      if (existing.type === "open") {
+        return prev.map((n) => (n.string === stringIndex ? { ...n, type: "muted" } : n));
+      }
+      if (existing.type === "muted") {
+        return prev.filter((n) => n.string !== stringIndex);
+      }
+      return prev;
+    });
+  };
+
+  const setMarkerLabel = (stringIndex: number, fretIndex: number, label: string) => {
+    setMarkers((prev) =>
+      prev.map((m) => (m.string === stringIndex && m.fret === fretIndex ? { ...m, label } : m))
+    );
   };
 
   const toggleMarker = (stringIndex: number, fretIndex: number) => {
@@ -89,43 +120,119 @@ function ChordGenerator() {
       );
     }
 
+    // Nut indicators (X / O)
+    const nutElements = [];
+    for (let s = 0; s < stringCount; s++) {
+      const x = margin + s * stringDistance;
+      const y = margin - 15;
+      const indicator = nutIndicators.find((n) => n.string === s);
+      
+      nutElements.push(
+        <g 
+          key={`nut-${s}`} 
+          className="cursor-pointer group" 
+          onClick={() => toggleNutIndicator(s)}
+        >
+          <rect x={x - 10} y={y - 10} width={20} height={20} fill="transparent" />
+          {indicator?.type === "open" && (
+            <circle cx={x} cy={y} r={6} fill="none" stroke={primaryColor} strokeWidth={strokeWidth[0]} />
+          )}
+          {indicator?.type === "muted" && (
+            <g stroke={primaryColor} strokeWidth={strokeWidth[0]}>
+              <line x1={x - 5} y1={y - 5} x2={x + 5} y2={y + 5} />
+              <line x1={x + 5} y1={y - 5} x2={x - 5} y2={y + 5} />
+            </g>
+          )}
+          {!indicator && (
+            <circle 
+              cx={x} 
+              cy={y} 
+              r={4} 
+              fill={primaryColor} 
+              fillOpacity="0" 
+              className="group-hover:fill-opacity-10 transition-all" 
+            />
+          )}
+        </g>
+      );
+    }
+
     // Hitboxes and Markers
     const interactiveElements = [];
     for (let s = 0; s < stringCount; s++) {
       for (let f = 1; f <= fretCount; f++) {
         const x = margin + s * stringDistance;
         const y = margin + (f - 0.5) * fretDistance;
-        const markerExists = markers.find(m => m.string === s && m.fret === f);
+        const marker = markers.find(m => m.string === s && m.fret === f);
+        const radius = (markerSize[0] / 200) * Math.min(stringDistance, fretDistance);
         
+        const renderShape = (isGhost = false) => {
+          const props = {
+            fill: primaryColor,
+            fillOpacity: isGhost ? "0.2" : "1",
+            className: isGhost ? "opacity-0 group-hover:opacity-100 transition-opacity" : ""
+          };
+
+          if (markerShape === "circle") return <circle cx={x} cy={y} r={radius} {...props} />;
+          if (markerShape === "square") return <rect x={x - radius} y={y - radius} width={radius * 2} height={radius * 2} {...props} />;
+          if (markerShape === "triangle") {
+            const p1 = `${x},${y - radius}`;
+            const p2 = `${x - radius},${y + radius}`;
+            const p3 = `${x + radius},${y + radius}`;
+            return <polygon points={`${p1} ${p2} ${p3}`} {...props} />;
+          }
+          return null;
+        };
+
         interactiveElements.push(
-          <g key={`cell-${s}-${f}`} className="cursor-pointer group" onClick={() => toggleMarker(s, f)}>
-            {/* Hitbox */}
+          <g key={`cell-${s}-${f}`} className="cursor-pointer group">
             <rect
               x={x - stringDistance / 2}
               y={margin + (f - 1) * fretDistance}
               width={stringDistance}
               height={fretDistance}
               fill="transparent"
+              onClick={() => toggleMarker(s, f)}
             />
-            {/* Ghost marker (hover) */}
-            {!markerExists && (
-              <circle
-                cx={x}
-                cy={y}
-                r={(markerSize[0] / 200) * Math.min(stringDistance, fretDistance)}
-                fill={primaryColor}
-                fillOpacity="0.2"
-                className="opacity-0 group-hover:opacity-100 transition-opacity"
-              />
-            )}
-            {/* Active marker */}
-            {markerExists && (
-              <circle
-                cx={x}
-                cy={y}
-                r={(markerSize[0] / 200) * Math.min(stringDistance, fretDistance)}
-                fill={primaryColor}
-              />
+            
+            {!marker && renderShape(true)}
+            
+            {marker && (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <g className="cursor-pointer">
+                    {renderShape()}
+                    <text
+                      x={x}
+                      y={y}
+                      textAnchor="middle"
+                      dominantBaseline="central"
+                      fill={bgColor}
+                      style={{ fontSize: fontSize[0] * 0.6, fontWeight: 'bold', pointerEvents: 'none' }}
+                    >
+                      {marker.label}
+                    </text>
+                  </g>
+                </PopoverTrigger>
+                <PopoverContent className="w-40 p-2">
+                  <div className="flex flex-col gap-2">
+                    <Label className="text-xs">Texto do marcador</Label>
+                    <div className="flex gap-2">
+                      <Input 
+                        autoFocus
+                        maxLength={2}
+                        className="h-8" 
+                        value={marker.label || ""} 
+                        onChange={(e) => setMarkerLabel(s, f, e.target.value)}
+                        placeholder="1..."
+                      />
+                      <Button size="sm" variant="destructive" onClick={() => toggleMarker(s, f)}>
+                        Remover
+                      </Button>
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
             )}
           </g>
         );
@@ -139,6 +246,7 @@ function ChordGenerator() {
         style={{ backgroundColor: bgColor }}
       >
         {lines}
+        {nutElements}
         {interactiveElements}
         {chordTitle && (
           <text
@@ -176,6 +284,8 @@ function ChordGenerator() {
     primaryColor, 
     bgColor, 
     markers,
+    markerShape,
+    nutIndicators,
     stringDistance,
     fretDistance,
     chartWidth,
@@ -233,6 +343,21 @@ function ChordGenerator() {
                   value={stringCount} 
                   onChange={(e) => setStringCount(parseInt(e.target.value) || 6)} 
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Formato do Marcador</Label>
+                <ToggleGroup type="single" value={markerShape} onValueChange={(val) => val && setMarkerShape(val)} className="justify-start">
+                  <ToggleGroupItem value="circle" aria-label="Círculo">
+                    <Circle className="h-4 w-4" />
+                  </ToggleGroupItem>
+                  <ToggleGroupItem value="square" aria-label="Quadrado">
+                    <Square className="h-4 w-4" />
+                  </ToggleGroupItem>
+                  <ToggleGroupItem value="triangle" aria-label="Triângulo">
+                    <Triangle className="h-4 w-4" />
+                  </ToggleGroupItem>
+                </ToggleGroup>
               </div>
 
               <div className="space-y-4">
