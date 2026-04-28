@@ -329,7 +329,7 @@ function ChordGenerator() {
                 <PopoverTrigger asChild>
                   <g className="cursor-pointer">
                     {renderShape(false, marker.color || markerColor)}
-                    <text x={x} y={y} textAnchor="middle" dominantBaseline="central" fill={bgColor} style={{ fontSize: labelFontSize[0], fontWeight: 'bold', pointerEvents: 'none' }}>{marker.label}</text>
+                    <text x={x} y={y} textAnchor="middle" dominantBaseline="central" fill="white" style={{ fontSize: labelFontSize[0], fontWeight: 'bold', pointerEvents: 'none' }}>{marker.label}</text>
                   </g>
                 </PopoverTrigger>
                 <PopoverContent className="w-56 p-3 space-y-4" onClick={(e) => e.stopPropagation()} onMouseDown={(e) => e.stopPropagation()}>
