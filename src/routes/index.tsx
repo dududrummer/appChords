@@ -291,26 +291,42 @@ function ChordGenerator() {
 
   const editorSvg = useMemo(() => {
     const { lines, nutElements, barreElements, interactiveElements, stringNameElements } = getFretboardContent(false);
+    const startFretPos = getCoords(0, 0.5);
+    const fretLabelX = isVertical ? margin - 15 : startFretPos.x;
+    const fretLabelY = isVertical ? startFretPos.y : margin - 15;
+    
     return (
       <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full h-full" style={{ backgroundColor: bgColor }}>
-        <text x={svgWidth / 2} y={margin / 2} textAnchor="middle" fill={primaryColor} style={{ fontSize: fontSize[0], fontWeight: 'bold' }}>{chordTitle}</text>
+        <text x={svgWidth / 2} y={isVertical ? margin / 2 : 25} textAnchor="middle" fill={primaryColor} style={{ fontSize: fontSize[0], fontWeight: 'bold' }}>{chordTitle}</text>
         {lines}{nutElements}{barreElements}{interactiveElements}{stringNameElements}
-        {startingFret > 1 && <text x={margin - 10} y={margin + fretDistance / 2} textAnchor="end" dominantBaseline="middle" fill={primaryColor} style={{ fontSize: fontSize[0] * 0.8 }}>{startingFret}fr</text>}
+        {startingFret > 1 && (
+          <text x={fretLabelX} y={fretLabelY} textAnchor={isVertical ? "end" : "middle"} dominantBaseline={isVertical ? "middle" : "auto"} fill={primaryColor} style={{ fontSize: fontSize[0] * 0.8 }}>
+            {startingFret}fr
+          </text>
+        )}
       </svg>
     );
-  }, [chordTitle, startingFret, fretCount, stringCount, markerSize, strokeWidth, fontSize, primaryColor, bgColor, markers, markerShape, nutIndicators, barres, dragStart, dragEnd, stringDistance, fretDistance, stringNames]);
+  }, [chordTitle, startingFret, fretCount, stringCount, markerSize, strokeWidth, fontSize, primaryColor, bgColor, markers, markerShape, nutIndicators, barres, dragStart, dragEnd, stringDistance, fretDistance, stringNames, orientation, taper]);
 
   const resultSvg = useMemo(() => {
     const { lines, nutElements, barreElements, interactiveElements, stringNameElements } = getFretboardContent(true);
+    const startFretPos = getCoords(0, 0.5);
+    const fretLabelX = isVertical ? margin - 15 : startFretPos.x;
+    const fretLabelY = isVertical ? startFretPos.y : margin - 15;
+
     return (
       <svg ref={resultSvgRef} viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full h-full" xmlns="http://www.w3.org/2000/svg" style={{ backgroundColor: bgColor }}>
         <rect width="100%" height="100%" fill={bgColor} />
-        <text x={svgWidth / 2} y={margin / 2} textAnchor="middle" fill={primaryColor} style={{ fontSize: fontSize[0], fontWeight: 'bold' }}>{chordTitle}</text>
+        <text x={svgWidth / 2} y={isVertical ? margin / 2 : 25} textAnchor="middle" fill={primaryColor} style={{ fontSize: fontSize[0], fontWeight: 'bold' }}>{chordTitle}</text>
         {lines}{nutElements}{barreElements}{interactiveElements}{stringNameElements}
-        {startingFret > 1 && <text x={margin - 10} y={margin + fretDistance / 2} textAnchor="end" dominantBaseline="middle" fill={primaryColor} style={{ fontSize: fontSize[0] * 0.8 }}>{startingFret}fr</text>}
+        {startingFret > 1 && (
+          <text x={fretLabelX} y={fretLabelY} textAnchor={isVertical ? "end" : "middle"} dominantBaseline={isVertical ? "middle" : "auto"} fill={primaryColor} style={{ fontSize: fontSize[0] * 0.8 }}>
+            {startingFret}fr
+          </text>
+        )}
       </svg>
     );
-  }, [chordTitle, startingFret, fretCount, stringCount, markerSize, strokeWidth, fontSize, primaryColor, bgColor, markers, markerShape, nutIndicators, barres, stringNames]);
+  }, [chordTitle, startingFret, fretCount, stringCount, markerSize, strokeWidth, fontSize, primaryColor, bgColor, markers, markerShape, nutIndicators, barres, stringNames, orientation, taper]);
 
   return (
     <div className={`min-h-screen ${isDarkMode ? "dark bg-background text-foreground" : "bg-slate-50"}`}>
