@@ -43,8 +43,9 @@ function ChordGenerator() {
   const [fontSize, setFontSize] = useState([16]);
   const [labelFontSize, setLabelFontSize] = useState([10]);
   const [primaryColor, setPrimaryColor] = useState("#000000");
-  const [bgColor, setBgColor] = useState("#ffffff");
+  const [markerColor, setMarkerColor] = useState("#000000");
   const [markerShape, setMarkerShape] = useState("circle");
+  const [bgColor, setBgColor] = useState("#ffffff");
   const [orientation, setOrientation] = useState<"vertical" | "horizontal">("vertical");
   const [taper, setTaper] = useState([10]);
   const [markers, setMarkers] = useState<Marker[]>([]);
@@ -112,7 +113,7 @@ function ChordGenerator() {
         } else {
           const exists = markers.find(m => m.string === dragStart.string && m.fret === dragStart.fret);
           if (!exists) {
-            setMarkers(prev => [...prev, { string: dragStart.string, fret: dragStart.fret, label: "", color: primaryColor }]);
+            setMarkers(prev => [...prev, { string: dragStart.string, fret: dragStart.fret, label: "", color: markerColor }]);
           }
         }
       }
@@ -216,7 +217,7 @@ function ChordGenerator() {
         const marker = markers.find(m => m.string === s && m.fret === f);
         const radius = (markerSize[0] / 200) * Math.min(stringDistance, fretDistance);
         
-        const renderShape = (isGhost = false, color = primaryColor) => {
+        const renderShape = (isGhost = false, color = markerColor) => {
           const props = { fill: color, fillOpacity: isGhost ? "0.2" : "1", className: isGhost ? "opacity-0 group-hover:opacity-100 transition-opacity" : "" };
           if (markerShape === "circle") return <circle cx={x} cy={y} r={radius} {...props} />;
           if (markerShape === "square") return <rect x={x - radius} y={y - radius} width={radius * 2} height={radius * 2} {...props} />;
@@ -233,7 +234,7 @@ function ChordGenerator() {
           if (marker) {
             interactiveElements.push(
               <g key={`cell-${s}-${f}`}>
-                {renderShape(false, marker.color || primaryColor)}
+                {renderShape(false, marker.color || markerColor)}
                 <text x={x} y={y} textAnchor="middle" dominantBaseline="central" fill={bgColor} style={{ fontSize: labelFontSize[0], fontWeight: 'bold' }}>{marker.label}</text>
               </g>
             );
@@ -255,7 +256,7 @@ function ChordGenerator() {
               <Popover>
                 <PopoverTrigger asChild>
                   <g className="cursor-pointer">
-                    {renderShape(false, marker.color || primaryColor)}
+                    {renderShape(false, marker.color || markerColor)}
                     <text x={x} y={y} textAnchor="middle" dominantBaseline="central" fill={bgColor} style={{ fontSize: labelFontSize[0], fontWeight: 'bold', pointerEvents: 'none' }}>{marker.label}</text>
                   </g>
                 </PopoverTrigger>
@@ -264,7 +265,7 @@ function ChordGenerator() {
                     <Label className="text-xs">Texto e Cor</Label>
                     <div className="flex gap-2 mb-2">
                       <Input maxLength={2} className="h-8" value={marker.label || ""} onChange={(e) => updateMarker(s, f, { label: e.target.value })} placeholder="1, T..." />
-                      <Input type="color" className="h-8 w-12 p-1 cursor-pointer" value={marker.color || primaryColor} onChange={(e) => updateMarker(s, f, { color: e.target.value })} />
+                      <Input type="color" className="h-8 w-12 p-1 cursor-pointer" value={marker.color || markerColor} onChange={(e) => updateMarker(s, f, { color: e.target.value })} />
                     </div>
                     <div className="flex flex-wrap gap-1">
                       {["#000000", "#3b82f6", "#22c55e", "#f97316", "#eab308", "#a855f7"].map((c) => (
@@ -305,7 +306,7 @@ function ChordGenerator() {
         )}
       </svg>
     );
-  }, [chordTitle, startingFret, fretCount, stringCount, markerSize, strokeWidth, fontSize, primaryColor, bgColor, markers, markerShape, nutIndicators, barres, dragStart, dragEnd, stringDistance, fretDistance, stringNames, orientation, taper]);
+  }, [chordTitle, startingFret, fretCount, stringCount, markerSize, strokeWidth, fontSize, primaryColor, markerColor, bgColor, markers, markerShape, nutIndicators, barres, dragStart, dragEnd, stringDistance, fretDistance, stringNames, orientation, taper]);
 
   const resultSvg = useMemo(() => {
     const { lines, nutElements, barreElements, interactiveElements, stringNameElements } = getFretboardContent(true);
@@ -325,7 +326,7 @@ function ChordGenerator() {
         )}
       </svg>
     );
-  }, [chordTitle, startingFret, fretCount, stringCount, markerSize, strokeWidth, fontSize, primaryColor, bgColor, markers, markerShape, nutIndicators, barres, stringNames, orientation, taper]);
+  }, [chordTitle, startingFret, fretCount, stringCount, markerSize, strokeWidth, fontSize, primaryColor, markerColor, bgColor, markers, markerShape, nutIndicators, barres, stringNames, orientation, taper]);
 
   const downloadFilename = (chordTitle || "chord").toLowerCase().replace(/[^a-z0-9]/g, "-");
 
@@ -379,9 +380,10 @@ function ChordGenerator() {
                 <Label>Fonte no Marcador ({labelFontSize}px)</Label>
                 <Slider value={labelFontSize} onValueChange={setLabelFontSize} min={6} max={24} step={1} />
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2"><Label>Cor Principal</Label><Input type="color" value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} className="h-10 p-1" /></div>
-                <div className="space-y-2"><Label>Cor Fundo</Label><Input type="color" value={bgColor} onChange={(e) => setBgColor(e.target.value)} className="h-10 p-1" /></div>
+              <div className="grid grid-cols-3 gap-4">
+                <div className="space-y-2"><Label>Cor Principal</Label><Input type="color" value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} className="h-10 p-1 w-full" /></div>
+                <div className="space-y-2"><Label>Cor Forma</Label><Input type="color" value={markerColor} onChange={(e) => setMarkerColor(e.target.value)} className="h-10 p-1 w-full" /></div>
+                <div className="space-y-2"><Label>Cor Fundo</Label><Input type="color" value={bgColor} onChange={(e) => setBgColor(e.target.value)} className="h-10 p-1 w-full" /></div>
               </div>
             </div>
             <div className="space-y-2">
