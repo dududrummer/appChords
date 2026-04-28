@@ -44,10 +44,12 @@ function ChordGenerator() {
   const [primaryColor, setPrimaryColor] = useState("#000000");
   const [bgColor, setBgColor] = useState("#ffffff");
   const [markerShape, setMarkerShape] = useState("circle");
+  const [orientation, setOrientation] = useState<"vertical" | "horizontal">("vertical");
+  const [taper, setTaper] = useState([10]);
   const [markers, setMarkers] = useState<Marker[]>([]);
   const [nutIndicators, setNutIndicators] = useState<NutIndicator[]>([]);
   const [barres, setBarres] = useState<Barre[]>([]);
-  const [stringNames, setStringNames] = useState<string[]>(Array(6).fill(""));
+  const [stringNames, setStringNames] = useState<string[]>(Array(12).fill(""));
   const [dragStart, setDragStart] = useState<{ fret: number; string: number } | null>(null);
   const [dragEnd, setDragEnd] = useState<{ fret: number; string: number } | null>(null);
   const resultSvgRef = useRef<SVGSVGElement>(null);
@@ -118,31 +120,53 @@ function ChordGenerator() {
     setDragEnd(null);
   };
 
-  const svgWidth = 300;
-  const svgHeight = 450;
+  const isVertical = orientation === "vertical";
+  const svgWidth = isVertical ? 300 : 450;
+  const svgHeight = isVertical ? 450 : 300;
   const margin = 50;
-  const chartWidth = svgWidth - margin * 2;
-  const chartHeight = svgHeight - margin * 2.5;
+  const chartWidth = (isVertical ? svgWidth : svgHeight) - margin * 2;
+  const chartHeight = (isVertical ? svgHeight : svgWidth) - margin * 2.5;
   const fretDistance = chartHeight / fretCount;
   const stringDistance = chartWidth / (stringCount - 1);
+  const taperFactor = taper[0] / 100;
+
+  const getCoords = (s: number, f: number) => {
+    const p = f / fretCount; // 0 at top (nut), 1 at bottom
+    const scale = (1 - taperFactor / 2) + p * taperFactor;
+    const middlePos = margin + (stringCount - 1) * stringDistance / 2;
+    const distFromCenter = (s * stringDistance) - ((stringCount - 1) * stringDistance / 2);
+    const variablePos = middlePos + distFromCenter * scale;
+    const constantPos = margin + f * fretDistance;
+
+    return isVertical 
+      ? { x: variablePos, y: constantPos } 
+      : { x: constantPos, y: variablePos };
+  };
 
   const getFretboardContent = (isReadOnly: boolean) => {
     const lines = [];
+    // Strings
     for (let i = 0; i < stringCount; i++) {
-      const x = margin + i * stringDistance;
-      lines.push(<line key={`string-${i}`} x1={x} y1={margin} x2={x} y2={margin + chartHeight} stroke={primaryColor} strokeWidth={strokeWidth[0]} />);
+      const p1 = getCoords(i, 0);
+      const p2 = getCoords(i, fretCount);
+      lines.push(<line key={`string-${i}`} x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} stroke={primaryColor} strokeWidth={strokeWidth[0]} />);
     }
+    // Frets
     for (let i = 0; i <= fretCount; i++) {
-      const y = margin + i * fretDistance;
+      const p1 = getCoords(0, i);
+      const p2 = getCoords(stringCount - 1, i);
       const isNut = i === 0 && startingFret === 1;
-      lines.push(<line key={`fret-${i}`} x1={margin} y1={y} x2={margin + chartWidth} y2={y} stroke={primaryColor} strokeWidth={isNut ? strokeWidth[0] * 3 : strokeWidth[0]} />);
+      lines.push(<line key={`fret-${i}`} x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} stroke={primaryColor} strokeWidth={isNut ? strokeWidth[0] * 3 : strokeWidth[0]} />);
     }
 
     const nutElements = [];
     for (let s = 0; s < stringCount; s++) {
-      const x = margin + s * stringDistance;
-      const y = margin - 15;
+      const pNut = getCoords(s, 0);
       const indicator = nutIndicators.find((n) => n.string === s);
+      const offset = 15;
+      const x = isVertical ? pNut.x : pNut.x - offset;
+      const y = isVertical ? pNut.y - offset : pNut.y;
+      
       nutElements.push(
         <g key={`nut-${s}`} className={isReadOnly ? "" : "cursor-pointer group"} onClick={isReadOnly ? undefined : () => toggleNutIndicator(s)}>
           {!isReadOnly && <rect x={x - 10} y={y - 10} width={20} height={20} fill="transparent" />}
@@ -156,11 +180,14 @@ function ChordGenerator() {
 
     const stringNameElements = [];
     for (let s = 0; s < stringCount; s++) {
-      const x = margin + s * stringDistance;
-      const y = margin + chartHeight + 20;
+      const pEnd = getCoords(s, fretCount);
+      const offset = 20;
+      const x = isVertical ? pEnd.x : pEnd.x + offset;
+      const y = isVertical ? pEnd.y + offset : pEnd.y;
+      
       if (stringNames[s]) {
         stringNameElements.push(
-          <text key={`name-${s}`} x={x} y={y} textAnchor="middle" fill={primaryColor} style={{ fontSize: fontSize[0] * 0.7, fontWeight: 'bold' }}>
+          <text key={`name-${s}`} x={x} y={y} textAnchor="middle" dominantBaseline="middle" fill={primaryColor} style={{ fontSize: fontSize[0] * 0.7, fontWeight: 'bold' }}>
             {stringNames[s]}
           </text>
         );
@@ -169,18 +196,22 @@ function ChordGenerator() {
 
     const barreElements: React.ReactNode[] = [];
     barres.forEach((barre, idx) => {
-      const xStart = margin + barre.startString * stringDistance;
-      const xEnd = margin + barre.endString * stringDistance;
-      const y = margin + (barre.fret - 0.5) * fretDistance;
+      const pStart = getCoords(barre.startString, barre.fret - 0.5);
+      const pEnd = getCoords(barre.endString, barre.fret - 0.5);
       const height = (markerSize[0] / 200) * Math.min(stringDistance, fretDistance) * 2;
-      barreElements.push(<rect key={`barre-${idx}`} x={xStart - height / 2} y={y - height / 2} width={xEnd - xStart + height} height={height} rx={height / 2} fill={primaryColor} />);
+      
+      if (isVertical) {
+        barreElements.push(<rect key={`barre-${idx}`} x={pStart.x - height / 2} y={pStart.y - height / 2} width={pEnd.x - pStart.x + height} height={height} rx={height / 2} fill={primaryColor} />);
+      } else {
+        barreElements.push(<rect key={`barre-${idx}`} x={pStart.x - height / 2} y={pStart.y - height / 2} width={pEnd.x - pStart.x + height} height={height} rx={height / 2} fill={primaryColor} transform={`rotate(90 ${pStart.x} ${pStart.y})`} />);
+      }
     });
 
     const interactiveElements = [];
     for (let s = 0; s < stringCount; s++) {
       for (let f = 1; f <= fretCount; f++) {
-        const x = margin + s * stringDistance;
-        const y = margin + (f - 0.5) * fretDistance;
+        const p = getCoords(s, f - 0.5);
+        const { x, y } = p;
         const marker = markers.find(m => m.string === s && m.fret === f);
         const radius = (markerSize[0] / 200) * Math.min(stringDistance, fretDistance);
         
@@ -189,8 +220,10 @@ function ChordGenerator() {
           if (markerShape === "circle") return <circle cx={x} cy={y} r={radius} {...props} />;
           if (markerShape === "square") return <rect x={x - radius} y={y - radius} width={radius * 2} height={radius * 2} {...props} />;
           if (markerShape === "triangle") {
-            const p = `${x},${y - radius} ${x - radius},${y + radius} ${x + radius},${y + radius}`;
-            return <polygon points={p} {...props} />;
+            const points = isVertical 
+              ? `${x},${y - radius} ${x - radius},${y + radius} ${x + radius},${y + radius}`
+              : `${x + radius},${y} ${x - radius},${y - radius} ${x - radius},${y + radius}`;
+            return <polygon points={points} {...props} />;
           }
           return null;
         };
@@ -207,9 +240,15 @@ function ChordGenerator() {
           continue;
         }
 
+        const p1 = getCoords(s, f-1);
+        const hitWidth = isVertical ? stringDistance : fretDistance;
+        const hitHeight = isVertical ? fretDistance : stringDistance;
+        const hitX = isVertical ? x - stringDistance / 2 : p1.x;
+        const hitY = isVertical ? p1.y : y - stringDistance / 2;
+
         interactiveElements.push(
           <g key={`cell-${s}-${f}`} onMouseDown={() => onMouseDown(s, f)} onMouseEnter={() => onMouseEnter(s, f)} onMouseUp={onMouseUp}>
-            <rect x={x - stringDistance / 2} y={margin + (f - 1) * fretDistance} width={stringDistance} height={fretDistance} fill="transparent" className="cursor-pointer" />
+            <rect x={hitX} y={hitY} width={hitWidth} height={hitHeight} fill="transparent" className="cursor-pointer" />
             {!marker && renderShape(true)}
             {marker && (
               <Popover>
@@ -250,26 +289,44 @@ function ChordGenerator() {
 
   const editorSvg = useMemo(() => {
     const { lines, nutElements, barreElements, interactiveElements, stringNameElements } = getFretboardContent(false);
+    const startFretPos = getCoords(0, 0.5);
+    const fretLabelX = isVertical ? margin - 15 : startFretPos.x;
+    const fretLabelY = isVertical ? startFretPos.y : margin - 15;
+    
     return (
       <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full h-full" style={{ backgroundColor: bgColor }}>
-        <text x={svgWidth / 2} y={margin / 2} textAnchor="middle" fill={primaryColor} style={{ fontSize: fontSize[0], fontWeight: 'bold' }}>{chordTitle}</text>
+        <text x={svgWidth / 2} y={isVertical ? margin / 2 : 25} textAnchor="middle" fill={primaryColor} style={{ fontSize: fontSize[0], fontWeight: 'bold' }}>{chordTitle}</text>
         {lines}{nutElements}{barreElements}{interactiveElements}{stringNameElements}
-        {startingFret > 1 && <text x={margin - 10} y={margin + fretDistance / 2} textAnchor="end" dominantBaseline="middle" fill={primaryColor} style={{ fontSize: fontSize[0] * 0.8 }}>{startingFret}fr</text>}
+        {startingFret > 1 && (
+          <text x={fretLabelX} y={fretLabelY} textAnchor={isVertical ? "end" : "middle"} dominantBaseline={isVertical ? "middle" : "auto"} fill={primaryColor} style={{ fontSize: fontSize[0] * 0.8 }}>
+            {startingFret}fr
+          </text>
+        )}
       </svg>
     );
-  }, [chordTitle, startingFret, fretCount, stringCount, markerSize, strokeWidth, fontSize, primaryColor, bgColor, markers, markerShape, nutIndicators, barres, dragStart, dragEnd, stringDistance, fretDistance, stringNames]);
+  }, [chordTitle, startingFret, fretCount, stringCount, markerSize, strokeWidth, fontSize, primaryColor, bgColor, markers, markerShape, nutIndicators, barres, dragStart, dragEnd, stringDistance, fretDistance, stringNames, orientation, taper]);
 
   const resultSvg = useMemo(() => {
     const { lines, nutElements, barreElements, interactiveElements, stringNameElements } = getFretboardContent(true);
+    const startFretPos = getCoords(0, 0.5);
+    const fretLabelX = isVertical ? margin - 15 : startFretPos.x;
+    const fretLabelY = isVertical ? startFretPos.y : margin - 15;
+
     return (
       <svg ref={resultSvgRef} viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full h-full" xmlns="http://www.w3.org/2000/svg" style={{ backgroundColor: bgColor }}>
         <rect width="100%" height="100%" fill={bgColor} />
-        <text x={svgWidth / 2} y={margin / 2} textAnchor="middle" fill={primaryColor} style={{ fontSize: fontSize[0], fontWeight: 'bold' }}>{chordTitle}</text>
+        <text x={svgWidth / 2} y={isVertical ? margin / 2 : 25} textAnchor="middle" fill={primaryColor} style={{ fontSize: fontSize[0], fontWeight: 'bold' }}>{chordTitle}</text>
         {lines}{nutElements}{barreElements}{interactiveElements}{stringNameElements}
-        {startingFret > 1 && <text x={margin - 10} y={margin + fretDistance / 2} textAnchor="end" dominantBaseline="middle" fill={primaryColor} style={{ fontSize: fontSize[0] * 0.8 }}>{startingFret}fr</text>}
+        {startingFret > 1 && (
+          <text x={fretLabelX} y={fretLabelY} textAnchor={isVertical ? "end" : "middle"} dominantBaseline={isVertical ? "middle" : "auto"} fill={primaryColor} style={{ fontSize: fontSize[0] * 0.8 }}>
+            {startingFret}fr
+          </text>
+        )}
       </svg>
     );
-  }, [chordTitle, startingFret, fretCount, stringCount, markerSize, strokeWidth, fontSize, primaryColor, bgColor, markers, markerShape, nutIndicators, barres, stringNames]);
+  }, [chordTitle, startingFret, fretCount, stringCount, markerSize, strokeWidth, fontSize, primaryColor, bgColor, markers, markerShape, nutIndicators, barres, stringNames, orientation, taper]);
+
+  const downloadFilename = (chordTitle || "chord").toLowerCase().replace(/[^a-z0-9]/g, "-");
 
   return (
     <div className={`min-h-screen ${isDarkMode ? "dark bg-background text-foreground" : "bg-slate-50"}`}>
@@ -287,6 +344,20 @@ function ChordGenerator() {
               <div className="space-y-2"><Label>Traste Inicial</Label><Input type="number" value={startingFret} onChange={(e) => setStartingFret(Number(e.target.value))} /></div>
               <div className="space-y-2"><Label>Trastes</Label><Input type="number" value={fretCount} onChange={(e) => setFretCount(Number(e.target.value))} /></div>
               <div className="space-y-2"><Label>Cordas</Label><Input type="number" value={stringCount} onChange={(e) => setStringCount(Number(e.target.value))} /></div>
+              
+              <div className="space-y-2">
+                <Label>Orientação</Label>
+                <ToggleGroup type="single" value={orientation} onValueChange={(v) => v && setOrientation(v as any)} className="justify-start">
+                  <ToggleGroupItem value="vertical" className="px-3">Vertical</ToggleGroupItem>
+                  <ToggleGroupItem value="horizontal" className="px-3">Horizontal</ToggleGroupItem>
+                </ToggleGroup>
+              </div>
+              <div className="space-y-4">
+                <Label>Conicidade ({taper}%)</Label>
+                <Slider value={taper} onValueChange={setTaper} min={0} max={30} step={1} />
+              </div>
+              <div className="space-y-4"><Label>Tamanho Nota ({markerSize}%)</Label><Slider value={markerSize} onValueChange={setMarkerSize} min={10} max={80} /></div>
+              <div className="space-y-4"><Label>Linha ({strokeWidth}px)</Label><Slider value={strokeWidth} onValueChange={setStrokeWidth} min={1} max={10} step={0.5} /></div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="space-y-2">
@@ -295,11 +366,17 @@ function ChordGenerator() {
                   <ToggleGroupItem value="circle"><Circle /></ToggleGroupItem><ToggleGroupItem value="square"><Square /></ToggleGroupItem><ToggleGroupItem value="triangle"><Triangle /></ToggleGroupItem>
                 </ToggleGroup>
               </div>
-              <div className="space-y-4"><Label>Tamanho Nota ({markerSize}%)</Label><Slider value={markerSize} onValueChange={setMarkerSize} min={10} max={80} /></div>
-              <div className="space-y-4"><Label>Linha ({strokeWidth}px)</Label><Slider value={strokeWidth} onValueChange={setStrokeWidth} min={1} max={10} step={0.5} /></div>
+              <div className="space-y-4">
+                <Label>Tamanho Fonte ({fontSize}px)</Label>
+                <Slider value={fontSize} onValueChange={setFontSize} min={8} max={24} step={1} />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2"><Label>Cor Principal</Label><Input type="color" value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} className="h-10 p-1" /></div>
+                <div className="space-y-2"><Label>Cor Fundo</Label><Input type="color" value={bgColor} onChange={(e) => setBgColor(e.target.value)} className="h-10 p-1" /></div>
+              </div>
             </div>
             <div className="space-y-2">
-              <Label>Nomes das Cordas (Abaixo do braço)</Label>
+              <Label>Nomes das Cordas ({isVertical ? "Abaixo" : "À direita"})</Label>
               <div className="flex flex-wrap gap-2">
                 {Array.from({ length: stringCount }).map((_, i) => (
                   <Input key={i} className="w-12 h-8 text-center" placeholder={`S${i+1}`} value={stringNames[i] || ""} onChange={(e) => handleStringNameChange(i, e.target.value)} />
@@ -310,8 +387,8 @@ function ChordGenerator() {
         </Card>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <Card><CardHeader className="bg-muted/50"><CardTitle>Editor</CardTitle></CardHeader><CardContent className="p-4 flex justify-center"><div className="w-full max-w-[300px] border rounded-lg bg-white/50 dark:bg-black/20">{editorSvg}</div></CardContent></Card>
-          <Card><CardHeader className="bg-muted/50"><CardTitle>Resultado</CardTitle></CardHeader><CardContent className="p-4 flex justify-center"><div className="w-full max-w-[300px] border rounded-lg bg-white dark:bg-black">{resultSvg}</div></CardContent></Card>
+          <Card><CardHeader className="bg-muted/50"><CardTitle>Editor</CardTitle></CardHeader><CardContent className="p-4 flex justify-center"><div className={`w-full ${isVertical ? "max-w-[300px]" : "max-w-[450px]"} border rounded-lg bg-white/50 dark:bg-black/20`}>{editorSvg}</div></CardContent></Card>
+          <Card><CardHeader className="bg-muted/50"><CardTitle>Resultado</CardTitle></CardHeader><CardContent className="p-4 flex justify-center"><div className={`w-full ${isVertical ? "max-w-[300px]" : "max-w-[450px]"} border rounded-lg bg-white dark:bg-black`}>{resultSvg}</div></CardContent></Card>
         </div>
 
         <div className="flex justify-center gap-4 py-4">
@@ -326,14 +403,14 @@ function ChordGenerator() {
               if (!ctx) return;
               ctx.fillStyle = bgColor; ctx.fillRect(0, 0, canvas.width, canvas.height);
               ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-              const link = document.createElement("a"); link.download = "chord.png"; link.href = canvas.toDataURL(); link.click();
+              const link = document.createElement("a"); link.download = `${downloadFilename}.png`; link.href = canvas.toDataURL(); link.click();
             };
             img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)));
           }}><Download className="mr-2 h-4 w-4" /> PNG</Button>
           <Button onClick={() => {
             if (!resultSvgRef.current) return;
             const svgData = new XMLSerializer().serializeToString(resultSvgRef.current);
-            const link = document.createElement("a"); link.download = "chord.svg";
+            const link = document.createElement("a"); link.download = `${downloadFilename}.svg`;
             link.href = URL.createObjectURL(new Blob([svgData], { type: "image/svg+xml" })); link.click();
           }}><Download className="mr-2 h-4 w-4" /> SVG</Button>
         </div>
@@ -341,3 +418,5 @@ function ChordGenerator() {
     </div>
   );
 }
+
+export default ChordGenerator;
