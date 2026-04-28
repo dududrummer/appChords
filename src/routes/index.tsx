@@ -1,6 +1,6 @@
 import { useState, useMemo, useRef } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Moon, Sun, Download, Circle, Square, Triangle, Trash2 } from "lucide-react";
+import { Moon, Sun, Download, Circle, Square, Triangle, Trash2, Columns, Rows } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
