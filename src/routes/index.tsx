@@ -308,7 +308,7 @@ function ChordGenerator() {
     );
   }, [chordTitle, startingFret, fretCount, stringCount, markerSize, strokeWidth, fontSize, primaryColor, markerColor, bgColor, markers, markerShape, nutIndicators, barres, dragStart, dragEnd, stringDistance, fretDistance, stringNames, orientation, taper]);
 
-  const resultSvg = useMemo(() => {
+  const exportSvg = useMemo(() => {
     const { lines, nutElements, barreElements, interactiveElements, stringNameElements } = getFretboardContent(true);
     const startFretPos = getCoords(0, 0.5);
     const fretLabelX = isVertical ? margin - 15 : startFretPos.x;
@@ -462,9 +462,21 @@ function ChordGenerator() {
           </CardContent>
         </Card>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <Card><CardHeader className="bg-muted/50"><CardTitle>Editor</CardTitle></CardHeader><CardContent className="p-4 flex justify-center"><div className={`w-full ${isVertical ? "max-w-[300px]" : "max-w-[450px]"} border rounded-lg bg-white/50 dark:bg-black/20`}>{editorSvg}</div></CardContent></Card>
-          <Card><CardHeader className="bg-muted/50"><CardTitle>Resultado</CardTitle></CardHeader><CardContent className="p-4 flex justify-center"><div className={`w-full ${isVertical ? "max-w-[300px]" : "max-w-[450px]"} border rounded-lg bg-white dark:bg-black`}>{resultSvg}</div></CardContent></Card>
+        <div className="flex justify-center">
+          <Card className="w-full max-w-2xl">
+            <CardHeader className="bg-muted/50">
+              <CardTitle>Diagrama</CardTitle>
+            </CardHeader>
+            <CardContent className="p-4 flex justify-center">
+              <div className={`w-full ${isVertical ? "max-w-[350px]" : "max-w-[500px]"} border rounded-lg bg-white/50 dark:bg-black/20`}>
+                {editorSvg}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="hidden">
+          {exportSvg}
         </div>
 
         <div className="flex justify-center gap-4 py-4">
