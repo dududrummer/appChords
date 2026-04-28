@@ -6,10 +6,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Circle, Square, Triangle } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 interface Marker {
   string: number;
   fret: number;
+  label?: string;
+}
+
+interface NutIndicator {
+  string: number;
+  type: "none" | "open" | "muted";
 }
 
 export const Route = createFileRoute("/")({
@@ -233,6 +242,21 @@ function ChordGenerator() {
                   value={stringCount} 
                   onChange={(e) => setStringCount(parseInt(e.target.value) || 6)} 
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Formato do Marcador</Label>
+                <ToggleGroup type="single" value={markerShape} onValueChange={(val) => val && setMarkerShape(val)} className="justify-start">
+                  <ToggleGroupItem value="circle" aria-label="Círculo">
+                    <Circle className="h-4 w-4" />
+                  </ToggleGroupItem>
+                  <ToggleGroupItem value="square" aria-label="Quadrado">
+                    <Square className="h-4 w-4" />
+                  </ToggleGroupItem>
+                  <ToggleGroupItem value="triangle" aria-label="Triângulo">
+                    <Triangle className="h-4 w-4" />
+                  </ToggleGroupItem>
+                </ToggleGroup>
               </div>
 
               <div className="space-y-4">
