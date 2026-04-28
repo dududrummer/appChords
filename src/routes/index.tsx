@@ -247,7 +247,7 @@ function ChordGenerator() {
                   y={(pStart.y + pEnd.y) / 2} 
                   textAnchor="middle" 
                   dominantBaseline="central" 
-                  fill={bgColor} 
+                  fill="white" 
                   style={{ fontSize: labelFontSize[0], fontWeight: 'bold', pointerEvents: 'none' }}
                 >
                   {barre.label}
