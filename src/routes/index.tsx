@@ -26,6 +26,8 @@ interface Barre {
   fret: number;
   startString: number;
   endString: number;
+  label?: string;
+  color?: string;
 }
 
 export const Route = createFileRoute("/")({
@@ -70,6 +72,12 @@ function ChordGenerator() {
   const updateMarker = (stringIndex: number, fretIndex: number, updates: Partial<Marker>) => {
     setMarkers((prev) =>
       prev.map((m) => (m.string === stringIndex && m.fret === fretIndex ? { ...m, ...updates } : m))
+    );
+  };
+
+  const updateBarre = (fretIndex: number, updates: Partial<Barre>) => {
+    setBarres((prev) =>
+      prev.map((b) => (b.fret === fretIndex ? { ...b, ...updates } : b))
     );
   };
 
@@ -202,10 +210,74 @@ function ChordGenerator() {
       const pEnd = getCoords(barre.endString, barre.fret - 0.5);
       const thickness = (markerSize[0] / 200) * Math.min(stringDistance, fretDistance) * 2;
       
-      if (isVertical) {
-        barreElements.push(<rect key={`barre-${idx}`} x={pStart.x - thickness / 2} y={pStart.y - thickness / 2} width={pEnd.x - pStart.x + thickness} height={thickness} rx={thickness / 2} fill={primaryColor} />);
+      const barreColor = barre.color || primaryColor;
+      
+      const renderBarre = () => {
+        if (isVertical) {
+          return <rect x={pStart.x - thickness / 2} y={pStart.y - thickness / 2} width={pEnd.x - pStart.x + thickness} height={thickness} rx={thickness / 2} fill={barreColor} />;
+        } else {
+          return <rect x={pStart.x - thickness / 2} y={pStart.y - thickness / 2} width={thickness} height={pEnd.y - pStart.y + thickness} rx={thickness / 2} fill={barreColor} />;
+        }
+      };
+
+      if (isReadOnly) {
+        barreElements.push(
+          <g key={`barre-${idx}`}>
+            {renderBarre()}
+            <text 
+              x={(pStart.x + pEnd.x) / 2} 
+              y={(pStart.y + pEnd.y) / 2} 
+              textAnchor="middle" 
+              dominantBaseline="central" 
+              fill={bgColor} 
+              style={{ fontSize: labelFontSize[0], fontWeight: 'bold' }}
+            >
+              {barre.label}
+            </text>
+          </g>
+        );
       } else {
-        barreElements.push(<rect key={`barre-${idx}`} x={pStart.x - thickness / 2} y={pStart.y - thickness / 2} width={thickness} height={pEnd.y - pStart.y + thickness} rx={thickness / 2} fill={primaryColor} />);
+        barreElements.push(
+          <Popover key={`barre-${idx}`}>
+            <PopoverTrigger asChild>
+              <g className="cursor-pointer">
+                {renderBarre()}
+                <text 
+                  x={(pStart.x + pEnd.x) / 2} 
+                  y={(pStart.y + pEnd.y) / 2} 
+                  textAnchor="middle" 
+                  dominantBaseline="central" 
+                  fill={bgColor} 
+                  style={{ fontSize: labelFontSize[0], fontWeight: 'bold', pointerEvents: 'none' }}
+                >
+                  {barre.label}
+                </text>
+              </g>
+            </PopoverTrigger>
+            <PopoverContent className="w-56 p-3 space-y-4" onClick={(e) => e.stopPropagation()} onMouseDown={(e) => e.stopPropagation()}>
+              <div className="space-y-2">
+                <Label className="text-xs">Texto e Cor da Pestana</Label>
+                <div className="flex gap-2 mb-2">
+                  <Input maxLength={2} className="h-8" value={barre.label || ""} onChange={(e) => updateBarre(barre.fret, { label: e.target.value })} placeholder="1, T..." />
+                  <Input type="color" className="h-8 w-12 p-1 cursor-pointer" value={barreColor} onChange={(e) => updateBarre(barre.fret, { color: e.target.value })} />
+                </div>
+                <div className="flex flex-wrap gap-1">
+                  {["#000000", "#3b82f6", "#22c55e", "#f97316", "#eab308", "#a855f7"].map((c) => (
+                    <button
+                      key={c}
+                      className="w-5 h-5 rounded-full border border-border transition-transform hover:scale-110"
+                      style={{ backgroundColor: c }}
+                      onClick={() => updateBarre(barre.fret, { color: c })}
+                    />
+                  ))}
+                </div>
+              </div>
+              <Button variant="destructive" size="sm" className="w-full gap-2" onClick={() => setBarres(prev => prev.filter(b => b.fret !== barre.fret))}>
+                <Trash2 className="h-4 w-4" /> Remover Pestana
+              </Button>
+            </PopoverContent>
+          </Popover>
+        );
       }
     });
 
