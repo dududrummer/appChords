@@ -380,10 +380,10 @@ function ChordGenerator() {
                 <Label>Fonte no Marcador ({labelFontSize}px)</Label>
                 <Slider value={labelFontSize} onValueChange={setLabelFontSize} min={6} max={24} step={1} />
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2"><Label>Cor Principal</Label><Input type="color" value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} className="h-10 p-1" /></div>
-                <div className="space-y-2"><Label>Cor Forma</Label><Input type="color" value={markerColor} onChange={(e) => setMarkerColor(e.target.value)} className="h-10 p-1" /></div>
-                <div className="space-y-2"><Label>Cor Fundo</Label><Input type="color" value={bgColor} onChange={(e) => setBgColor(e.target.value)} className="h-10 p-1" /></div>
+              <div className="grid grid-cols-3 gap-4">
+                <div className="space-y-2"><Label>Cor Principal</Label><Input type="color" value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} className="h-10 p-1 w-full" /></div>
+                <div className="space-y-2"><Label>Cor Forma</Label><Input type="color" value={markerColor} onChange={(e) => setMarkerColor(e.target.value)} className="h-10 p-1 w-full" /></div>
+                <div className="space-y-2"><Label>Cor Fundo</Label><Input type="color" value={bgColor} onChange={(e) => setBgColor(e.target.value)} className="h-10 p-1 w-full" /></div>
               </div>
             </div>
             <div className="space-y-2">
