@@ -222,9 +222,19 @@ function ChordGenerator() {
                 <PopoverContent className="w-56 p-3 space-y-4" onClick={(e) => e.stopPropagation()} onMouseDown={(e) => e.stopPropagation()}>
                   <div className="space-y-2">
                     <Label className="text-xs">Texto e Cor</Label>
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 mb-2">
                       <Input maxLength={2} className="h-8" value={marker.label || ""} onChange={(e) => updateMarker(s, f, { label: e.target.value })} placeholder="1, T..." />
-                      <Input type="color" className="h-8 w-12 p-1" value={marker.color || primaryColor} onChange={(e) => updateMarker(s, f, { color: e.target.value })} />
+                      <Input type="color" className="h-8 w-12 p-1 cursor-pointer" value={marker.color || primaryColor} onChange={(e) => updateMarker(s, f, { color: e.target.value })} />
+                    </div>
+                    <div className="flex flex-wrap gap-1">
+                      {["#000000", "#3b82f6", "#22c55e", "#f97316", "#eab308", "#a855f7"].map((c) => (
+                        <button
+                          key={c}
+                          className="w-5 h-5 rounded-full border border-border transition-transform hover:scale-110"
+                          style={{ backgroundColor: c }}
+                          onClick={() => updateMarker(s, f, { color: c })}
+                        />
+                      ))}
                     </div>
                   </div>
                   <Button variant="destructive" size="sm" className="w-full gap-2" onClick={() => removeMarker(s, f)}><Trash2 className="h-4 w-4" /> Remover Nota</Button>
