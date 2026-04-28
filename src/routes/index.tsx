@@ -385,11 +385,8 @@ function ChordGenerator() {
                   <Label>Cor Principal</Label>
                   <Popover>
                     <PopoverTrigger asChild>
-                      <Button variant="outline" className="w-full h-10 flex items-center justify-between px-3">
-                        <div className="flex items-center gap-2">
-                          <div className="w-4 h-4 rounded-full border" style={{ backgroundColor: primaryColor }} />
-                          <span className="text-xs">Selecione</span>
-                        </div>
+                      <Button variant="outline" className="w-full h-10 p-1">
+                        <div className="w-full h-full rounded-sm border" style={{ backgroundColor: primaryColor }} />
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-48 p-2">
@@ -411,11 +408,8 @@ function ChordGenerator() {
                   <Label>Cor Forma</Label>
                   <Popover>
                     <PopoverTrigger asChild>
-                      <Button variant="outline" className="w-full h-10 flex items-center justify-between px-3">
-                        <div className="flex items-center gap-2">
-                          <div className="w-4 h-4 rounded-full border" style={{ backgroundColor: markerColor }} />
-                          <span className="text-xs">Selecione</span>
-                        </div>
+                      <Button variant="outline" className="w-full h-10 p-1">
+                        <div className="w-full h-full rounded-sm border" style={{ backgroundColor: markerColor }} />
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-48 p-2">
@@ -437,11 +431,8 @@ function ChordGenerator() {
                   <Label>Cor Fundo</Label>
                   <Popover>
                     <PopoverTrigger asChild>
-                      <Button variant="outline" className="w-full h-10 flex items-center justify-between px-3">
-                        <div className="flex items-center gap-2">
-                          <div className="w-4 h-4 rounded-full border" style={{ backgroundColor: bgColor }} />
-                          <span className="text-xs">Selecione</span>
-                        </div>
+                      <Button variant="outline" className="w-full h-10 p-1">
+                        <div className="w-full h-full rounded-sm border" style={{ backgroundColor: bgColor }} />
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-48 p-2">
