@@ -167,7 +167,7 @@ function ChordGenerator() {
       }
     }
 
-    const barreElements: JSX.Element[] = [];
+    const barreElements: React.ReactNode[] = [];
     barres.forEach((barre, idx) => {
       const xStart = margin + barre.startString * stringDistance;
       const xEnd = margin + barre.endString * stringDistance;
