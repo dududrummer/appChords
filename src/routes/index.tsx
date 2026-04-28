@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Moon, Sun, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -6,6 +6,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
+
+interface Marker {
+  string: number;
+  fret: number;
+}
 
 export const Route = createFileRoute("/")({
   component: ChordGenerator,
@@ -22,11 +27,160 @@ function ChordGenerator() {
   const [fontSize, setFontSize] = useState([16]);
   const [primaryColor, setPrimaryColor] = useState("#000000");
   const [bgColor, setBgColor] = useState("#ffffff");
+  const [markers, setMarkers] = useState<Marker[]>([]);
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
     document.documentElement.classList.toggle("dark");
   };
+
+  const toggleMarker = (stringIndex: number, fretIndex: number) => {
+    setMarkers((prev) => {
+      const exists = prev.find((m) => m.string === stringIndex && m.fret === fretIndex);
+      if (exists) {
+        return prev.filter((m) => !(m.string === stringIndex && m.fret === fretIndex));
+      }
+      return [...prev, { string: stringIndex, fret: fretIndex }];
+    });
+  };
+
+  const svgWidth = 300;
+  const svgHeight = 400;
+  const margin = 40;
+  const chartWidth = svgWidth - margin * 2;
+  const chartHeight = svgHeight - margin * 2;
+
+  const fretDistance = chartHeight / fretCount;
+  const stringDistance = chartWidth / (stringCount - 1);
+
+  const editorSvg = useMemo(() => {
+    const lines = [];
+    
+    // Draw strings (vertical)
+    for (let i = 0; i < stringCount; i++) {
+      const x = margin + i * stringDistance;
+      lines.push(
+        <line
+          key={`string-${i}`}
+          x1={x}
+          y1={margin}
+          x2={x}
+          y2={margin + chartHeight}
+          stroke={primaryColor}
+          strokeWidth={strokeWidth[0]}
+        />
+      );
+    }
+
+    // Draw frets (horizontal)
+    for (let i = 0; i <= fretCount; i++) {
+      const y = margin + i * fretDistance;
+      const isNut = i === 0 && startingFret === 1;
+      lines.push(
+        <line
+          key={`fret-${i}`}
+          x1={margin}
+          y1={y}
+          x2={margin + chartWidth}
+          y2={y}
+          stroke={primaryColor}
+          strokeWidth={isNut ? strokeWidth[0] * 3 : strokeWidth[0]}
+        />
+      );
+    }
+
+    // Hitboxes and Markers
+    const interactiveElements = [];
+    for (let s = 0; s < stringCount; s++) {
+      for (let f = 1; f <= fretCount; f++) {
+        const x = margin + s * stringDistance;
+        const y = margin + (f - 0.5) * fretDistance;
+        const markerExists = markers.find(m => m.string === s && m.fret === f);
+        
+        interactiveElements.push(
+          <g key={`cell-${s}-${f}`} className="cursor-pointer group" onClick={() => toggleMarker(s, f)}>
+            {/* Hitbox */}
+            <rect
+              x={x - stringDistance / 2}
+              y={margin + (f - 1) * fretDistance}
+              width={stringDistance}
+              height={fretDistance}
+              fill="transparent"
+            />
+            {/* Ghost marker (hover) */}
+            {!markerExists && (
+              <circle
+                cx={x}
+                cy={y}
+                r={(markerSize[0] / 200) * Math.min(stringDistance, fretDistance)}
+                fill={primaryColor}
+                fillOpacity="0.2"
+                className="opacity-0 group-hover:opacity-100 transition-opacity"
+              />
+            )}
+            {/* Active marker */}
+            {markerExists && (
+              <circle
+                cx={x}
+                cy={y}
+                r={(markerSize[0] / 200) * Math.min(stringDistance, fretDistance)}
+                fill={primaryColor}
+              />
+            )}
+          </g>
+        );
+      }
+    }
+
+    return (
+      <svg 
+        viewBox={`0 0 ${svgWidth} ${svgHeight}`} 
+        className="w-full h-full max-h-[500px]"
+        style={{ backgroundColor: bgColor }}
+      >
+        {lines}
+        {interactiveElements}
+        {chordTitle && (
+          <text
+            x={svgWidth / 2}
+            y={margin / 2}
+            textAnchor="middle"
+            fill={primaryColor}
+            style={{ fontSize: fontSize[0], fontWeight: 'bold' }}
+          >
+            {chordTitle}
+          </text>
+        )}
+        {startingFret > 1 && (
+          <text
+            x={margin - 10}
+            y={margin + fretDistance / 2}
+            textAnchor="end"
+            dominantBaseline="middle"
+            fill={primaryColor}
+            style={{ fontSize: fontSize[0] * 0.8 }}
+          >
+            {startingFret}fr
+          </text>
+        )}
+      </svg>
+    );
+  }, [
+    chordTitle, 
+    startingFret, 
+    fretCount, 
+    stringCount, 
+    markerSize, 
+    strokeWidth, 
+    fontSize, 
+    primaryColor, 
+    bgColor, 
+    markers,
+    stringDistance,
+    fretDistance,
+    chartWidth,
+    chartHeight
+  ]);
 
   return (
     <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? "dark bg-background text-foreground" : "bg-slate-50 text-slate-900"}`}>
@@ -126,9 +280,9 @@ function ChordGenerator() {
             <CardHeader className="border-b bg-muted/50 py-3">
               <CardTitle className="text-md">Editor</CardTitle>
             </CardHeader>
-            <CardContent className="flex-1 flex items-center justify-center p-0">
-              <div className="text-muted-foreground animate-pulse">
-                SVG do Editor virá aqui
+            <CardContent className="flex-1 flex items-center justify-center p-4">
+              <div className="w-full max-w-[300px] border rounded-lg overflow-hidden shadow-inner bg-white/50 dark:bg-black/20">
+                {editorSvg}
               </div>
             </CardContent>
           </Card>
