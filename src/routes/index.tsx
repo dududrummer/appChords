@@ -1,6 +1,6 @@
 import { useState, useMemo, useRef } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Moon, Sun, Download, Circle, Square, Triangle, Trash2 } from "lucide-react";
+import { Moon, Sun, Download, Circle, Square, Triangle, Trash2, Columns, Rows } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -187,7 +187,7 @@ function ChordGenerator() {
       
       if (stringNames[s]) {
         stringNameElements.push(
-          <text key={`name-${s}`} x={x} y={y} textAnchor="middle" dominantBaseline="middle" fill={primaryColor} style={{ fontSize: fontSize[0] * 0.7, fontWeight: 'bold' }}>
+          <text key={`name-${s}`} x={x} y={y} textAnchor={isVertical ? "middle" : "start"} dominantBaseline="middle" fill={primaryColor} style={{ fontSize: fontSize[0] * 0.7, fontWeight: 'bold' }}>
             {stringNames[s]}
           </text>
         );
@@ -198,12 +198,12 @@ function ChordGenerator() {
     barres.forEach((barre, idx) => {
       const pStart = getCoords(barre.startString, barre.fret - 0.5);
       const pEnd = getCoords(barre.endString, barre.fret - 0.5);
-      const height = (markerSize[0] / 200) * Math.min(stringDistance, fretDistance) * 2;
+      const thickness = (markerSize[0] / 200) * Math.min(stringDistance, fretDistance) * 2;
       
       if (isVertical) {
-        barreElements.push(<rect key={`barre-${idx}`} x={pStart.x - height / 2} y={pStart.y - height / 2} width={pEnd.x - pStart.x + height} height={height} rx={height / 2} fill={primaryColor} />);
+        barreElements.push(<rect key={`barre-${idx}`} x={pStart.x - thickness / 2} y={pStart.y - thickness / 2} width={pEnd.x - pStart.x + thickness} height={thickness} rx={thickness / 2} fill={primaryColor} />);
       } else {
-        barreElements.push(<rect key={`barre-${idx}`} x={pStart.x - height / 2} y={pStart.y - height / 2} width={pEnd.x - pStart.x + height} height={height} rx={height / 2} fill={primaryColor} transform={`rotate(90 ${pStart.x} ${pStart.y})`} />);
+        barreElements.push(<rect key={`barre-${idx}`} x={pStart.x - thickness / 2} y={pStart.y - thickness / 2} width={thickness} height={pEnd.y - pStart.y + thickness} rx={thickness / 2} fill={primaryColor} />);
       }
     });
 
@@ -346,10 +346,14 @@ function ChordGenerator() {
               <div className="space-y-2"><Label>Cordas</Label><Input type="number" value={stringCount} onChange={(e) => setStringCount(Number(e.target.value))} /></div>
               
               <div className="space-y-2">
-                <Label>Orientação</Label>
-                <ToggleGroup type="single" value={orientation} onValueChange={(v) => v && setOrientation(v as any)} className="justify-start">
-                  <ToggleGroupItem value="vertical" className="px-3">Vertical</ToggleGroupItem>
-                  <ToggleGroupItem value="horizontal" className="px-3">Horizontal</ToggleGroupItem>
+                <Label>Orientação do Diagrama</Label>
+                <ToggleGroup type="single" value={orientation} onValueChange={(v) => v && setOrientation(v as any)} className="justify-start border p-1 rounded-md w-fit">
+                  <ToggleGroupItem value="vertical" className="px-3 gap-2" title="Vertical">
+                    <Rows className="h-4 w-4" /> <span>Vertical</span>
+                  </ToggleGroupItem>
+                  <ToggleGroupItem value="horizontal" className="px-3 gap-2" title="Horizontal">
+                    <Columns className="h-4 w-4" /> <span>Horizontal</span>
+                  </ToggleGroupItem>
                 </ToggleGroup>
               </div>
               <div className="space-y-4">
