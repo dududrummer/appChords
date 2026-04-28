@@ -383,45 +383,80 @@ function ChordGenerator() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="space-y-2">
                   <Label>Cor Principal</Label>
-                  <div className="flex flex-wrap gap-1">
-                    {["#000000", "#3b82f6", "#22c55e", "#a855f7", "#f97316", "#eab308"].map((c) => (
-                      <button
-                        key={c}
-                        className={`w-8 h-8 rounded-full border-2 transition-transform hover:scale-110 ${primaryColor === c ? "border-primary" : "border-transparent"}`}
-                        style={{ backgroundColor: c }}
-                        onClick={() => setPrimaryColor(c)}
-                        title={c}
-                      />
-                    ))}
-                  </div>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="outline" className="w-full h-10 flex items-center justify-between px-3">
+                        <div className="flex items-center gap-2">
+                          <div className="w-4 h-4 rounded-full border" style={{ backgroundColor: primaryColor }} />
+                          <span className="text-xs">Selecione</span>
+                        </div>
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-48 p-2">
+                      <div className="grid grid-cols-3 gap-2">
+                        {["#000000", "#3b82f6", "#22c55e", "#a855f7", "#f97316", "#eab308"].map((c) => (
+                          <button
+                            key={c}
+                            className={`w-10 h-10 rounded-full border-2 transition-transform hover:scale-110 ${primaryColor === c ? "border-primary" : "border-transparent"}`}
+                            style={{ backgroundColor: c }}
+                            onClick={() => setPrimaryColor(c)}
+                          />
+                        ))}
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 </div>
+
                 <div className="space-y-2">
                   <Label>Cor Forma</Label>
-                  <div className="flex flex-wrap gap-1">
-                    {["#000000", "#3b82f6", "#22c55e", "#a855f7", "#f97316", "#eab308"].map((c) => (
-                      <button
-                        key={c}
-                        className={`w-8 h-8 rounded-full border-2 transition-transform hover:scale-110 ${markerColor === c ? "border-primary" : "border-transparent"}`}
-                        style={{ backgroundColor: c }}
-                        onClick={() => setMarkerColor(c)}
-                        title={c}
-                      />
-                    ))}
-                  </div>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="outline" className="w-full h-10 flex items-center justify-between px-3">
+                        <div className="flex items-center gap-2">
+                          <div className="w-4 h-4 rounded-full border" style={{ backgroundColor: markerColor }} />
+                          <span className="text-xs">Selecione</span>
+                        </div>
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-48 p-2">
+                      <div className="grid grid-cols-3 gap-2">
+                        {["#000000", "#3b82f6", "#22c55e", "#a855f7", "#f97316", "#eab308"].map((c) => (
+                          <button
+                            key={c}
+                            className={`w-10 h-10 rounded-full border-2 transition-transform hover:scale-110 ${markerColor === c ? "border-primary" : "border-transparent"}`}
+                            style={{ backgroundColor: c }}
+                            onClick={() => setMarkerColor(c)}
+                          />
+                        ))}
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 </div>
+
                 <div className="space-y-2">
                   <Label>Cor Fundo</Label>
-                  <div className="flex flex-wrap gap-1">
-                    {["#ffffff", "#f8fafc", "#f1f5f9", "#e2e8f0", "#000000", "#1a1a1a"].map((c) => (
-                      <button
-                        key={c}
-                        className={`w-8 h-8 rounded-full border-2 transition-transform hover:scale-110 ${bgColor === c ? "border-primary" : "border-transparent"}`}
-                        style={{ backgroundColor: c }}
-                        onClick={() => setBgColor(c)}
-                        title={c}
-                      />
-                    ))}
-                  </div>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="outline" className="w-full h-10 flex items-center justify-between px-3">
+                        <div className="flex items-center gap-2">
+                          <div className="w-4 h-4 rounded-full border" style={{ backgroundColor: bgColor }} />
+                          <span className="text-xs">Selecione</span>
+                        </div>
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-48 p-2">
+                      <div className="grid grid-cols-3 gap-2">
+                        {["#ffffff", "#f8fafc", "#f1f5f9", "#e2e8f0", "#000000", "#1a1a1a"].map((c) => (
+                          <button
+                            key={c}
+                            className={`w-10 h-10 rounded-full border-2 transition-transform hover:scale-110 ${bgColor === c ? "border-primary" : "border-transparent"}`}
+                            style={{ backgroundColor: c }}
+                            onClick={() => setBgColor(c)}
+                          />
+                        ))}
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </div>
             </div>
