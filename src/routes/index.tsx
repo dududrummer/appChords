@@ -306,7 +306,7 @@ function ChordGenerator() {
         )}
       </svg>
     );
-  }, [chordTitle, startingFret, fretCount, stringCount, markerSize, strokeWidth, fontSize, primaryColor, bgColor, markers, markerShape, nutIndicators, barres, dragStart, dragEnd, stringDistance, fretDistance, stringNames, orientation, taper]);
+  }, [chordTitle, startingFret, fretCount, stringCount, markerSize, strokeWidth, fontSize, primaryColor, markerColor, bgColor, markers, markerShape, nutIndicators, barres, dragStart, dragEnd, stringDistance, fretDistance, stringNames, orientation, taper]);
 
   const resultSvg = useMemo(() => {
     const { lines, nutElements, barreElements, interactiveElements, stringNameElements } = getFretboardContent(true);
