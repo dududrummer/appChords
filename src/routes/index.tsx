@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Moon, Sun, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { Slider } from "@/components/ui/slider";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Circle, Square, Triangle } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { toast } from "sonner";
 
 interface Marker {
   string: number;
@@ -48,6 +49,7 @@ function ChordGenerator() {
   const [barres, setBarres] = useState<Barre[]>([]);
   const [dragStart, setDragStart] = useState<{ fret: number; string: number } | null>(null);
   const [dragEnd, setDragEnd] = useState<{ fret: number; string: number } | null>(null);
+  const resultSvgRef = useRef<SVGSVGElement>(null);
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
@@ -517,9 +519,9 @@ function ChordGenerator() {
             <CardHeader className="border-b bg-muted/50 py-3">
               <CardTitle className="text-md">Resultado</CardTitle>
             </CardHeader>
-            <CardContent className="flex-1 flex items-center justify-center p-0">
-              <div className="text-muted-foreground animate-pulse">
-                SVG do Resultado virá aqui
+            <CardContent className="flex-1 flex items-center justify-center p-4">
+              <div className="w-full max-w-[300px] border rounded-lg overflow-hidden shadow-inner bg-white dark:bg-black">
+                {resultSvg}
               </div>
             </CardContent>
           </Card>
@@ -527,11 +529,11 @@ function ChordGenerator() {
 
         {/* Ações de Download */}
         <div className="flex flex-wrap justify-center gap-4 py-4">
-          <Button size="lg" variant="secondary" className="gap-2">
+          <Button size="lg" variant="secondary" className="gap-2" onClick={downloadPng}>
             <Download className="h-4 w-4" />
             Baixar PNG
           </Button>
-          <Button size="lg" className="gap-2">
+          <Button size="lg" className="gap-2" onClick={downloadSvg}>
             <Download className="h-4 w-4" />
             Baixar SVG
           </Button>
