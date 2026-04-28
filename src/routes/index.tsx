@@ -112,12 +112,12 @@ function ChordGenerator() {
         const endString = Math.max(dragStart.string, dragEnd.string);
         setBarres(prev => {
           const filtered = prev.filter(b => b.fret !== fret);
-          return [...filtered, { fret, startString, endString }];
+          return [...filtered, { fret, startString, endString, color: markerColor, label: "" }];
         });
       } else {
         const existingBarre = barres.find(b => b.fret === dragStart.fret && dragStart.string >= b.startString && dragStart.string <= b.endString);
         if (existingBarre) {
-          setBarres(prev => prev.filter(b => b !== existingBarre));
+          // Do nothing on single click if it's a barre, the Popover will handle it
         } else {
           const exists = markers.find(m => m.string === dragStart.string && m.fret === dragStart.fret);
           if (!exists) {
