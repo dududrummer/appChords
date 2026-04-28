@@ -187,7 +187,7 @@ function ChordGenerator() {
       
       if (stringNames[s]) {
         stringNameElements.push(
-          <text key={`name-${s}`} x={x} y={y} textAnchor="middle" dominantBaseline="middle" fill={primaryColor} style={{ fontSize: fontSize[0] * 0.7, fontWeight: 'bold' }}>
+          <text key={`name-${s}`} x={x} y={y} textAnchor={isVertical ? "middle" : "start"} dominantBaseline="middle" fill={primaryColor} style={{ fontSize: fontSize[0] * 0.7, fontWeight: 'bold' }}>
             {stringNames[s]}
           </text>
         );
