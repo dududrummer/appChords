@@ -44,6 +44,7 @@ function ChordGenerator() {
   const [labelFontSize, setLabelFontSize] = useState([10]);
   const [primaryColor, setPrimaryColor] = useState("#000000");
   const [markerColor, setMarkerColor] = useState("#000000");
+  const [markerShape, setMarkerShape] = useState("circle");
   const [bgColor, setBgColor] = useState("#ffffff");
   const [orientation, setOrientation] = useState<"vertical" | "horizontal">("vertical");
   const [taper, setTaper] = useState([10]);
