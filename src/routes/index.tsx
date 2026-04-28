@@ -120,31 +120,53 @@ function ChordGenerator() {
     setDragEnd(null);
   };
 
-  const svgWidth = 300;
-  const svgHeight = 450;
+  const isVertical = orientation === "vertical";
+  const svgWidth = isVertical ? 300 : 450;
+  const svgHeight = isVertical ? 450 : 300;
   const margin = 50;
-  const chartWidth = svgWidth - margin * 2;
-  const chartHeight = svgHeight - margin * 2.5;
+  const chartWidth = (isVertical ? svgWidth : svgHeight) - margin * 2;
+  const chartHeight = (isVertical ? svgHeight : svgWidth) - margin * 2.5;
   const fretDistance = chartHeight / fretCount;
   const stringDistance = chartWidth / (stringCount - 1);
+  const taperFactor = taper[0] / 100;
+
+  const getCoords = (s: number, f: number) => {
+    const p = f / fretCount; // 0 at top/left (nut), 1 at bottom/right
+    const scale = (1 - taperFactor / 2) + p * taperFactor;
+    const middlePos = margin + (stringCount - 1) * stringDistance / 2;
+    const distFromCenter = (s * stringDistance) - ((stringCount - 1) * stringDistance / 2);
+    const variablePos = middlePos + distFromCenter * scale;
+    const constantPos = margin + f * fretDistance;
+
+    return isVertical 
+      ? { x: variablePos, y: constantPos } 
+      : { x: constantPos, y: variablePos };
+  };
 
   const getFretboardContent = (isReadOnly: boolean) => {
     const lines = [];
+    // Strings
     for (let i = 0; i < stringCount; i++) {
-      const x = margin + i * stringDistance;
-      lines.push(<line key={`string-${i}`} x1={x} y1={margin} x2={x} y2={margin + chartHeight} stroke={primaryColor} strokeWidth={strokeWidth[0]} />);
+      const p1 = getCoords(i, 0);
+      const p2 = getCoords(i, fretCount);
+      lines.push(<line key={`string-${i}`} x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} stroke={primaryColor} strokeWidth={strokeWidth[0]} />);
     }
+    // Frets
     for (let i = 0; i <= fretCount; i++) {
-      const y = margin + i * fretDistance;
+      const p1 = getCoords(0, i);
+      const p2 = getCoords(stringCount - 1, i);
       const isNut = i === 0 && startingFret === 1;
-      lines.push(<line key={`fret-${i}`} x1={margin} y1={y} x2={margin + chartWidth} y2={y} stroke={primaryColor} strokeWidth={isNut ? strokeWidth[0] * 3 : strokeWidth[0]} />);
+      lines.push(<line key={`fret-${i}`} x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} stroke={primaryColor} strokeWidth={isNut ? strokeWidth[0] * 3 : strokeWidth[0]} />);
     }
 
     const nutElements = [];
     for (let s = 0; s < stringCount; s++) {
-      const x = margin + s * stringDistance;
-      const y = margin - 15;
+      const pNut = getCoords(s, 0);
       const indicator = nutIndicators.find((n) => n.string === s);
+      const offset = 15;
+      const x = isVertical ? pNut.x : pNut.x - offset;
+      const y = isVertical ? pNut.y - offset : pNut.y;
+      
       nutElements.push(
         <g key={`nut-${s}`} className={isReadOnly ? "" : "cursor-pointer group"} onClick={isReadOnly ? undefined : () => toggleNutIndicator(s)}>
           {!isReadOnly && <rect x={x - 10} y={y - 10} width={20} height={20} fill="transparent" />}
@@ -158,11 +180,14 @@ function ChordGenerator() {
 
     const stringNameElements = [];
     for (let s = 0; s < stringCount; s++) {
-      const x = margin + s * stringDistance;
-      const y = margin + chartHeight + 20;
+      const pEnd = getCoords(s, fretCount);
+      const offset = 20;
+      const x = isVertical ? pEnd.x : pEnd.x + offset;
+      const y = isVertical ? pEnd.y + offset : pEnd.y;
+      
       if (stringNames[s]) {
         stringNameElements.push(
-          <text key={`name-${s}`} x={x} y={y} textAnchor="middle" fill={primaryColor} style={{ fontSize: fontSize[0] * 0.7, fontWeight: 'bold' }}>
+          <text key={`name-${s}`} x={x} y={y} textAnchor="middle" dominantBaseline="middle" fill={primaryColor} style={{ fontSize: fontSize[0] * 0.7, fontWeight: 'bold' }}>
             {stringNames[s]}
           </text>
         );
@@ -171,18 +196,22 @@ function ChordGenerator() {
 
     const barreElements: React.ReactNode[] = [];
     barres.forEach((barre, idx) => {
-      const xStart = margin + barre.startString * stringDistance;
-      const xEnd = margin + barre.endString * stringDistance;
-      const y = margin + (barre.fret - 0.5) * fretDistance;
+      const pStart = getCoords(barre.startString, barre.fret - 0.5);
+      const pEnd = getCoords(barre.endString, barre.fret - 0.5);
       const height = (markerSize[0] / 200) * Math.min(stringDistance, fretDistance) * 2;
-      barreElements.push(<rect key={`barre-${idx}`} x={xStart - height / 2} y={y - height / 2} width={xEnd - xStart + height} height={height} rx={height / 2} fill={primaryColor} />);
+      
+      if (isVertical) {
+        barreElements.push(<rect key={`barre-${idx}`} x={pStart.x - height / 2} y={pStart.y - height / 2} width={pEnd.x - pStart.x + height} height={height} rx={height / 2} fill={primaryColor} />);
+      } else {
+        barreElements.push(<rect key={`barre-${idx}`} x={pStart.x - height / 2} y={pStart.y - height / 2} width={height} height={pEnd.y - pStart.y + height} rx={height / 2} fill={primaryColor} />);
+      }
     });
 
     const interactiveElements = [];
     for (let s = 0; s < stringCount; s++) {
       for (let f = 1; f <= fretCount; f++) {
-        const x = margin + s * stringDistance;
-        const y = margin + (f - 0.5) * fretDistance;
+        const p = getCoords(s, f - 0.5);
+        const { x, y } = p;
         const marker = markers.find(m => m.string === s && m.fret === f);
         const radius = (markerSize[0] / 200) * Math.min(stringDistance, fretDistance);
         
@@ -191,8 +220,10 @@ function ChordGenerator() {
           if (markerShape === "circle") return <circle cx={x} cy={y} r={radius} {...props} />;
           if (markerShape === "square") return <rect x={x - radius} y={y - radius} width={radius * 2} height={radius * 2} {...props} />;
           if (markerShape === "triangle") {
-            const p = `${x},${y - radius} ${x - radius},${y + radius} ${x + radius},${y + radius}`;
-            return <polygon points={p} {...props} />;
+            const points = isVertical 
+              ? `${x},${y - radius} ${x - radius},${y + radius} ${x + radius},${y + radius}`
+              : `${x + radius},${y} ${x - radius},${y - radius} ${x - radius},${y + radius}`;
+            return <polygon points={points} {...props} />;
           }
           return null;
         };
@@ -209,9 +240,17 @@ function ChordGenerator() {
           continue;
         }
 
+        // Hitbox logic
+        const p1 = getCoords(s, f-1);
+        const p2 = getCoords(s, f);
+        const hitWidth = isVertical ? stringDistance : fretDistance;
+        const hitHeight = isVertical ? fretDistance : stringDistance;
+        const hitX = isVertical ? x - stringDistance / 2 : p1.x;
+        const hitY = isVertical ? p1.y : y - stringDistance / 2;
+
         interactiveElements.push(
           <g key={`cell-${s}-${f}`} onMouseDown={() => onMouseDown(s, f)} onMouseEnter={() => onMouseEnter(s, f)} onMouseUp={onMouseUp}>
-            <rect x={x - stringDistance / 2} y={margin + (f - 1) * fretDistance} width={stringDistance} height={fretDistance} fill="transparent" className="cursor-pointer" />
+            <rect x={hitX} y={hitY} width={hitWidth} height={hitHeight} fill="transparent" className="cursor-pointer" />
             {!marker && renderShape(true)}
             {marker && (
               <Popover>
