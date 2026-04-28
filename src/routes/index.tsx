@@ -217,7 +217,7 @@ function ChordGenerator() {
         const marker = markers.find(m => m.string === s && m.fret === f);
         const radius = (markerSize[0] / 200) * Math.min(stringDistance, fretDistance);
         
-        const renderShape = (isGhost = false, color = primaryColor) => {
+        const renderShape = (isGhost = false, color = markerColor) => {
           const props = { fill: color, fillOpacity: isGhost ? "0.2" : "1", className: isGhost ? "opacity-0 group-hover:opacity-100 transition-opacity" : "" };
           if (markerShape === "circle") return <circle cx={x} cy={y} r={radius} {...props} />;
           if (markerShape === "square") return <rect x={x - radius} y={y - radius} width={radius * 2} height={radius * 2} {...props} />;
