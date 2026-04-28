@@ -49,7 +49,7 @@ function ChordGenerator() {
   const [markers, setMarkers] = useState<Marker[]>([]);
   const [nutIndicators, setNutIndicators] = useState<NutIndicator[]>([]);
   const [barres, setBarres] = useState<Barre[]>([]);
-  const [stringNames, setStringNames] = useState<string[]>(Array(6).fill(""));
+  const [stringNames, setStringNames] = useState<string[]>(Array(12).fill(""));
   const [dragStart, setDragStart] = useState<{ fret: number; string: number } | null>(null);
   const [dragEnd, setDragEnd] = useState<{ fret: number; string: number } | null>(null);
   const resultSvgRef = useRef<SVGSVGElement>(null);
@@ -131,7 +131,7 @@ function ChordGenerator() {
   const taperFactor = taper[0] / 100;
 
   const getCoords = (s: number, f: number) => {
-    const p = f / fretCount; // 0 at top/left (nut), 1 at bottom/right
+    const p = f / fretCount; // 0 at top (nut), 1 at bottom
     const scale = (1 - taperFactor / 2) + p * taperFactor;
     const middlePos = margin + (stringCount - 1) * stringDistance / 2;
     const distFromCenter = (s * stringDistance) - ((stringCount - 1) * stringDistance / 2);
@@ -203,7 +203,7 @@ function ChordGenerator() {
       if (isVertical) {
         barreElements.push(<rect key={`barre-${idx}`} x={pStart.x - height / 2} y={pStart.y - height / 2} width={pEnd.x - pStart.x + height} height={height} rx={height / 2} fill={primaryColor} />);
       } else {
-        barreElements.push(<rect key={`barre-${idx}`} x={pStart.x - height / 2} y={pStart.y - height / 2} width={height} height={pEnd.y - pStart.y + height} rx={height / 2} fill={primaryColor} />);
+        barreElements.push(<rect key={`barre-${idx}`} x={pStart.x - height / 2} y={pStart.y - height / 2} width={pEnd.x - pStart.x + height} height={height} rx={height / 2} fill={primaryColor} transform={`rotate(90 ${pStart.x} ${pStart.y})`} />);
       }
     });
 
@@ -240,9 +240,7 @@ function ChordGenerator() {
           continue;
         }
 
-        // Hitbox logic
         const p1 = getCoords(s, f-1);
-        const p2 = getCoords(s, f);
         const hitWidth = isVertical ? stringDistance : fretDistance;
         const hitHeight = isVertical ? fretDistance : stringDistance;
         const hitX = isVertical ? x - stringDistance / 2 : p1.x;
@@ -328,6 +326,8 @@ function ChordGenerator() {
     );
   }, [chordTitle, startingFret, fretCount, stringCount, markerSize, strokeWidth, fontSize, primaryColor, bgColor, markers, markerShape, nutIndicators, barres, stringNames, orientation, taper]);
 
+  const downloadFilename = (chordTitle || "chord").toLowerCase().replace(/[^a-z0-9]/g, "-");
+
   return (
     <div className={`min-h-screen ${isDarkMode ? "dark bg-background text-foreground" : "bg-slate-50"}`}>
       <header className="border-b bg-card px-6 py-4 flex items-center justify-between shadow-sm sticky top-0 z-10">
@@ -344,6 +344,20 @@ function ChordGenerator() {
               <div className="space-y-2"><Label>Traste Inicial</Label><Input type="number" value={startingFret} onChange={(e) => setStartingFret(Number(e.target.value))} /></div>
               <div className="space-y-2"><Label>Trastes</Label><Input type="number" value={fretCount} onChange={(e) => setFretCount(Number(e.target.value))} /></div>
               <div className="space-y-2"><Label>Cordas</Label><Input type="number" value={stringCount} onChange={(e) => setStringCount(Number(e.target.value))} /></div>
+              
+              <div className="space-y-2">
+                <Label>Orientação</Label>
+                <ToggleGroup type="single" value={orientation} onValueChange={(v) => v && setOrientation(v as any)} className="justify-start">
+                  <ToggleGroupItem value="vertical" className="px-3">Vertical</ToggleGroupItem>
+                  <ToggleGroupItem value="horizontal" className="px-3">Horizontal</ToggleGroupItem>
+                </ToggleGroup>
+              </div>
+              <div className="space-y-4">
+                <Label>Conicidade ({taper}%)</Label>
+                <Slider value={taper} onValueChange={setTaper} min={0} max={30} step={1} />
+              </div>
+              <div className="space-y-4"><Label>Tamanho Nota ({markerSize}%)</Label><Slider value={markerSize} onValueChange={setMarkerSize} min={10} max={80} /></div>
+              <div className="space-y-4"><Label>Linha ({strokeWidth}px)</Label><Slider value={strokeWidth} onValueChange={setStrokeWidth} min={1} max={10} step={0.5} /></div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="space-y-2">
@@ -352,11 +366,17 @@ function ChordGenerator() {
                   <ToggleGroupItem value="circle"><Circle /></ToggleGroupItem><ToggleGroupItem value="square"><Square /></ToggleGroupItem><ToggleGroupItem value="triangle"><Triangle /></ToggleGroupItem>
                 </ToggleGroup>
               </div>
-              <div className="space-y-4"><Label>Tamanho Nota ({markerSize}%)</Label><Slider value={markerSize} onValueChange={setMarkerSize} min={10} max={80} /></div>
-              <div className="space-y-4"><Label>Linha ({strokeWidth}px)</Label><Slider value={strokeWidth} onValueChange={setStrokeWidth} min={1} max={10} step={0.5} /></div>
+              <div className="space-y-4">
+                <Label>Tamanho Fonte ({fontSize}px)</Label>
+                <Slider value={fontSize} onValueChange={setFontSize} min={8} max={24} step={1} />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2"><Label>Cor Principal</Label><Input type="color" value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} className="h-10 p-1" /></div>
+                <div className="space-y-2"><Label>Cor Fundo</Label><Input type="color" value={bgColor} onChange={(e) => setBgColor(e.target.value)} className="h-10 p-1" /></div>
+              </div>
             </div>
             <div className="space-y-2">
-              <Label>Nomes das Cordas (Abaixo do braço)</Label>
+              <Label>Nomes das Cordas ({isVertical ? "Abaixo" : "À direita"})</Label>
               <div className="flex flex-wrap gap-2">
                 {Array.from({ length: stringCount }).map((_, i) => (
                   <Input key={i} className="w-12 h-8 text-center" placeholder={`S${i+1}`} value={stringNames[i] || ""} onChange={(e) => handleStringNameChange(i, e.target.value)} />
@@ -367,8 +387,8 @@ function ChordGenerator() {
         </Card>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <Card><CardHeader className="bg-muted/50"><CardTitle>Editor</CardTitle></CardHeader><CardContent className="p-4 flex justify-center"><div className="w-full max-w-[300px] border rounded-lg bg-white/50 dark:bg-black/20">{editorSvg}</div></CardContent></Card>
-          <Card><CardHeader className="bg-muted/50"><CardTitle>Resultado</CardTitle></CardHeader><CardContent className="p-4 flex justify-center"><div className="w-full max-w-[300px] border rounded-lg bg-white dark:bg-black">{resultSvg}</div></CardContent></Card>
+          <Card><CardHeader className="bg-muted/50"><CardTitle>Editor</CardTitle></CardHeader><CardContent className="p-4 flex justify-center"><div className={`w-full ${isVertical ? "max-w-[300px]" : "max-w-[450px]"} border rounded-lg bg-white/50 dark:bg-black/20`}>{editorSvg}</div></CardContent></Card>
+          <Card><CardHeader className="bg-muted/50"><CardTitle>Resultado</CardTitle></CardHeader><CardContent className="p-4 flex justify-center"><div className={`w-full ${isVertical ? "max-w-[300px]" : "max-w-[450px]"} border rounded-lg bg-white dark:bg-black`}>{resultSvg}</div></CardContent></Card>
         </div>
 
         <div className="flex justify-center gap-4 py-4">
@@ -383,14 +403,14 @@ function ChordGenerator() {
               if (!ctx) return;
               ctx.fillStyle = bgColor; ctx.fillRect(0, 0, canvas.width, canvas.height);
               ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-              const link = document.createElement("a"); link.download = "chord.png"; link.href = canvas.toDataURL(); link.click();
+              const link = document.createElement("a"); link.download = `${downloadFilename}.png`; link.href = canvas.toDataURL(); link.click();
             };
             img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)));
           }}><Download className="mr-2 h-4 w-4" /> PNG</Button>
           <Button onClick={() => {
             if (!resultSvgRef.current) return;
             const svgData = new XMLSerializer().serializeToString(resultSvgRef.current);
-            const link = document.createElement("a"); link.download = "chord.svg";
+            const link = document.createElement("a"); link.download = `${downloadFilename}.svg`;
             link.href = URL.createObjectURL(new Blob([svgData], { type: "image/svg+xml" })); link.click();
           }}><Download className="mr-2 h-4 w-4" /> SVG</Button>
         </div>
@@ -398,3 +418,5 @@ function ChordGenerator() {
     </div>
   );
 }
+
+export default ChordGenerator;
