@@ -258,8 +258,8 @@ function ChordGenerator() {
               <div className="space-y-2">
                 <Label className="text-xs">Texto e Cor da Pestana</Label>
                 <div className="flex gap-2 mb-2">
-                  <Input maxLength={2} className="h-8" value={barre.label || ""} onChange={(e) => updateBarre(barre.fret, { label: e.target.value })} placeholder="1, T..." />
-                  <Input type="color" className="h-8 w-12 p-1 cursor-pointer" value={barreColor} onChange={(e) => updateBarre(barre.fret, { color: e.target.value })} />
+                  <Input maxLength={2} className="h-8" value={barre.label || ""} onChange={(e) => updateBarre(barre.fret, { label: e.target.value })} onKeyDown={(e) => e.stopPropagation()} placeholder="1, T..." />
+                  <Input type="color" className="h-8 w-12 p-1 cursor-pointer" value={barreColor} onChange={(e) => updateBarre(barre.fret, { color: e.target.value })} onKeyDown={(e) => e.stopPropagation()} />
                 </div>
                 <div className="flex flex-wrap gap-1">
                   {["#000000", "#3b82f6", "#22c55e", "#f97316", "#eab308", "#a855f7"].map((c) => (
