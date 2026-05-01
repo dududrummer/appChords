@@ -28,8 +28,8 @@ jobs:
       - name: 🚀 Enviar para Hostinger via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
+          server: ${{ secrets.verusdeal.com/appchords }}
+          username: ${{ secrets.u699510729.verusdeal.com }}
+          password: ${{ secrets.Jesuscristo85@ }}
           local-dir: ./dist/
-          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          server-dir: ${{ secrets./public_html/ }}
