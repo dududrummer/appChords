@@ -189,7 +189,10 @@ export function ChordSearch({
       // Cavaquinho/ukulele: sem cordas mudas (usa omissões de notas em vez disso)
       allowMuted: !isCavaquinho,
       maxFret: 12,
-      maxResults: 24,
+      // Cavaquinho: 12 resultados e limite interno 80 (configuração original)
+      // Violão: 24 resultados e limite interno 200 (necessário para achar x35453 e similares)
+      maxResults: isCavaquinho ? 12 : 24,
+      maxInternalResults: isCavaquinho ? 80 : 200,
       allowOmissions: isCavaquinho,
       rootNoteIndex: parsed.noteIndices[0],
       // Violão: filtra pelo baixo = fundamental; slash chords usam o baixo explícito

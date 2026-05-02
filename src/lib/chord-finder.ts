@@ -20,6 +20,7 @@ interface FindOptions {
   allowMuted?: boolean;
   maxSpan?: number;
   maxResults?: number;
+  maxInternalResults?: number; // limite interno do backtracking
   allowOmissions?: boolean;
   rootNoteIndex?: number;
   bassNoteIndex?: number;
@@ -83,7 +84,7 @@ function findVoicingsForNotes(
   opts: Omit<FindOptions, 'allowOmissions' | 'rootNoteIndex'>,
   omitted: string[]
 ): Voicing[] {
-  const { maxFret = 12, allowMuted = false, maxSpan = 4, minBarreStrings = 2 } = opts;
+  const { maxFret = 12, allowMuted = false, maxSpan = 4, minBarreStrings = 2, maxInternalResults = 200 } = opts;
   const n = tuning.length;
 
   const validFrets: number[][] = tuning.map(note => {
@@ -100,7 +101,7 @@ function findVoicingsForNotes(
   const collected: Voicing[] = [];
 
   function bt(si: number, cur: number[], cov: Set<number>) {
-    if (collected.length >= 200) return;
+    if (collected.length >= maxInternalResults) return;
     if (si === n) {
       if (!required.every(x => cov.has(x))) return;
       const pressed = cur.filter(f => f > 0);
