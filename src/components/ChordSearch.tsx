@@ -191,6 +191,7 @@ export function ChordSearch({
       maxResults: 12,
       allowOmissions: smallInstrument,
       rootNoteIndex: parsed.noteIndices[0],
+      bassNoteIndex: parsed.bassNoteIndex,
     });
 
     if (results.length === 0) {

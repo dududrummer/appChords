@@ -107,17 +107,39 @@ export interface ParsedChord {
   root: string;
   quality: string;
   qualityName: string;
-  noteIndices: number[];
+  noteIndices: number[];   // all required notes (includes bass if slash chord)
+  bassNoteIndex?: number;  // for slash chords like E/G#, C/G
   displayName: string;
 }
 
 export function parseChord(input: string): ParsedChord | null {
   if (!input.trim()) return null;
-  const rootMatch = input.trim().match(/^([A-G][b#]?)/);
+
+  // Detect slash chord: split on last '/' that is NOT part of chord quality
+  // e.g. "C/G" → chord="C", bass="G" | "m6/9" → chord="m6/9", no slash
+  // Strategy: look for /<Note> at the end
+  const slashMatch = input.trim().match(/^(.+)\/([A-G][b#]?)$/);
+  let chordPart = input.trim();
+  let bassNote: string | undefined;
+
+  if (slashMatch) {
+    // Validate: left side must be a valid chord
+    const leftRoot = slashMatch[1].match(/^([A-G][b#]?)/);
+    if (leftRoot) {
+      const leftQuality = slashMatch[1].slice(leftRoot[1].length);
+      // Only treat as slash chord if left quality is valid
+      if (leftQuality in CHORD_FORMULAS || leftQuality === '') {
+        chordPart = slashMatch[1];
+        bassNote = slashMatch[2];
+      }
+    }
+  }
+
+  const rootMatch = chordPart.match(/^([A-G][b#]?)/);
   if (!rootMatch) return null;
 
   const root = rootMatch[1];
-  const quality = input.trim().slice(root.length);
+  const quality = chordPart.slice(root.length);
   const formula = CHORD_FORMULAS[quality];
   if (!formula) return null;
 
@@ -126,7 +148,21 @@ export function parseChord(input: string): ParsedChord | null {
 
   const noteIndices = [...new Set(formula.intervals.map(i => (rootIndex + i) % 12))];
 
-  return { root, quality, qualityName: formula.name, noteIndices, displayName: `${root}${quality}` };
+  let bassNoteIndex: number | undefined;
+  if (bassNote) {
+    const bi = getNoteIndex(bassNote);
+    if (bi === -1) return null;
+    bassNoteIndex = bi;
+    // Ensure bass note is in the required notes
+    if (!noteIndices.includes(bi)) noteIndices.push(bi);
+  }
+
+  const displayBass = bassNote ? `/${bassNote}` : '';
+  return {
+    root, quality, qualityName: formula.name,
+    noteIndices, bassNoteIndex,
+    displayName: `${root}${quality}${displayBass}`,
+  };
 }
 
 export const INSTRUMENT_PRESETS: Record<string, { label: string; tuning: string[]; strings: number }> = {

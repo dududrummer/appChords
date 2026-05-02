@@ -19,8 +19,9 @@ interface FindOptions {
   allowMuted?: boolean;    // default false
   maxSpan?: number;        // default 4
   maxResults?: number;     // default 12
-  allowOmissions?: boolean;// default false — omit 5th/root for small instruments
+  allowOmissions?: boolean;// default false
   rootNoteIndex?: number;  // required when allowOmissions=true
+  bassNoteIndex?: number;  // for slash chords: lowest string must play this note
 }
 
 // ── Internal: find voicings for a given set of required notes ───────────────
@@ -92,7 +93,7 @@ export function findVoicings(
   tuning: string[],
   options: FindOptions = {}
 ): Voicing[] {
-  const { allowOmissions = false, rootNoteIndex, maxResults = 12, ...restOpts } = options;
+  const { allowOmissions = false, rootNoteIndex, bassNoteIndex, maxResults = 12, ...restOpts } = options;
 
   const allRaw: Voicing[] = [];
 
@@ -102,34 +103,47 @@ export function findVoicings(
   if (allowOmissions && rootNoteIndex !== undefined) {
     const perfectFifth = (rootNoteIndex + 7) % 12;
     const hasPerfectFifth = chordNoteIndices.includes(perfectFifth);
+    // Bass note must never be omitted
+    const isBassRoot = bassNoteIndex === rootNoteIndex;
+    const isBassFifth = bassNoteIndex === perfectFifth;
 
-    // 2. Omit perfect 5th (never omit b5/aug5 — they define the chord)
-    if (hasPerfectFifth) {
+    if (hasPerfectFifth && !isBassFifth) {
       const noFifth = chordNoteIndices.filter(n => n !== perfectFifth);
       allRaw.push(...findVoicingsForNotes(noFifth, tuning, restOpts, ['s/ 5ª']));
 
-      // 3. Omit 5th AND root
       const noFifthNoRoot = noFifth.filter(n => n !== rootNoteIndex);
-      if (noFifthNoRoot.length > 0) {
+      if (noFifthNoRoot.length > 0 && !isBassRoot) {
         allRaw.push(...findVoicingsForNotes(noFifthNoRoot, tuning, restOpts, ['s/ 5ª', 's/ fund.']));
       }
     }
 
-    // 4. Omit root only
-    const noRoot = chordNoteIndices.filter(n => n !== rootNoteIndex);
-    if (noRoot.length > 0) {
-      allRaw.push(...findVoicingsForNotes(noRoot, tuning, restOpts, ['s/ fund.']));
+    if (!isBassRoot) {
+      const noRoot = chordNoteIndices.filter(n => n !== rootNoteIndex);
+      if (noRoot.length > 0) {
+        allRaw.push(...findVoicingsForNotes(noRoot, tuning, restOpts, ['s/ fund.']));
+      }
     }
   }
 
-  // Deduplicate (keep first occurrence = fullest chord wins)
+  // Deduplicate
   const seen = new Set<string>();
-  const unique = allRaw.filter(v => {
+  let unique = allRaw.filter(v => {
     const key = v.frets.join(',');
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
   });
+
+  // Filter by bass note: lowest non-muted string must play bassNoteIndex
+  if (bassNoteIndex !== undefined) {
+    unique = unique.filter(v => {
+      const lowestStr = v.frets.findIndex(f => f !== -1);
+      if (lowestStr === -1) return false;
+      const openIdx = getNoteIndex(tuning[lowestStr]);
+      if (openIdx === -1) return false;
+      return noteIndexAtFret(openIdx, v.frets[lowestStr]) === bassNoteIndex;
+    });
+  }
 
   // Sort: full chords first, then by startingFret, then fewer muted strings
   unique.sort((a, b) => {
