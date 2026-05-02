@@ -46,11 +46,10 @@ function MiniDiagram({
   const strSp = stringCount > 1 ? iW / (stringCount - 1) : iW;
 
   const sx = (s: number) => ml + s * strSp;
-  const fy = (f: number) => mt + f * fretH; // f=0 is nut line
+  const fy = (f: number) => mt + f * fretH;
 
   const startFret = voicing.startingFret;
   const showNut = startFret === 1;
-
   const elements: React.ReactNode[] = [];
 
   // Fret lines
@@ -79,26 +78,22 @@ function MiniDiagram({
     );
   }
 
-  // Nut indicators (O / X) and dots
+  // Nut indicators and dots
   for (let s = 0; s < stringCount; s++) {
     const fret = voicing.frets[s];
     const cx = sx(s);
-
     if (fret === -1) {
-      // Muted
       elements.push(
         <text key={`mut${s}`} x={cx} y={mt - 8} textAnchor="middle"
           fill={primaryColor} fontSize={9} fontWeight="bold">✕</text>
       );
     } else if (fret === 0) {
-      // Open
       elements.push(
         <circle key={`open${s}`} cx={cx} cy={mt - 8} r={4}
           fill="none" stroke={primaryColor} strokeWidth={1} />
       );
     } else {
-      // Pressed fret — place dot in middle of fret cell
-      const relFret = fret - startFret + 1; // relative position within window
+      const relFret = fret - startFret + 1;
       if (relFret >= 1 && relFret <= FRETS) {
         const cy = mt + (relFret - 0.5) * fretH;
         elements.push(
@@ -119,18 +114,28 @@ function MiniDiagram({
         <rect key={`barre${i}`}
           x={sx(b.startString) - r} y={cy - r}
           width={sx(b.endString) - sx(b.startString) + r * 2}
-          height={r * 2} rx={r}
-          fill={markerColor} />
+          height={r * 2} rx={r} fill={markerColor} />
       );
     }
   });
+
+  const hasOmissions = voicing.omitted.length > 0;
 
   return (
     <button
       onClick={onClick}
       className={`relative rounded-lg border-2 transition-all hover:scale-105 cursor-pointer bg-white dark:bg-zinc-900 ${selected ? "border-primary shadow-md shadow-primary/30 scale-105" : "border-border"}`}
-      title={`Traste ${voicing.startingFret}: ${voicing.frets.map(f => f === -1 ? "X" : f).join("-")}`}
+      title={`Traste ${voicing.startingFret}: ${voicing.frets.map(f => f === -1 ? "X" : f).join("-")}${hasOmissions ? ` (${voicing.omitted.join(", ")})` : ""}`}
     >
+      {hasOmissions && (
+        <div className="absolute -top-2 left-1/2 -translate-x-1/2 flex gap-1 flex-wrap justify-center">
+          {voicing.omitted.map((tag, i) => (
+            <span key={i} className="rounded-full bg-amber-500 text-white text-[8px] px-1.5 py-0.5 whitespace-nowrap font-bold leading-none">
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
       <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} style={{ backgroundColor: "transparent" }}>
         {elements}
       </svg>
@@ -154,8 +159,10 @@ export function ChordSearch({
   const [error, setError] = useState("");
   const [instrument, setInstrument] = useState("violao");
 
+  // Auto-enable omissions for 4-string instruments
+  const isSmallInstrument = INSTRUMENT_PRESETS[instrument]?.strings <= 4;
+
   const getActiveTuning = useCallback((): string[] => {
-    // Use string names entered by user if filled, else use instrument preset
     const filled = stringNames.slice(0, stringCount).filter(n => n.trim());
     if (filled.length === stringCount) return stringNames.slice(0, stringCount);
     return INSTRUMENT_PRESETS[instrument]?.tuning ?? INSTRUMENT_PRESETS.violao.tuning;
@@ -176,18 +183,25 @@ export function ChordSearch({
 
     setParsedName(`${parsed.displayName} — ${parsed.qualityName}`);
     const tuning = getActiveTuning();
-    const results = findVoicings(parsed.noteIndices, tuning, { allowMuted, maxFret: 12, maxResults: 12 });
+    const smallInstrument = INSTRUMENT_PRESETS[instrument]?.strings <= 4;
+
+    const results = findVoicings(parsed.noteIndices, tuning, {
+      allowMuted,
+      maxFret: 12,
+      maxResults: 12,
+      allowOmissions: smallInstrument,
+      rootNoteIndex: parsed.noteIndices[0],
+    });
 
     if (results.length === 0) {
       setError("Nenhuma posição encontrada. Verifique a afinação das cordas.");
       setVoicings([]); return;
     }
     setVoicings(results);
-  }, [getActiveTuning, allowMuted]);
+  }, [getActiveTuning, allowMuted, instrument]);
 
   const handleSelectVoicing = useCallback((voicing: Voicing, idx: number) => {
     setSelectedIdx(idx);
-    const tuning = getActiveTuning();
 
     const markers: Marker[] = [];
     const nutIndicators: NutIndicator[] = [];
@@ -206,14 +220,8 @@ export function ChordSearch({
       fret: b.fret, startString: b.startString, endString: b.endString, color: markerColor
     }));
 
-    onSelectVoicing({
-      markers,
-      barres,
-      nutIndicators,
-      startingFret: voicing.startingFret,
-      chordName: query.trim(),
-    });
-  }, [getActiveTuning, markerColor, onSelectVoicing, query]);
+    onSelectVoicing({ markers, barres, nutIndicators, startingFret: voicing.startingFret, chordName: query.trim() });
+  }, [markerColor, onSelectVoicing, query]);
 
   const handleInstrumentChange = (value: string) => {
     setInstrument(value);
@@ -255,6 +263,12 @@ export function ChordSearch({
               ))}
             </div>
           </div>
+          {isSmallInstrument && (
+            <div className="flex items-center gap-1.5 pb-1">
+              <span className="rounded-full bg-amber-500 text-white text-[10px] px-2 py-0.5 font-bold">Auto</span>
+              <span className="text-xs text-muted-foreground">Omissões de 5ª/fund. ativadas para instrumento de 4 cordas</span>
+            </div>
+          )}
         </div>
 
         {/* Search + Options */}
@@ -262,7 +276,7 @@ export function ChordSearch({
           <div className="space-y-1 flex-1 min-w-48">
             <Label>Nome do acorde</Label>
             <Input
-              placeholder="Ex: Am, G7, F#m7, Cmaj7..."
+              placeholder="Ex: Am, G7, F#m7, C7b9..."
               value={query}
               onChange={e => handleSearch(e.target.value)}
               className="font-mono text-base"
@@ -273,7 +287,7 @@ export function ChordSearch({
               setAllowMuted(v);
               if (query) handleSearch(query);
             }} />
-            <Label htmlFor="muted-sw" className="cursor-pointer text-sm">Permitir cordas mudas</Label>
+            <Label htmlFor="muted-sw" className="cursor-pointer text-sm">Cordas mudas</Label>
           </div>
         </div>
 
@@ -286,8 +300,11 @@ export function ChordSearch({
         {/* Voicing Grid */}
         {voicings.length > 0 && (
           <div className="space-y-2">
-            <Label className="text-xs text-muted-foreground">Clique numa posição para carregar no diagrama principal</Label>
-            <div className="flex flex-wrap gap-3">
+            <Label className="text-xs text-muted-foreground">
+              Clique numa posição para carregar no diagrama principal
+              {isSmallInstrument && " · Tags amarelas indicam notas omitidas"}
+            </Label>
+            <div className="flex flex-wrap gap-4 pt-2">
               {voicings.map((v, i) => (
                 <MiniDiagram
                   key={i}
