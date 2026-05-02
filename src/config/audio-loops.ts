@@ -40,9 +40,18 @@ export const AUDIO_LOOPS: AudioLoop[] = [
   { style: 'sambaenredo', bpm: 155, file: 'sambaenredo_155.mp3' },
   { style: 'sambaenredo', bpm: 160, file: 'sambaenredo_160.mp3' },
 
-  // ── Jazz (adicionar quando tiver os arquivos) ─────────────────────────────
-  // { style: 'jazz', bpm: 120, file: 'jazz_120.mp3' },
-  // { style: 'jazz', bpm: 140, file: 'jazz_140.mp3' },
+  // ── Jazz (150–200 BPM) ──────────────────────────────────────────────────────
+  { style: 'jazz', bpm: 150, file: 'jazz_150.mp3' },
+  { style: 'jazz', bpm: 155, file: 'jazz_155.mp3' },
+  { style: 'jazz', bpm: 160, file: 'jazz_160.mp3' },
+  { style: 'jazz', bpm: 165, file: 'jazz_165.mp3' },
+  { style: 'jazz', bpm: 170, file: 'jazz_170.mp3' },
+  { style: 'jazz', bpm: 175, file: 'jazz_175.mp3' },
+  { style: 'jazz', bpm: 180, file: 'jazz_180.mp3' },
+  { style: 'jazz', bpm: 185, file: 'jazz_185.mp3' },
+  { style: 'jazz', bpm: 190, file: 'jazz_190.mp3' },
+  { style: 'jazz', bpm: 195, file: 'jazz_195.mp3' },
+  { style: 'jazz', bpm: 200, file: 'jazz_200.mp3' },
 
   // ── Bossa Nova (adicionar quando tiver os arquivos) ───────────────────────
   // { style: 'bossanova', bpm: 100, file: 'bossanova_100.mp3' },

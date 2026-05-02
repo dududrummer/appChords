@@ -7,12 +7,12 @@ export type Style     = LoopStyle;
 export type AudioMode = 'harmony' | 'percussion' | 'both';
 
 export const DEFAULT_BPM: Record<Style, number> = {
-  batucada: 90, sambaenredo: 140, jazz: 138, bossanova: 108,
+  batucada: 90, sambaenredo: 140, jazz: 170, bossanova: 108,
 };
 export const BPM_RANGE: Record<Style, [number,number]> = {
   batucada:   [60, 120],
   sambaenredo:[125, 160],
-  jazz:       [90, 240],
+  jazz:       [150, 200],
   bossanova:  [70, 150],
 };
 

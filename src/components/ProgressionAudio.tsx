@@ -19,7 +19,7 @@ interface Props {
 const STYLES: { value: Style; label: string; desc: string; bpmLabel: string }[] = [
   { value: 'batucada',    label: '🥁 Batucada',    desc: 'Samba / Pagode',  bpmLabel: '60–120 BPM' },
   { value: 'sambaenredo', label: '🎺 Samba Enredo', desc: 'Carnaval',        bpmLabel: '125–160 BPM' },
-  { value: 'jazz',        label: '🎷 Jazz',         desc: 'Swing',           bpmLabel: '90–240 BPM' },
+  { value: 'jazz',        label: '🎷 Jazz',         desc: 'Swing',           bpmLabel: '150–200 BPM' },
   { value: 'bossanova',   label: '🎸 Bossa Nova',   desc: 'Bossa Nova',      bpmLabel: '70–150 BPM' },
 ];
 
