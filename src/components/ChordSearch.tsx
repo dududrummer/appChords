@@ -207,7 +207,7 @@ export function ChordSearch({
       setVoicings([]); return;
     }
     setVoicings(results);
-  }, [getActiveTuning, allowMuted, instrument]);
+  }, [getActiveTuning, instrument]);
 
   const handleSelectVoicing = useCallback((voicing: Voicing, idx: number) => {
     setSelectedIdx(idx);
