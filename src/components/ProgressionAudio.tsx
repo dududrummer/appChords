@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { startPlayback, stopPlayback, setBpm, DEFAULT_BPM, BPM_RANGE, type Style, type AudioMode } from '@/lib/audio';
+import { startPlayback, stopPlayback, setBpm, DEFAULT_BPM, BPM_RANGE, hasLoopFor, type Style, type AudioMode } from '@/lib/audio';
 import type { Measure } from '@/lib/progression';
 import type { Voicing } from '@/lib/chord-finder';
 
@@ -17,10 +17,12 @@ interface Props {
 }
 
 const STYLES: { value: Style; label: string; desc: string; bpmLabel: string }[] = [
-  { value: 'samba',     label: '🥁 Samba',     desc: 'Batucada + comping sincopado',      bpmLabel: '70–160 BPM' },
-  { value: 'jazz',      label: '🎷 Jazz',      desc: 'Swing + comping no 2 e 4',          bpmLabel: '90–240 BPM' },
-  { value: 'bossanova', label: '🎸 Bossa Nova', desc: 'Clave João Gilberto + piano suave', bpmLabel: '70–150 BPM' },
+  { value: 'batucada',    label: '🥁 Batucada',    desc: 'Samba / Pagode',  bpmLabel: '60–120 BPM' },
+  { value: 'sambaenredo', label: '🎺 Samba Enredo', desc: 'Carnaval',        bpmLabel: '125–160 BPM' },
+  { value: 'jazz',        label: '🎷 Jazz',         desc: 'Swing',           bpmLabel: '90–240 BPM' },
+  { value: 'bossanova',   label: '🎸 Bossa Nova',   desc: 'Bossa Nova',      bpmLabel: '70–150 BPM' },
 ];
+
 
 const MODES: { value: AudioMode; label: string }[] = [
   { value: 'both',       label: '🎵 + 🥁  Harmonia & Percussão' },
@@ -30,9 +32,9 @@ const MODES: { value: AudioMode; label: string }[] = [
 
 export function ProgressionAudio({ measures, voicings, onMeasureChange }: Props) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [style, setStyle]         = useState<Style>('samba');
+  const [style, setStyle]         = useState<Style>('batucada');
   const [mode, setMode]           = useState<AudioMode>('both');
-  const [bpm, setBpmState]        = useState<number>(DEFAULT_BPM.samba);
+  const [bpm, setBpmState]        = useState<number>(DEFAULT_BPM.batucada);
   const [metronome, setMetronome] = useState(false);
   const [loop, setLoop]           = useState(true);
 
@@ -66,7 +68,7 @@ export function ProgressionAudio({ measures, voicings, onMeasureChange }: Props)
 
       <div className="space-y-2">
         <Label className="text-sm font-semibold">Estilo rítmico</Label>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 gap-2">
           {STYLES.map(s => (
             <button key={s.value} onClick={() => handleStyleChange(s.value)}
               className={`rounded-lg border-2 p-3 text-left transition-all ${
@@ -100,12 +102,27 @@ export function ProgressionAudio({ measures, voicings, onMeasureChange }: Props)
           <span className="font-mono font-bold tabular-nums text-lg">{bpm} <span className="text-xs font-normal text-muted-foreground">BPM</span></span>
         </div>
         <Slider min={min} max={max} step={1} value={[bpm]} onValueChange={handleBpm} />
-        <div className="flex justify-between text-[10px] text-muted-foreground">
+        <div className="flex justify-between items-center text-[10px] text-muted-foreground">
           <span>{min} lento</span>
           <span className="text-primary font-medium">{DEFAULT_BPM[style]} padrão</span>
           <span>{max} rápido</span>
         </div>
+        {/* Loop source indicator */}
+        {mode !== 'harmony' && (
+          <div className="flex items-center gap-1.5 mt-1">
+            {hasLoopFor(style, bpm) ? (
+              <span className="inline-flex items-center gap-1 rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 px-2 py-0.5 text-[10px] font-medium">
+                ✓ Áudio real carregado
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1 rounded-full bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400 px-2 py-0.5 text-[10px]">
+                ⚙ Percussão sintetizada (adicione arquivos em public/audio/loops/)
+              </span>
+            )}
+          </div>
+        )}
       </div>
+
 
       <div className="flex flex-wrap gap-5">
         <div className="flex items-center gap-2">
