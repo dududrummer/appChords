@@ -25,11 +25,16 @@ jobs:
       - name: 🔨 Fazer o build
         run: npm run build
 
-      - name: 🚀 Enviar para Hostinger via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./dist/
-          server-dir: /public_html/
+      - name: 📦 Instalar lftp
+        run: sudo apt-get install -y lftp
+
+      - name: 🚀 Deploy via SFTP para Hostinger
+        run: |
+          lftp -e "
+            set sftp:auto-confirm yes;
+            set net:timeout 30;
+            set net:max-retries 3;
+            open sftp://${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}@${{ secrets.FTP_SERVER }}:22;
+            mirror --reverse --delete --verbose ./dist/ /public_html/;
+            bye
+          "
