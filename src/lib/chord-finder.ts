@@ -28,32 +28,33 @@ interface FindOptions {
 
 // ── Barre detection ───────────────────────────────────────────────────────────
 function detectBarres(frets: number[], minBarreStrings = 2): BarreDef[] {
+  // For each candidate fret value (lowest first), check if a barre is possible:
+  // A barre at fretVal from `start` to `end` is valid when:
+  //   - Both start and end strings play exactly fretVal
+  //   - All strings between play fretVal or HIGHER (they're pressed above the barre)
+  //   - No muted string between start and end
+  //   - Span (end-start+1) >= minBarreStrings
   const fretValues = [...new Set(frets.filter(f => f > 0))].sort((a, b) => a - b);
 
   for (const fretVal of fretValues) {
-    // Find the longest CONSECUTIVE run of strings at this fret
-    let bestStart = -1, bestLen = 0, runStart = -1;
-    for (let i = 0; i <= frets.length; i++) {
-      if (i < frets.length && frets[i] === fretVal) {
-        if (runStart === -1) runStart = i;
-      } else {
-        if (runStart !== -1) {
-          const len = i - runStart;
-          if (len > bestLen) { bestLen = len; bestStart = runStart; }
-          runStart = -1;
-        }
-      }
-    }
-    if (bestLen < minBarreStrings) continue;
+    const stringsAtFret = frets
+      .map((f, i) => (f === fretVal ? i : -1))
+      .filter(i => i !== -1);
+    if (stringsAtFret.length < 2) continue;
 
-    const first = bestStart, last = bestStart + bestLen - 1;
-    if (frets.slice(first, last + 1).some(f => f === -1)) continue;
-    if (!frets.slice(first, last + 1).every(f => f === 0 || f >= fretVal)) continue;
+    const start = stringsAtFret[0];
+    const end   = stringsAtFret[stringsAtFret.length - 1];
+    if (end - start + 1 < minBarreStrings) continue;
 
-    return [{ fret: fretVal, startString: first, endString: last }];
+    const slice = frets.slice(start, end + 1);
+    if (slice.some(f => f === -1)) continue;        // muted in range → invalid
+    if (!slice.every(f => f >= fretVal)) continue;  // some below barre fret → invalid
+
+    return [{ fret: fretVal, startString: start, endString: end }];
   }
   return [];
 }
+
 
 
 // Group adjacent same-fret strings → 1 finger each group (regardless of barre display)
@@ -99,7 +100,7 @@ function findVoicingsForNotes(
   const collected: Voicing[] = [];
 
   function bt(si: number, cur: number[], cov: Set<number>) {
-    if (collected.length >= 80) return;
+    if (collected.length >= 200) return;
     if (si === n) {
       if (!required.every(x => cov.has(x))) return;
       const pressed = cur.filter(f => f > 0);
@@ -180,9 +181,13 @@ export function findVoicings(
     });
   }
 
-  // Sort: full chord > fewer fingers > lower fret
+  // Sort: full chord > fewer muted strings > fewer fingers > lower fret
   unique.sort((a, b) => {
     if (a.omitted.length !== b.omitted.length) return a.omitted.length - b.omitted.length;
+    // Prefer shapes with fewer muted strings (more notes sounding)
+    const aMuted = a.frets.filter(f => f === -1).length;
+    const bMuted = b.frets.filter(f => f === -1).length;
+    if (aMuted !== bMuted) return aMuted - bMuted;
     if (a.fingerCount !== b.fingerCount) return a.fingerCount - b.fingerCount;
     return a.startingFret - b.startingFret;
   });
