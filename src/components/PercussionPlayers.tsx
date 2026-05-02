@@ -22,6 +22,7 @@ export function PercussionPlayers() {
   const [activeStyle, setActiveStyle] = useState<LoopStyle | null>(null);
   const [activeBpm,   setActiveBpm]   = useState<number | null>(null);
   const [selectedBpm, setSelectedBpm] = useState<Partial<Record<LoopStyle, string>>>({});
+  const [errorStyle,  setErrorStyle]  = useState<LoopStyle | null>(null);
 
   const stop = useCallback(() => {
     if (audioRef.current) {
@@ -40,17 +41,34 @@ export function PercussionPlayers() {
     const entry = findLoop(style, bpm);
     if (!entry) return;
 
-    // Stop current if any
     stop();
+    setErrorStyle(null);
 
-    const audio = new Audio(`/audio/loops/${entry.file}`);
+    const url = `/audio/loops/${entry.file}`;
+    const audio = new Audio(url);
     audio.loop = true;
     audio.volume = 0.9;
-    audio.play().catch(e => console.warn('Audio error:', e));
-    audioRef.current = audio;
-    setActiveStyle(style);
-    setActiveBpm(entry.bpm);
+    audio.preload = 'auto';
+
+    audio.addEventListener('error', () => {
+      console.error(`Erro ao carregar: ${url}`, audio.error?.message);
+      setErrorStyle(style);
+      setActiveStyle(null);
+      setActiveBpm(null);
+    });
+
+    audio.play()
+      .then(() => {
+        audioRef.current = audio;
+        setActiveStyle(style);
+        setActiveBpm(entry.bpm);
+      })
+      .catch(e => {
+        console.error('play() rejeitado:', e);
+        setErrorStyle(style);
+      });
   }, [selectedBpm, stop]);
+
 
   const togglePlay = useCallback((style: LoopStyle) => {
     if (activeStyle === style) { stop(); } else { play(style); }
@@ -83,7 +101,10 @@ export function PercussionPlayers() {
               <div className="flex gap-2 items-center">
                 <Select
                   value={selectedBpm[style] ?? ''}
-                  onValueChange={val => setSelectedBpm(prev => ({ ...prev, [style]: val }))}
+                  onValueChange={val => {
+                    setSelectedBpm(prev => ({ ...prev, [style]: val }));
+                    setErrorStyle(null);
+                  }}
                 >
                   <SelectTrigger className="flex-1">
                     <SelectValue placeholder="Escolha o andamento…" />
@@ -107,6 +128,12 @@ export function PercussionPlayers() {
                   {playing ? <Square className="h-4 w-4" /> : <Play className="h-4 w-4" />}
                 </Button>
               </div>
+
+              {errorStyle === style && (
+                <p className="text-[10px] text-red-500 mt-1.5">
+                  ⚠ Arquivo não encontrado. Verifique se o MP3 está em public/audio/loops/
+                </p>
+              )}
             </div>
           );
         })}

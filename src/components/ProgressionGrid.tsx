@@ -1,5 +1,9 @@
 import type { Measure } from '@/lib/progression';
 import type { HarmonicAnalysis } from '@/lib/harmony';
+import type { Voicing } from '@/lib/chord-finder';
+import { VoicingMiniSvg } from './VoicingMiniSvg';
+
+interface StoredVoicing extends Voicing { tuning: string[] }
 
 const FUNC_COLORS: Record<string, string> = {
   blue:   'bg-blue-100 border-blue-400 text-blue-900 dark:bg-blue-900/30 dark:border-blue-600 dark:text-blue-200',
@@ -11,46 +15,53 @@ const FUNC_COLORS: Record<string, string> = {
 };
 
 const FUNC_BADGE: Record<string, string> = {
-  blue:   'bg-blue-500 text-white',
-  yellow: 'bg-yellow-500 text-white',
-  red:    'bg-red-500 text-white',
-  orange: 'bg-orange-500 text-white',
-  purple: 'bg-purple-500 text-white',
-  zinc:   'bg-zinc-400 text-white',
+  blue: 'bg-blue-500', yellow: 'bg-yellow-500', red: 'bg-red-500',
+  orange: 'bg-orange-500', purple: 'bg-purple-500', zinc: 'bg-zinc-400',
 };
 
 interface Props {
   measures: Measure[];
   analysis: HarmonicAnalysis | null;
   activeMeasure: number | null;
+  voicings?: Record<string, StoredVoicing>;
+  stringCount?: number;
+  markerColor?: string;
+  primaryColor?: string;
 }
 
-export function ProgressionGrid({ measures, analysis, activeMeasure }: Props) {
+export function ProgressionGrid({
+  measures, analysis, activeMeasure,
+  voicings = {}, stringCount = 6,
+  markerColor = '#000', primaryColor = '#000',
+}: Props) {
+  const hasVoicings = Object.keys(voicings).length > 0;
+
   if (measures.length === 0) {
     return (
       <p className="text-center text-muted-foreground text-sm py-8">
-        Digite uma progressão acima e pressione Enter para visualizar.
+        Digite uma progressão acima para visualizar.
       </p>
     );
   }
 
   return (
     <div className="space-y-3">
+      {/* Key + legend */}
       {analysis && (
         <div className="flex flex-wrap gap-2 items-center text-sm">
-          <span className="font-semibold">Tonalidade detectada:</span>
+          <span className="font-semibold">Tom:</span>
           <span className="rounded-full bg-primary text-primary-foreground px-3 py-0.5 font-bold text-sm">
             {analysis.keyName}
           </span>
-          <span className="flex gap-2 ml-2">
+          <span className="flex gap-1.5 ml-1 flex-wrap">
             {[
-              { color: 'blue',   label: 'T — Tônica' },
-              { color: 'yellow', label: 'SD — Subdominante' },
-              { color: 'red',    label: 'D — Dominante' },
-              { color: 'orange', label: 'Dom. Sec.' },
-              { color: 'purple', label: 'Empréstimo' },
+              { color: 'blue',   label: 'T' },
+              { color: 'yellow', label: 'SD' },
+              { color: 'red',    label: 'D' },
+              { color: 'orange', label: 'Dom.Sec' },
+              { color: 'purple', label: 'Modal' },
             ].map(({ color, label }) => (
-              <span key={color} className={`rounded px-2 py-0.5 text-[10px] font-medium ${FUNC_BADGE[color]}`}>
+              <span key={color} className={`rounded px-1.5 py-0.5 text-[9px] font-bold text-white ${FUNC_BADGE[color]}`}>
                 {label}
               </span>
             ))}
@@ -58,39 +69,63 @@ export function ProgressionGrid({ measures, analysis, activeMeasure }: Props) {
         </div>
       )}
 
+      {/* Measures grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {measures.map((measure) => {
           const isActive = activeMeasure === measure.index;
           return (
-            <div
-              key={measure.index}
-              className={`rounded-lg border-2 p-2 transition-all ${
+            <div key={measure.index}
+              className={`rounded-lg border-2 p-2 transition-all bg-card ${
                 isActive ? 'ring-2 ring-primary ring-offset-1 scale-105' : ''
-              } bg-card`}
+              }`}
             >
-              <div className="text-[9px] text-muted-foreground mb-1 font-mono">
-                c.{measure.index + 1}
-              </div>
+              <div className="text-[9px] text-muted-foreground mb-1 font-mono">c.{measure.index + 1}</div>
               <div className="flex gap-1 flex-wrap">
                 {measure.beats.map((beat, bi) => {
                   const a = analysis?.analyses[beat.chordName];
                   const color = a?.color ?? 'zinc';
+                  const voicing = voicings[beat.chordName];
+
                   return (
-                    <div
-                      key={bi}
-                      className={`flex-1 min-w-0 rounded border px-1.5 py-1 ${FUNC_COLORS[color]}`}
-                      style={{ minWidth: '40px' }}
+                    <div key={bi}
+                      className={`flex-1 min-w-0 rounded border px-1.5 py-1 flex flex-col items-center ${FUNC_COLORS[color]}`}
+                      style={{ minWidth: '44px' }}
                     >
+                      {/* Roman numeral */}
                       {a && (
-                        <div className="text-[9px] font-bold opacity-70 leading-none mb-0.5">
+                        <div className="text-[9px] font-bold opacity-70 leading-none mb-0.5 self-start">
                           {a.romanNumeral}
                         </div>
                       )}
-                      <div className="text-xs font-bold truncate leading-tight">
+                      {/* Chord name */}
+                      <div className="text-xs font-bold truncate w-full leading-tight text-center">
                         {beat.chordName}
                       </div>
+                      {/* Mini voicing diagram */}
+                      {voicing ? (
+                        <div className="mt-1.5 rounded overflow-hidden bg-white/60 dark:bg-black/30">
+                          <VoicingMiniSvg
+                            voicing={voicing}
+                            stringCount={voicing.tuning?.length ?? stringCount}
+                            markerColor={markerColor}
+                            primaryColor={primaryColor}
+                            width={58}
+                            height={72}
+                          />
+                          <div className="text-[7px] text-center opacity-50 pb-0.5">
+                            {voicing.frets.map(f => f === -1 ? 'X' : f).join(' ')}
+                          </div>
+                        </div>
+                      ) : (
+                        hasVoicings && (
+                          <div className="mt-1.5 text-[8px] opacity-40 text-center">
+                            sem diagrama
+                          </div>
+                        )
+                      )}
+                      {/* Function label */}
                       {a && (
-                        <div className="text-[8px] opacity-60 leading-none mt-0.5">
+                        <div className="text-[8px] opacity-55 leading-none mt-1 self-start">
                           {a.harmonicFunction}
                         </div>
                       )}
@@ -102,6 +137,12 @@ export function ProgressionGrid({ measures, analysis, activeMeasure }: Props) {
           );
         })}
       </div>
+
+      {!hasVoicings && (
+        <p className="text-[11px] text-muted-foreground text-center">
+          💡 Selecione posições no <strong>Dicionário de Acordes</strong> para ver os diagramas aqui.
+        </p>
+      )}
     </div>
   );
 }

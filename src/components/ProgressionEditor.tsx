@@ -85,7 +85,12 @@ export function ProgressionEditor({
               measures={measures}
               analysis={analysis}
               activeMeasure={null}
+              voicings={voicings}
+              stringCount={stringCount}
+              markerColor={markerColor}
+              primaryColor={primaryColor}
             />
+
 
             {/* Separador */}
             {measures.length > 0 && (
