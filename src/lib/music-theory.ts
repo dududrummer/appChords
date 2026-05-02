@@ -188,12 +188,14 @@ export function parseChord(input: string): ParsedChord | null {
   let bassNote: string | undefined;
 
   if (slashMatch) {
-    // Validate: left side must be a valid chord
     const leftRoot = slashMatch[1].match(/^([A-G][b#]?)/);
     if (leftRoot) {
       const leftQuality = slashMatch[1].slice(leftRoot[1].length);
-      // Only treat as slash chord if left quality is valid
-      if (leftQuality in CHORD_FORMULAS || leftQuality === '') {
+      // Accept if quality is in table OR parseable by modular parser
+      const isValid = leftQuality in CHORD_FORMULAS ||
+        leftQuality === '' ||
+        parseQualityModular(leftQuality) !== null;
+      if (isValid) {
         chordPart = slashMatch[1];
         bassNote = slashMatch[2];
       }
@@ -205,9 +207,7 @@ export function parseChord(input: string): ParsedChord | null {
 
   const root = rootMatch[1];
   const quality = chordPart.slice(root.length);
-  const formula = CHORD_FORMULAS[quality];
-  if (!formula) return null;
-
+  const formula = CHORD_FORMULAS[quality]; // may be undefined — fallback below
   const rootIndex = getNoteIndex(root);
   if (rootIndex === -1) return null;
 
@@ -223,6 +223,7 @@ export function parseChord(input: string): ParsedChord | null {
     intervals = [...new Set(modular.intervals.map(i => (rootIndex + i) % 12))];
     qualityName = modular.name;
   }
+
 
   const noteIndices = intervals;
   let bassNoteIndex: number | undefined;
