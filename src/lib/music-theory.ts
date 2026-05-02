@@ -103,6 +103,71 @@ export const CHORD_FORMULAS: Record<string, { intervals: number[]; name: string 
 };
 
 
+/** Modular quality parser: handles combinations not in CHORD_FORMULAS table.
+ *  Examples: m7b13, m9#11, maj7#5, m11b13, 7#9b13, etc.
+ */
+function parseQualityModular(q: string): { intervals: number[]; name: string } | null {
+  const iv = new Set<number>([0]); // root always included
+  const nm: string[] = [];
+
+  // 1. Base triad
+  if (q.startsWith('mmaj') || q.startsWith('mMaj')) {
+    iv.add(3); iv.add(7); nm.push('MenorMaj'); q = q.slice(4);
+  } else if (q.startsWith('min')) {
+    iv.add(3); iv.add(7); nm.push('Menor'); q = q.slice(3);
+  } else if (q.startsWith('m') && !q.startsWith('maj') && !q.startsWith('M')) {
+    iv.add(3); iv.add(7); nm.push('Menor'); q = q.slice(1);
+  } else if (q.startsWith('dim')) {
+    iv.add(3); iv.add(6); nm.push('Diminuto'); q = q.slice(3);
+  } else if (q.startsWith('aug') || q.startsWith('aum') || q.startsWith('+')) {
+    iv.add(4); iv.add(8); nm.push('Aumentado');
+    q = q.startsWith('+') ? q.slice(1) : q.slice(3);
+  } else {
+    iv.add(4); iv.add(7); nm.push('Maior'); // default major
+  }
+
+  // 2. 7th / 6th
+  if (q.startsWith('maj7') || q.startsWith('Maj7')) {
+    iv.add(11); nm.push('7M'); q = q.slice(4);
+  } else if (q.startsWith('M7') || q.startsWith('7M')) {
+    iv.add(11); nm.push('7M'); q = q.slice(2);
+  } else if (q.startsWith('7')) {
+    iv.add(10); nm.push('7'); q = q.slice(1);
+  } else if (q.startsWith('6')) {
+    iv.add(9); nm.push('6'); q = q.slice(1);
+  }
+
+  // 3. Extensions
+  if (q.startsWith('13')) {
+    if (!iv.has(10) && !iv.has(11)) iv.add(10);
+    iv.add(2); iv.add(5); iv.add(9); nm.push('13'); q = q.slice(2);
+  } else if (q.startsWith('11')) {
+    if (!iv.has(10) && !iv.has(11)) iv.add(10);
+    iv.add(2); iv.add(5); nm.push('11'); q = q.slice(2);
+  } else if (q.startsWith('9')) {
+    if (!iv.has(10) && !iv.has(11)) iv.add(10);
+    iv.add(2); nm.push('9'); q = q.slice(1);
+  }
+
+  // 4. Alterations (can repeat)
+  while (q.length > 0) {
+    if      (q.startsWith('b13'))  { iv.add(8);  nm.push('b13'); q = q.slice(3); }
+    else if (q.startsWith('#11'))  { iv.add(6);  nm.push('#11'); q = q.slice(3); }
+    else if (q.startsWith('b9'))   { iv.delete(2); iv.add(1); nm.push('b9'); q = q.slice(2); }
+    else if (q.startsWith('#9'))   { iv.add(3);  nm.push('#9'); q = q.slice(2); }
+    else if (q.startsWith('#5'))   { iv.delete(7); iv.add(8); nm.push('#5'); q = q.slice(2); }
+    else if (q.startsWith('b5'))   { iv.delete(7); iv.add(6); nm.push('b5'); q = q.slice(2); }
+    else if (q.startsWith('sus4')) { iv.delete(3); iv.delete(4); iv.add(5); nm.push('Sus4'); q = q.slice(4); }
+    else if (q.startsWith('sus2')) { iv.delete(3); iv.delete(4); iv.add(2); nm.push('Sus2'); q = q.slice(4); }
+    else if (q.startsWith('add9') || q.startsWith('com9')) { iv.add(2); nm.push('Add9'); q = q.slice(4); }
+    else if (q.startsWith('alt'))  { iv.add(1); iv.add(3); iv.add(8); nm.push('Alt'); q = q.slice(3); }
+    else return null; // unknown suffix
+  }
+
+  if (nm.length <= 1) return null; // only base triad = use exact table
+  return { intervals: [...iv], name: nm.join(' ') };
+}
+
 export interface ParsedChord {
   root: string;
   quality: string;
@@ -146,20 +211,31 @@ export function parseChord(input: string): ParsedChord | null {
   const rootIndex = getNoteIndex(root);
   if (rootIndex === -1) return null;
 
-  const noteIndices = [...new Set(formula.intervals.map(i => (rootIndex + i) % 12))];
+  // Try exact formula match first, then modular parser
+  let intervals: number[];
+  let qualityName: string;
+  if (formula) {
+    intervals = [...new Set(formula.intervals.map(i => (rootIndex + i) % 12))];
+    qualityName = formula.name;
+  } else {
+    const modular = parseQualityModular(quality);
+    if (!modular) return null;
+    intervals = [...new Set(modular.intervals.map(i => (rootIndex + i) % 12))];
+    qualityName = modular.name;
+  }
 
+  const noteIndices = intervals;
   let bassNoteIndex: number | undefined;
   if (bassNote) {
     const bi = getNoteIndex(bassNote);
     if (bi === -1) return null;
     bassNoteIndex = bi;
-    // Ensure bass note is in the required notes
     if (!noteIndices.includes(bi)) noteIndices.push(bi);
   }
 
   const displayBass = bassNote ? `/${bassNote}` : '';
   return {
-    root, quality, qualityName: formula.name,
+    root, quality, qualityName,
     noteIndices, bassNoteIndex,
     displayName: `${root}${quality}${displayBass}`,
   };
