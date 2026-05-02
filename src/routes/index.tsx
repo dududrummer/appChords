@@ -1,6 +1,6 @@
 import { useState, useMemo, useRef, useCallback } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Moon, Sun, Download, Circle, Square, Triangle, Trash2, Columns, Rows } from "lucide-react";
+import { Moon, Sun, Download, Circle, Square, Triangle, Trash2, Columns, Rows, Guitar, Music2, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -38,6 +38,7 @@ export const Route = createFileRoute("/")({
 
 function ChordGenerator() {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [activePage, setActivePage] = useState<'diagram' | 'progression'>('diagram');
   const [chordTitle, setChordTitle] = useState("C Major");
   const [startingFret, setStartingFret] = useState(1);
   const [fretCount, setFretCount] = useState(5);
@@ -442,31 +443,79 @@ function ChordGenerator() {
   const downloadFilename = (chordTitle || "chord").toLowerCase().replace(/[^a-z0-9]/g, "-");
 
   return (
-    <div className={`min-h-screen ${isDarkMode ? "dark bg-background text-foreground" : "bg-slate-50"}`}>
-      <header className="border-b bg-card px-6 py-4 flex items-center justify-between shadow-sm sticky top-0 z-10">
-        <h1 className="text-xl font-bold">Criador de Acordes Moderno</h1>
-        <Button variant="outline" size="icon" onClick={toggleDarkMode}>{isDarkMode ? <Sun /> : <Moon />}</Button>
-      </header>
+    <div className={`min-h-screen flex ${isDarkMode ? "dark bg-background text-foreground" : "bg-slate-50"}`}>
 
-      <main className="container mx-auto p-6 space-y-8">
-        <ChordSearch
-          stringCount={stringCount}
-          stringNames={stringNames}
-          markerColor={markerColor}
-          primaryColor={primaryColor}
-          bgColor={bgColor}
-          markerShape={markerShape}
-          markerSize={markerSize}
-          onSelectVoicing={handleSelectVoicing}
-          onTuningChange={handleTuningChange}
-        />
-        <ProgressionEditor
-          instrument="violao"
-          stringCount={stringCount}
-          stringNames={stringNames}
-          markerColor={markerColor}
-          primaryColor={primaryColor}
-        />
+      {/* ── Sidebar ──────────────────────────────────────────────────────── */}
+      <aside className="w-56 shrink-0 border-r bg-card flex flex-col sticky top-0 h-screen overflow-hidden z-20">
+        <div className="px-5 py-4 border-b">
+          <div className="flex items-center gap-2">
+            <Guitar className="h-5 w-5 text-primary" />
+            <span className="font-bold text-base">AppChords</span>
+          </div>
+          <p className="text-[10px] text-muted-foreground mt-0.5">Gerador de Acordes</p>
+        </div>
+
+        <nav className="flex-1 p-2 space-y-1">
+          {[
+            { page: 'diagram' as const,     icon: <Guitar  className="h-4 w-4" />, label: 'Diagrama de Acordes', sub: 'Construtor SVG' },
+            { page: 'progression' as const, icon: <Music2  className="h-4 w-4" />, label: 'Progressão',          sub: 'Análise + Áudio' },
+          ].map(({ page, icon, label, sub }) => (
+            <button
+              key={page}
+              onClick={() => setActivePage(page)}
+              className={`w-full text-left rounded-lg px-3 py-2.5 flex items-center gap-3 transition-all group ${
+                activePage === page
+                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  : 'hover:bg-muted text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              {icon}
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-medium truncate">{label}</div>
+                <div className={`text-[10px] truncate ${activePage === page ? 'opacity-70' : 'opacity-50'}`}>{sub}</div>
+              </div>
+              <ChevronRight className={`h-3.5 w-3.5 opacity-0 group-hover:opacity-100 transition-opacity ${ activePage === page ? 'opacity-70' : '' }`} />
+            </button>
+          ))}
+        </nav>
+
+        <div className="p-3 border-t">
+          <Button variant="outline" size="sm" onClick={toggleDarkMode} className="w-full gap-2">
+            {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            {isDarkMode ? 'Modo Claro' : 'Modo Escuro'}
+          </Button>
+        </div>
+      </aside>
+
+      {/* ── Main content ─────────────────────────────────────────────────── */}
+      <div className="flex-1 flex flex-col min-w-0">
+        <header className="border-b bg-card px-6 py-3 flex items-center justify-between shadow-sm sticky top-0 z-10">
+          <h1 className="text-lg font-bold">
+            {activePage === 'diagram' ? 'Diagrama de Acordes' : 'Progressão de Acordes'}
+          </h1>
+        </header>
+
+        <main className="flex-1 overflow-y-auto p-6 space-y-8">
+          {activePage === 'progression' ? (
+            <ProgressionEditor
+              instrument="violao"
+              stringCount={stringCount}
+              stringNames={stringNames}
+              markerColor={markerColor}
+              primaryColor={primaryColor}
+            />
+          ) : (<>
+            <ChordSearch
+              stringCount={stringCount}
+              stringNames={stringNames}
+              markerColor={markerColor}
+              primaryColor={primaryColor}
+              bgColor={bgColor}
+              markerShape={markerShape}
+              markerSize={markerSize}
+              onSelectVoicing={handleSelectVoicing}
+              onTuningChange={handleTuningChange}
+            />
         <Card>
           <CardHeader><CardTitle className="text-lg">Configurações</CardTitle></CardHeader>
           <CardContent className="space-y-6">
@@ -631,7 +680,9 @@ function ChordGenerator() {
             link.href = URL.createObjectURL(new Blob([svgData], { type: "image/svg+xml" })); link.click();
           }}><Download className="mr-2 h-4 w-4" /> SVG</Button>
         </div>
-      </main>
+        </>) /* end diagram page */}
+        </main>
+      </div> {/* end main content */}
     </div>
   );
 }
