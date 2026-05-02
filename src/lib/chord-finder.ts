@@ -28,47 +28,49 @@ interface FindOptions {
 
 // ── Barre detection ───────────────────────────────────────────────────────────
 function detectBarres(frets: number[], minBarreStrings = 2): BarreDef[] {
-  const pressed = frets.map((f, i) => ({ f, i })).filter(x => x.f > 0);
-  if (pressed.length < 2) return [];
-
-  const barres: BarreDef[] = [];
-  const fretValues = [...new Set(pressed.map(x => x.f))].sort((a, b) => a - b);
+  const fretValues = [...new Set(frets.filter(f => f > 0))].sort((a, b) => a - b);
 
   for (const fretVal of fretValues) {
-    // Find consecutive string runs at this fret
-    const stringsAtFret = frets
-      .map((f, i) => (f === fretVal ? i : -1))
-      .filter(i => i !== -1);
+    // Find the longest CONSECUTIVE run of strings at this fret
+    let bestStart = -1, bestLen = 0, runStart = -1;
+    for (let i = 0; i <= frets.length; i++) {
+      if (i < frets.length && frets[i] === fretVal) {
+        if (runStart === -1) runStart = i;
+      } else {
+        if (runStart !== -1) {
+          const len = i - runStart;
+          if (len > bestLen) { bestLen = len; bestStart = runStart; }
+          runStart = -1;
+        }
+      }
+    }
+    if (bestLen < minBarreStrings) continue;
 
-    if (stringsAtFret.length < minBarreStrings) continue;
+    const first = bestStart, last = bestStart + bestLen - 1;
+    if (frets.slice(first, last + 1).some(f => f === -1)) continue;
+    if (!frets.slice(first, last + 1).every(f => f === 0 || f >= fretVal)) continue;
 
-    // Check there's no muted string between first and last
-    const first = stringsAtFret[0], last = stringsAtFret[stringsAtFret.length - 1];
-    const hasMutedBetween = frets.slice(first, last + 1).some(f => f === -1);
-    if (hasMutedBetween) continue;
-
-    // All strings between first and last must be >= fretVal (can't play below a barre)
-    const allPlayable = frets.slice(first, last + 1).every(f => f === 0 || f >= fretVal);
-    if (!allPlayable) continue;
-
-    barres.push({ fret: fretVal, startString: first, endString: last });
-    break; // one barre per voicing is enough
+    return [{ fret: fretVal, startString: first, endString: last }];
   }
-  return barres;
+  return [];
 }
 
-// ── Playability: count distinct fingers needed ────────────────────────────────
+
+// Group adjacent same-fret strings → 1 finger each group (regardless of barre display)
 function countFingers(frets: number[], barres: BarreDef[]): number {
-  // Which (string, fret) combos are covered by a barre
   const barredKeys = new Set<string>();
   for (const b of barres) {
-    for (let s = b.startString; s <= b.endString; s++) {
-      barredKeys.add(`${s},${b.fret}`);
-    }
+    for (let s = b.startString; s <= b.endString; s++) barredKeys.add(`${s},${b.fret}`);
   }
   let count = barres.length;
-  for (let i = 0; i < frets.length; i++) {
-    if (frets[i] > 0 && !barredKeys.has(`${i},${frets[i]}`)) count++;
+  let i = 0;
+  while (i < frets.length) {
+    if (frets[i] <= 0) { i++; continue; }
+    if (barredKeys.has(`${i},${frets[i]}`)) { i++; continue; }
+    // Count this run of adjacent strings at the same non-barred fret as ONE finger
+    const f = frets[i];
+    while (i < frets.length && frets[i] === f && !barredKeys.has(`${i},${f}`)) i++;
+    count++;
   }
   return count;
 }

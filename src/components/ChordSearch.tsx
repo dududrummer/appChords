@@ -192,7 +192,7 @@ export function ChordSearch({
       allowOmissions: isCavaquinho,   // cavaquinho omite 5ª/fund.
       rootNoteIndex: parsed.noteIndices[0],
       bassNoteIndex: parsed.bassNoteIndex,
-      minBarreStrings: isCavaquinho ? 3 : 2, // cavaquinho: pestana só com 3+ cordas
+      minBarreStrings: isCavaquinho ? 3 : 4, // violão: pestana só com 4+ cordas no mesmo traste
     });
 
 
