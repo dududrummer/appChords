@@ -10,6 +10,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { toast } from "sonner";
 import { ChordSearch } from "@/components/ChordSearch";
+import { ProgressionEditor } from "@/components/ProgressionEditor";
 
 interface Marker {
   string: number;
@@ -458,6 +459,13 @@ function ChordGenerator() {
           markerSize={markerSize}
           onSelectVoicing={handleSelectVoicing}
           onTuningChange={handleTuningChange}
+        />
+        <ProgressionEditor
+          instrument="violao"
+          stringCount={stringCount}
+          stringNames={stringNames}
+          markerColor={markerColor}
+          primaryColor={primaryColor}
         />
         <Card>
           <CardHeader><CardTitle className="text-lg">Configurações</CardTitle></CardHeader>
