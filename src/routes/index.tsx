@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo, useRef, useCallback } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Moon, Sun, Download, Circle, Square, Triangle, Trash2, Columns, Rows } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { Slider } from "@/components/ui/slider";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { toast } from "sonner";
+import { ChordSearch } from "@/components/ChordSearch";
 
 interface Marker {
   string: number;
@@ -57,6 +58,33 @@ function ChordGenerator() {
   const [dragStart, setDragStart] = useState<{ fret: number; string: number } | null>(null);
   const [dragEnd, setDragEnd] = useState<{ fret: number; string: number } | null>(null);
   const resultSvgRef = useRef<SVGSVGElement>(null);
+
+  const handleSelectVoicing = useCallback((data: {
+    markers: Marker[];
+    barres: Barre[];
+    nutIndicators: NutIndicator[];
+    startingFret: number;
+    chordName: string;
+  }) => {
+    setMarkers(data.markers);
+    setBarres(data.barres);
+    setNutIndicators(data.nutIndicators);
+    setStartingFret(data.startingFret);
+    setChordTitle(data.chordName);
+    toast.success(`Acorde ${data.chordName} carregado!`);
+  }, []);
+
+  const handleTuningChange = useCallback((tuning: string[], count: number) => {
+    setStringCount(count);
+    setStringNames(prev => {
+      const next = Array(12).fill("");
+      tuning.forEach((n, i) => { next[i] = n; });
+      return next;
+    });
+    setMarkers([]);
+    setBarres([]);
+    setNutIndicators([]);
+  }, []);
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
@@ -410,6 +438,17 @@ function ChordGenerator() {
       </header>
 
       <main className="container mx-auto p-6 space-y-8">
+        <ChordSearch
+          stringCount={stringCount}
+          stringNames={stringNames}
+          markerColor={markerColor}
+          primaryColor={primaryColor}
+          bgColor={bgColor}
+          markerShape={markerShape}
+          markerSize={markerSize}
+          onSelectVoicing={handleSelectVoicing}
+          onTuningChange={handleTuningChange}
+        />
         <Card>
           <CardHeader><CardTitle className="text-lg">Configurações</CardTitle></CardHeader>
           <CardContent className="space-y-6">
