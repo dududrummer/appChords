@@ -1,19 +1,15 @@
 import { useState, useCallback, useEffect } from 'react';
-import { Play, Square, Volume2, Music, Drum, Loader2 } from 'lucide-react';
+import { Play, Square, Volume2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import {
-  startPlayback, stopPlayback, setBpm, loadSamples, isLoaded,
-  DEFAULT_BPM, BPM_RANGE, type Style, type AudioMode
-} from '@/lib/audio';
+import { startPlayback, stopPlayback, setBpm, DEFAULT_BPM, BPM_RANGE, type Style, type AudioMode } from '@/lib/audio';
 import type { Measure } from '@/lib/progression';
 import type { Voicing } from '@/lib/chord-finder';
 
 interface StoredVoicing extends Voicing { tuning: string[] }
-
 interface Props {
   measures: Measure[];
   voicings: Record<string, StoredVoicing>;
@@ -21,20 +17,19 @@ interface Props {
 }
 
 const STYLES: { value: Style; label: string; desc: string; bpmLabel: string }[] = [
-  { value: 'samba',     label: '🥁 Samba',     desc: 'Batucada + comping sincopado',       bpmLabel: '70–160 BPM' },
-  { value: 'jazz',      label: '🎷 Jazz',      desc: 'Swing CR78 + comping no 2 e 4',      bpmLabel: '100–240 BPM' },
-  { value: 'bossanova', label: '🎸 Bossa Nova', desc: 'Clave João Gilberto + piano suave',  bpmLabel: '70–160 BPM' },
+  { value: 'samba',     label: '🥁 Samba',     desc: 'Batucada + comping sincopado',      bpmLabel: '70–160 BPM' },
+  { value: 'jazz',      label: '🎷 Jazz',      desc: 'Swing + comping no 2 e 4',          bpmLabel: '90–240 BPM' },
+  { value: 'bossanova', label: '🎸 Bossa Nova', desc: 'Clave João Gilberto + piano suave', bpmLabel: '70–150 BPM' },
 ];
 
 const MODES: { value: AudioMode; label: string }[] = [
-  { value: 'both',       label: '🎵 + 🥁 Harmonia & Percussão' },
-  { value: 'harmony',    label: '🎵 Só Harmonia' },
-  { value: 'percussion', label: '🥁 Só Percussão' },
+  { value: 'both',       label: '🎵 + 🥁  Harmonia & Percussão' },
+  { value: 'harmony',    label: '🎵  Só Harmonia' },
+  { value: 'percussion', label: '🥁  Só Percussão' },
 ];
 
 export function ProgressionAudio({ measures, voicings, onMeasureChange }: Props) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [loadState, setLoadState] = useState<'idle' | 'loading' | 'ready'>('idle');
   const [style, setStyle]         = useState<Style>('samba');
   const [mode, setMode]           = useState<AudioMode>('both');
   const [bpm, setBpmState]        = useState<number>(DEFAULT_BPM.samba);
@@ -43,7 +38,6 @@ export function ProgressionAudio({ measures, voicings, onMeasureChange }: Props)
 
   useEffect(() => () => { stopPlayback(); }, []);
 
-  // Update BPM to style default when style changes (only if not playing)
   const handleStyleChange = useCallback((s: Style) => {
     setStyle(s);
     if (!isPlaying) setBpmState(DEFAULT_BPM[s]);
@@ -51,18 +45,9 @@ export function ProgressionAudio({ measures, voicings, onMeasureChange }: Props)
 
   const handlePlay = useCallback(async () => {
     if (measures.length === 0) return;
-
-    // Load samples if needed
-    if (!isLoaded()) {
-      setLoadState('loading');
-      await loadSamples();
-      setLoadState('ready');
-    }
-
     const vm: Record<string, { frets: number[]; tuning: string[] }> = {};
     for (const [k, v] of Object.entries(voicings)) vm[k] = { frets: v.frets, tuning: v.tuning };
-
-    await startPlayback(measures, style, bpm, metronome, mode, vm, (idx) => onMeasureChange(idx), loop);
+    await startPlayback(measures, style, bpm, metronome, mode, vm, idx => onMeasureChange(idx), loop);
     setIsPlaying(true);
   }, [measures, style, bpm, metronome, mode, voicings, loop, onMeasureChange]);
 
@@ -79,18 +64,14 @@ export function ProgressionAudio({ measures, voicings, onMeasureChange }: Props)
   return (
     <div className="space-y-5">
 
-      {/* Style cards */}
       <div className="space-y-2">
         <Label className="text-sm font-semibold">Estilo rítmico</Label>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
           {STYLES.map(s => (
-            <button
-              key={s.value}
-              onClick={() => handleStyleChange(s.value)}
+            <button key={s.value} onClick={() => handleStyleChange(s.value)}
               className={`rounded-lg border-2 p-3 text-left transition-all ${
                 style === s.value ? 'border-primary bg-primary/10' : 'border-border hover:border-primary/40'
-              }`}
-            >
+              }`}>
               <div className="font-semibold text-sm">{s.label}</div>
               <div className="text-[11px] text-muted-foreground mt-0.5">{s.desc}</div>
               <div className="text-[10px] text-primary/70 font-mono mt-1">{s.bpmLabel}</div>
@@ -99,41 +80,33 @@ export function ProgressionAudio({ measures, voicings, onMeasureChange }: Props)
         </div>
       </div>
 
-      {/* Mode */}
       <div className="space-y-2">
         <Label className="text-sm font-semibold">O que tocar</Label>
         <ToggleGroup type="single" value={mode} onValueChange={v => v && setMode(v as AudioMode)} className="flex flex-wrap gap-2">
           {MODES.map(m => (
-            <ToggleGroupItem key={m.value} value={m.value} className="flex-1 text-xs">
-              {m.label}
-            </ToggleGroupItem>
+            <ToggleGroupItem key={m.value} value={m.value} className="flex-1 text-xs">{m.label}</ToggleGroupItem>
           ))}
         </ToggleGroup>
         {mode === 'percussion' && (
           <p className="text-[11px] text-amber-600 dark:text-amber-400">
-            💡 Modo ideal para improvisação — toque por cima da levada sem ouvir os acordes.
+            💡 Ideal para improvisação — toque por cima da levada sem ouvir os acordes.
           </p>
         )}
       </div>
 
-      {/* BPM */}
       <div className="space-y-2">
         <div className="flex justify-between items-center">
           <Label className="text-sm font-semibold">Andamento</Label>
-          <div className="flex items-center gap-2">
-            <span className="font-mono font-bold tabular-nums text-lg">{bpm}</span>
-            <span className="text-xs text-muted-foreground">BPM</span>
-          </div>
+          <span className="font-mono font-bold tabular-nums text-lg">{bpm} <span className="text-xs font-normal text-muted-foreground">BPM</span></span>
         </div>
         <Slider min={min} max={max} step={1} value={[bpm]} onValueChange={handleBpm} />
         <div className="flex justify-between text-[10px] text-muted-foreground">
           <span>{min} lento</span>
-          <span className="font-medium text-primary">{DEFAULT_BPM[style]} padrão</span>
+          <span className="text-primary font-medium">{DEFAULT_BPM[style]} padrão</span>
           <span>{max} rápido</span>
         </div>
       </div>
 
-      {/* Options */}
       <div className="flex flex-wrap gap-5">
         <div className="flex items-center gap-2">
           <Switch id="metro" checked={metronome} onCheckedChange={setMetronome} />
@@ -147,35 +120,17 @@ export function ProgressionAudio({ measures, voicings, onMeasureChange }: Props)
         </div>
       </div>
 
-      {/* Play / Stop */}
-      <Button
-        onClick={isPlaying ? handleStop : handlePlay}
-        disabled={measures.length === 0 || loadState === 'loading'}
-        className="w-full text-base py-5"
-        variant={isPlaying ? 'destructive' : 'default'}
-        size="lg"
-      >
-        {loadState === 'loading'
-          ? <><Loader2 className="h-5 w-5 mr-2 animate-spin" />Carregando samples de áudio…</>
-          : isPlaying
+      <Button onClick={isPlaying ? handleStop : handlePlay} disabled={measures.length === 0}
+        className="w-full text-base py-5" variant={isPlaying ? 'destructive' : 'default'} size="lg">
+        {isPlaying
           ? <><Square className="h-5 w-5 mr-2" />Parar</>
-          : <><Play  className="h-5 w-5 mr-2" />Reproduzir</>}
+          : <><Play   className="h-5 w-5 mr-2" />Reproduzir</>}
       </Button>
-
-      {loadState === 'loading' && (
-        <p className="text-xs text-center text-muted-foreground">
-          Baixando piano Salamander + bateria CR78 (primeira vez pode demorar alguns segundos…)
-        </p>
-      )}
 
       {isPlaying && (
         <div className="text-center space-y-0.5">
-          <p className="text-sm font-medium animate-pulse">
-            {STYLES.find(s => s.value === style)?.label} · {bpm} BPM
-          </p>
-          <p className="text-xs text-muted-foreground">
-            {MODES.find(m => m.value === mode)?.label}
-          </p>
+          <p className="text-sm font-medium animate-pulse">{STYLES.find(s => s.value === style)?.label} · {bpm} BPM</p>
+          <p className="text-xs text-muted-foreground">{MODES.find(m => m.value === mode)?.label}</p>
         </div>
       )}
     </div>
