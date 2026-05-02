@@ -2,7 +2,6 @@ import { useState, useCallback } from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { parseChord, INSTRUMENT_PRESETS } from "@/lib/music-theory";
@@ -20,6 +19,8 @@ interface ChordSearchProps {
   bgColor: string;
   markerShape: string;
   markerSize: number[];
+  instrument: string;
+  onInstrumentChange: (instrument: string) => void;
   onSelectVoicing: (data: {
     markers: Marker[];
     barres: Barre[];
@@ -149,15 +150,13 @@ function MiniDiagram({
 // ── Main ChordSearch Component ──────────────────────────────────────────────
 export function ChordSearch({
   stringCount, stringNames, markerColor, primaryColor, bgColor,
-  markerShape, markerSize, onSelectVoicing, onTuningChange
+  markerShape, markerSize, instrument, onInstrumentChange, onSelectVoicing, onTuningChange
 }: ChordSearchProps) {
   const [query, setQuery] = useState("");
-  const [allowMuted, setAllowMuted] = useState(false);
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   const [voicings, setVoicings] = useState<Voicing[]>([]);
   const [parsedName, setParsedName] = useState("");
   const [error, setError] = useState("");
-  const [instrument, setInstrument] = useState("violao");
 
   // Auto-enable omissions for 4-string instruments
   const isSmallInstrument = INSTRUMENT_PRESETS[instrument]?.strings <= 4;
@@ -186,17 +185,14 @@ export function ChordSearch({
     const isCavaquinho = INSTRUMENT_PRESETS[instrument]?.strings <= 4;
 
     const results = findVoicings(parsed.noteIndices, tuning, {
-      // Violão: sempre permite corda muda para achar posições clássicas (X32000, x35453, etc.)
-      // Cavaquinho/ukulele: respeita a preferência do usuário
-      allowMuted: isCavaquinho ? allowMuted : true,
+      // Violão: sempre permite corda muda (acha X32000, x35453, etc.)
+      // Cavaquinho/ukulele: sem cordas mudas (usa omissões de notas em vez disso)
+      allowMuted: !isCavaquinho,
       maxFret: 12,
-      // Mais resultados para cobrir shapes em todas as regiões do braço
       maxResults: 24,
       allowOmissions: isCavaquinho,
       rootNoteIndex: parsed.noteIndices[0],
-      // Violão: sempre filtra pelo baixo = fundamental (ex: C7M só mostra voicings com Dó no baixo)
-      // Isso inclui x35453 pois string 0 muda → string 1 toca Dó (root) ✅
-      // Slash chords (C/G) usam o baixo explícito do usuário
+      // Violão: filtra pelo baixo = fundamental; slash chords usam o baixo explícito
       bassNoteIndex: isCavaquinho
         ? parsed.bassNoteIndex
         : (parsed.bassNoteIndex ?? parsed.noteIndices[0]),
@@ -218,6 +214,7 @@ export function ChordSearch({
 
     const markers: Marker[] = [];
     const nutIndicators: NutIndicator[] = [];
+    const sf = voicing.startingFret;
 
     voicing.frets.forEach((fret, s) => {
       if (fret === 0) {
@@ -225,21 +222,25 @@ export function ChordSearch({
       } else if (fret === -1) {
         nutIndicators.push({ string: s, type: "muted" });
       } else {
-        // sem color — o diagrama usa a cor global configurada pelo usuário
-        markers.push({ string: s, fret });
+        // Converte fret absoluto → relativo ao startingFret
+        // Ex: startingFret=3, fret=3 → slot 1 (topo); fret=5 → slot 3
+        // Assim o diagrama principal renderiza corretamente sem deslocar
+        markers.push({ string: s, fret: fret - sf + 1 });
       }
     });
 
-    // sem color nas pestanas — usa primaryColor/markerColor global
+    // Barres também convertidos para relativos
     const barres: Barre[] = voicing.barres.map(b => ({
-      fret: b.fret, startString: b.startString, endString: b.endString
+      fret: b.fret - sf + 1,
+      startString: b.startString,
+      endString: b.endString
     }));
 
-    onSelectVoicing({ markers, barres, nutIndicators, startingFret: voicing.startingFret, chordName: query.trim() });
+    onSelectVoicing({ markers, barres, nutIndicators, startingFret: sf, chordName: query.trim() });
   }, [onSelectVoicing, query]);
 
   const handleInstrumentChange = (value: string) => {
-    setInstrument(value);
+    onInstrumentChange(value);
     const preset = INSTRUMENT_PRESETS[value];
     if (preset) onTuningChange(preset.tuning, preset.strings);
     setVoicings([]); setSelectedIdx(null); setParsedName(""); setError("");
@@ -286,7 +287,7 @@ export function ChordSearch({
           )}
         </div>
 
-        {/* Search + Options */}
+        {/* Search */}
         <div className="flex flex-wrap gap-4 items-end">
           <div className="space-y-1 flex-1 min-w-48">
             <Label>Nome do acorde</Label>
@@ -296,13 +297,6 @@ export function ChordSearch({
               onChange={e => handleSearch(e.target.value)}
               className="font-mono text-base"
             />
-          </div>
-          <div className="flex items-center gap-2 pb-1">
-            <Switch id="muted-sw" checked={allowMuted} onCheckedChange={(v) => {
-              setAllowMuted(v);
-              if (query) handleSearch(query);
-            }} />
-            <Label htmlFor="muted-sw" className="cursor-pointer text-sm">Cordas mudas</Label>
           </div>
         </div>
 

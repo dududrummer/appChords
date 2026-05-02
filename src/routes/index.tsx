@@ -40,6 +40,7 @@ function ChordGenerator() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [activePage, setActivePage] = useState<'diagram' | 'progression'>('diagram');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [instrument, setInstrument] = useState('violao');
   const [chordTitle, setChordTitle] = useState("C Major");
   const [startingFret, setStartingFret] = useState(1);
   const [fretCount, setFretCount] = useState(5);
@@ -76,15 +77,19 @@ function ChordGenerator() {
     setChordTitle(data.chordName);
 
     // Ajusta fretCount para mostrar todas as notas da posição
+    // Os frets agora são relativos (slot 1 = startingFret), então max relativo = tamanho do shape
     const pressedFrets = data.markers.map(m => m.fret).filter(f => f > 0);
     if (pressedFrets.length > 0) {
-      const maxFret = Math.max(...pressedFrets);
-      const minFret = data.startingFret;
-      const span = maxFret - minFret + 2; // +2 para margem visual
+      const maxRelFret = Math.max(...pressedFrets);
+      const span = maxRelFret + 1; // +1 para margem visual
       setFretCount(prev => Math.max(prev, span));
     }
 
     toast.success(`Acorde ${data.chordName} carregado!`);
+  }, []);
+
+  const handleInstrumentChange = useCallback((inst: string) => {
+    setInstrument(inst);
   }, []);
 
   const handleTuningChange = useCallback((tuning: string[], count: number) => {
@@ -523,11 +528,12 @@ function ChordGenerator() {
         <main className="flex-1 overflow-y-auto p-6 space-y-8">
           {activePage === 'progression' ? (
             <ProgressionEditor
-              instrument="violao"
+              instrument={instrument}
               stringCount={stringCount}
               stringNames={stringNames}
               markerColor={markerColor}
               primaryColor={primaryColor}
+              onInstrumentChange={handleInstrumentChange}
             />
           ) : (<>
             <ChordSearch
@@ -538,6 +544,8 @@ function ChordGenerator() {
               bgColor={bgColor}
               markerShape={markerShape}
               markerSize={markerSize}
+              instrument={instrument}
+              onInstrumentChange={handleInstrumentChange}
               onSelectVoicing={handleSelectVoicing}
               onTuningChange={handleTuningChange}
             />

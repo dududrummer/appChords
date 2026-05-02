@@ -4,8 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { parseProgression, uniqueChords, type Measure } from '@/lib/progression';
 import { analyseProgression, type HarmonicAnalysis } from '@/lib/harmony';
+import { INSTRUMENT_PRESETS } from '@/lib/music-theory';
 import { ProgressionGrid } from './ProgressionGrid';
 import { ChordDictionary } from './ChordDictionary';
 import { PercussionPlayers } from './PercussionPlayers';
@@ -19,12 +21,13 @@ interface Props {
   stringNames: string[];
   markerColor: string;
   primaryColor: string;
+  onInstrumentChange?: (instrument: string) => void;
 }
 
 const EXAMPLE = 'C7M | Em7 | Gm7 C7 | F7M Fm6 | Em7 A7 | D7 | Dm7 G7 | C7M';
 
 export function ProgressionEditor({
-  instrument, stringCount, stringNames, markerColor, primaryColor
+  instrument, stringCount, stringNames, markerColor, primaryColor, onInstrumentChange
 }: Props) {
   const [input, setInput]               = useState(EXAMPLE);
   const [voicings, setVoicings]         = useState<Record<string, StoredVoicing>>({});
@@ -48,6 +51,21 @@ export function ProgressionEditor({
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
+
+        {/* Seletor de instrumento */}
+        <div className="flex items-center gap-3">
+          <Label className="shrink-0">Instrumento</Label>
+          <Select value={instrument} onValueChange={v => onInstrumentChange?.(v)}>
+            <SelectTrigger className="w-52">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.entries(INSTRUMENT_PRESETS).map(([k, v]) => (
+                <SelectItem key={k} value={k}>{v.label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
         {/* Input */}
         <div className="space-y-1.5">
