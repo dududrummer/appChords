@@ -37,11 +37,11 @@ function MiniDiagram({
   voicing: Voicing; stringCount: number; primaryColor: string;
   markerColor: string; bgColor: string; selected: boolean; onClick: () => void;
 }) {
-  const W = 88, H = 108;
+  const W = 88, H = 140;
   const ml = 14, mr = 14, mt = 22, mb = 10;
   const iW = W - ml - mr;
   const iH = H - mt - mb;
-  const FRETS = 4;
+  const FRETS = 6;
   const fretH = iH / FRETS;
   const strSp = stringCount > 1 ? iW / (stringCount - 1) : iW;
 
