@@ -194,11 +194,12 @@ export function ChordSearch({
       maxResults: 24,
       allowOmissions: isCavaquinho,
       rootNoteIndex: parsed.noteIndices[0],
-      // Só aplica filtro de baixo para slash chords explícitos (C/G, E/G#, etc.)
-      // Para acordes normais: sem restrição de baixo → permite x35453, x32010, etc.
+      // Violão: sempre filtra pelo baixo = fundamental (ex: C7M só mostra voicings com Dó no baixo)
+      // Isso inclui x35453 pois string 0 muda → string 1 toca Dó (root) ✅
+      // Slash chords (C/G) usam o baixo explícito do usuário
       bassNoteIndex: isCavaquinho
         ? parsed.bassNoteIndex
-        : parsed.bassNoteIndex, // undefined para acordes normais, definido apenas para slash
+        : (parsed.bassNoteIndex ?? parsed.noteIndices[0]),
       minBarreStrings: isCavaquinho ? 3 : 4,
     });
 
