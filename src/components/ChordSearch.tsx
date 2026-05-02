@@ -186,18 +186,21 @@ export function ChordSearch({
     const isCavaquinho = INSTRUMENT_PRESETS[instrument]?.strings <= 4;
 
     const results = findVoicings(parsed.noteIndices, tuning, {
-      allowMuted,
+      // Violão: sempre permite corda muda internamente para achar posições clássicas (X32000 etc.)
+      // Cavaquinho: usa preferência do usuário
+      allowMuted: isCavaquinho ? allowMuted : true,
       maxFret: 12,
       maxResults: 12,
       allowOmissions: isCavaquinho,
       rootNoteIndex: parsed.noteIndices[0],
-      // Violão: baixo sempre na fundamental (a menos que seja acorde com baixo alterado Ex: C/E)
+      // Violão: filtra para só mostrar com fundamental no baixo (exceto slash chords)
       // Cavaquinho: sem restrição de baixo
       bassNoteIndex: isCavaquinho
         ? parsed.bassNoteIndex
         : (parsed.bassNoteIndex ?? parsed.noteIndices[0]),
       minBarreStrings: isCavaquinho ? 3 : 4,
     });
+
 
 
 
