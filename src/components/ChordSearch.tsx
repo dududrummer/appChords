@@ -189,11 +189,16 @@ export function ChordSearch({
       allowMuted,
       maxFret: 12,
       maxResults: 12,
-      allowOmissions: isCavaquinho,   // cavaquinho omite 5ª/fund.
+      allowOmissions: isCavaquinho,
       rootNoteIndex: parsed.noteIndices[0],
-      bassNoteIndex: parsed.bassNoteIndex,
-      minBarreStrings: isCavaquinho ? 3 : 4, // violão: pestana só com 4+ cordas no mesmo traste
+      // Violão: baixo sempre na fundamental (a menos que seja acorde com baixo alterado Ex: C/E)
+      // Cavaquinho: sem restrição de baixo
+      bassNoteIndex: isCavaquinho
+        ? parsed.bassNoteIndex
+        : (parsed.bassNoteIndex ?? parsed.noteIndices[0]),
+      minBarreStrings: isCavaquinho ? 3 : 4,
     });
+
 
 
     if (results.length === 0) {
