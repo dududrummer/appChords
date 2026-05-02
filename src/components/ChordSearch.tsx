@@ -183,16 +183,18 @@ export function ChordSearch({
 
     setParsedName(`${parsed.displayName} — ${parsed.qualityName}`);
     const tuning = getActiveTuning();
-    const smallInstrument = INSTRUMENT_PRESETS[instrument]?.strings <= 4;
+    const isCavaquinho = INSTRUMENT_PRESETS[instrument]?.strings <= 4;
 
     const results = findVoicings(parsed.noteIndices, tuning, {
       allowMuted,
       maxFret: 12,
       maxResults: 12,
-      allowOmissions: smallInstrument,
+      allowOmissions: isCavaquinho,   // cavaquinho omite 5ª/fund.
       rootNoteIndex: parsed.noteIndices[0],
       bassNoteIndex: parsed.bassNoteIndex,
+      minBarreStrings: isCavaquinho ? 3 : 2, // cavaquinho: pestana só com 3+ cordas
     });
+
 
     if (results.length === 0) {
       setError("Nenhuma posição encontrada. Verifique a afinação das cordas.");

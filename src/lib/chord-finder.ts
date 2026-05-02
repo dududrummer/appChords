@@ -1,11 +1,12 @@
 import { getNoteIndex, noteIndexAtFret } from './music-theory';
 
 export interface Voicing {
-  frets: number[];        // -1=muted, 0=open, 1-12=fret position
-  startingFret: number;   // lowest non-open fret (for display window)
+  frets: number[];
+  startingFret: number;
   barres: BarreDef[];
-  mutedStrings: number[]; // string indices that are muted
-  omitted: string[];      // e.g. ['5ª'] or ['fund.'] or ['5ª','fund.']
+  mutedStrings: number[];
+  omitted: string[];
+  fingerCount: number;
 }
 
 export interface BarreDef {
@@ -15,158 +16,174 @@ export interface BarreDef {
 }
 
 interface FindOptions {
-  maxFret?: number;        // default 12
-  allowMuted?: boolean;    // default false
-  maxSpan?: number;        // default 4
-  maxResults?: number;     // default 12
-  allowOmissions?: boolean;// default false
-  rootNoteIndex?: number;  // required when allowOmissions=true
-  bassNoteIndex?: number;  // for slash chords: lowest string must play this note
+  maxFret?: number;
+  allowMuted?: boolean;
+  maxSpan?: number;
+  maxResults?: number;
+  allowOmissions?: boolean;
+  rootNoteIndex?: number;
+  bassNoteIndex?: number;
+  minBarreStrings?: number; // 2=violão (default), 3=cavaquinho
 }
 
-// ── Internal: find voicings for a given set of required notes ───────────────
+// ── Barre detection ───────────────────────────────────────────────────────────
+function detectBarres(frets: number[], minBarreStrings = 2): BarreDef[] {
+  const pressed = frets.map((f, i) => ({ f, i })).filter(x => x.f > 0);
+  if (pressed.length < 2) return [];
+
+  const barres: BarreDef[] = [];
+  const fretValues = [...new Set(pressed.map(x => x.f))].sort((a, b) => a - b);
+
+  for (const fretVal of fretValues) {
+    // Find consecutive string runs at this fret
+    const stringsAtFret = frets
+      .map((f, i) => (f === fretVal ? i : -1))
+      .filter(i => i !== -1);
+
+    if (stringsAtFret.length < minBarreStrings) continue;
+
+    // Check there's no muted string between first and last
+    const first = stringsAtFret[0], last = stringsAtFret[stringsAtFret.length - 1];
+    const hasMutedBetween = frets.slice(first, last + 1).some(f => f === -1);
+    if (hasMutedBetween) continue;
+
+    // All strings between first and last must be >= fretVal (can't play below a barre)
+    const allPlayable = frets.slice(first, last + 1).every(f => f === 0 || f >= fretVal);
+    if (!allPlayable) continue;
+
+    barres.push({ fret: fretVal, startString: first, endString: last });
+    break; // one barre per voicing is enough
+  }
+  return barres;
+}
+
+// ── Playability: count distinct fingers needed ────────────────────────────────
+function countFingers(frets: number[], barres: BarreDef[]): number {
+  // Which (string, fret) combos are covered by a barre
+  const barredKeys = new Set<string>();
+  for (const b of barres) {
+    for (let s = b.startString; s <= b.endString; s++) {
+      barredKeys.add(`${s},${b.fret}`);
+    }
+  }
+  let count = barres.length;
+  for (let i = 0; i < frets.length; i++) {
+    if (frets[i] > 0 && !barredKeys.has(`${i},${frets[i]}`)) count++;
+  }
+  return count;
+}
+
+// ── Core search ───────────────────────────────────────────────────────────────
 function findVoicingsForNotes(
-  requiredNotes: number[],
+  required: number[],
   tuning: string[],
-  options: Omit<FindOptions, 'allowOmissions' | 'rootNoteIndex'>,
+  opts: Omit<FindOptions, 'allowOmissions' | 'rootNoteIndex'>,
   omitted: string[]
 ): Voicing[] {
-  const { maxFret = 12, allowMuted = false, maxSpan = 4 } = options;
-  const numStrings = tuning.length;
+  const { maxFret = 12, allowMuted = false, maxSpan = 4, minBarreStrings = 2 } = opts;
+  const n = tuning.length;
 
-  const validFretsPerString: number[][] = tuning.map(openNote => {
-    const openIdx = getNoteIndex(openNote);
-    if (openIdx === -1) return [];
-    const valid: number[] = [];
-    if (allowMuted) valid.push(-1);
-    for (let fret = 0; fret <= maxFret; fret++) {
-      if (requiredNotes.includes(noteIndexAtFret(openIdx, fret))) {
-        valid.push(fret);
-      }
+  const validFrets: number[][] = tuning.map(note => {
+    const base = getNoteIndex(note);
+    if (base === -1) return [];
+    const v: number[] = [];
+    if (allowMuted) v.push(-1);
+    for (let f = 0; f <= maxFret; f++) {
+      if (required.includes(noteIndexAtFret(base, f))) v.push(f);
     }
-    return valid;
+    return v;
   });
 
   const collected: Voicing[] = [];
 
-  function backtrack(strIdx: number, current: number[], covered: Set<number>) {
-    if (collected.length >= 60) return;
-
-    if (strIdx === numStrings) {
-      if (!requiredNotes.every(n => covered.has(n))) return;
-      const pressed = current.filter(f => f > 0);
+  function bt(si: number, cur: number[], cov: Set<number>) {
+    if (collected.length >= 80) return;
+    if (si === n) {
+      if (!required.every(x => cov.has(x))) return;
+      const pressed = cur.filter(f => f > 0);
       if (pressed.length >= 2 && Math.max(...pressed) - Math.min(...pressed) > maxSpan) return;
-      const startingFret = pressed.length > 0 ? Math.min(...pressed) : 1;
+      const barres = detectBarres(cur, minBarreStrings);
+      const fingers = countFingers(cur, barres);
+      if (fingers > 4) return; // physically impossible
+      const sf = pressed.length > 0 ? Math.min(...pressed) : 1;
       collected.push({
-        frets: [...current],
-        startingFret,
-        barres: detectBarres(current),
-        mutedStrings: current.reduce<number[]>((a, f, i) => (f === -1 ? [...a, i] : a), []),
-        omitted,
+        frets: [...cur], startingFret: sf, barres,
+        mutedStrings: cur.reduce<number[]>((a, f, i) => f === -1 ? [...a, i] : a, []),
+        omitted, fingerCount: fingers,
       });
       return;
     }
-
-    for (const fret of validFretsPerString[strIdx]) {
-      const tentative = [...current, fret];
-      const pressed = tentative.filter(f => f > 0);
+    for (const f of validFrets[si]) {
+      const pressed = [...cur.filter(x => x > 0), ...(f > 0 ? [f] : [])];
       if (pressed.length >= 2 && Math.max(...pressed) - Math.min(...pressed) > maxSpan) continue;
-
-      const newCovered = new Set(covered);
-      if (fret >= 0) {
-        const openIdx = getNoteIndex(tuning[strIdx]);
-        if (openIdx !== -1) newCovered.add(noteIndexAtFret(openIdx, fret));
+      const nc = new Set(cov);
+      if (f >= 0) {
+        const base = getNoteIndex(tuning[si]);
+        if (base !== -1) nc.add(noteIndexAtFret(base, f));
       }
-      current.push(fret);
-      backtrack(strIdx + 1, current, newCovered);
-      current.pop();
+      cur.push(f); bt(si + 1, cur, nc); cur.pop();
     }
   }
 
-  backtrack(0, [], new Set());
+  bt(0, [], new Set());
   return collected;
 }
 
-// ── Public API ───────────────────────────────────────────────────────────────
+// ── Public API ────────────────────────────────────────────────────────────────
 export function findVoicings(
-  chordNoteIndices: number[],
+  noteIndices: number[],
   tuning: string[],
   options: FindOptions = {}
 ): Voicing[] {
-  const { allowOmissions = false, rootNoteIndex, bassNoteIndex, maxResults = 12, ...restOpts } = options;
-
+  const { allowOmissions = false, rootNoteIndex, bassNoteIndex, maxResults = 12, ...rest } = options;
   const allRaw: Voicing[] = [];
 
-  // 1. Full chord (all notes required)
-  allRaw.push(...findVoicingsForNotes(chordNoteIndices, tuning, restOpts, []));
+  allRaw.push(...findVoicingsForNotes(noteIndices, tuning, rest, []));
 
   if (allowOmissions && rootNoteIndex !== undefined) {
-    const perfectFifth = (rootNoteIndex + 7) % 12;
-    const hasPerfectFifth = chordNoteIndices.includes(perfectFifth);
-    // Bass note must never be omitted
+    const fifth = (rootNoteIndex + 7) % 12;
+    const hasFifth = noteIndices.includes(fifth);
     const isBassRoot = bassNoteIndex === rootNoteIndex;
-    const isBassFifth = bassNoteIndex === perfectFifth;
+    const isBassFifth = bassNoteIndex === fifth;
 
-    if (hasPerfectFifth && !isBassFifth) {
-      const noFifth = chordNoteIndices.filter(n => n !== perfectFifth);
-      allRaw.push(...findVoicingsForNotes(noFifth, tuning, restOpts, ['s/ 5ª']));
-
+    if (hasFifth && !isBassFifth) {
+      const noFifth = noteIndices.filter(n => n !== fifth);
+      allRaw.push(...findVoicingsForNotes(noFifth, tuning, rest, ['s/ 5ª']));
       const noFifthNoRoot = noFifth.filter(n => n !== rootNoteIndex);
-      if (noFifthNoRoot.length > 0 && !isBassRoot) {
-        allRaw.push(...findVoicingsForNotes(noFifthNoRoot, tuning, restOpts, ['s/ 5ª', 's/ fund.']));
-      }
+      if (noFifthNoRoot.length > 0 && !isBassRoot)
+        allRaw.push(...findVoicingsForNotes(noFifthNoRoot, tuning, rest, ['s/ 5ª', 's/ fund.']));
     }
-
     if (!isBassRoot) {
-      const noRoot = chordNoteIndices.filter(n => n !== rootNoteIndex);
-      if (noRoot.length > 0) {
-        allRaw.push(...findVoicingsForNotes(noRoot, tuning, restOpts, ['s/ fund.']));
-      }
+      const noRoot = noteIndices.filter(n => n !== rootNoteIndex);
+      if (noRoot.length > 0)
+        allRaw.push(...findVoicingsForNotes(noRoot, tuning, rest, ['s/ fund.']));
     }
   }
 
   // Deduplicate
   const seen = new Set<string>();
   let unique = allRaw.filter(v => {
-    const key = v.frets.join(',');
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
+    const k = v.frets.join(',');
+    if (seen.has(k)) return false;
+    seen.add(k); return true;
   });
 
-  // Filter by bass note: lowest non-muted string must play bassNoteIndex
+  // Filter by bass note
   if (bassNoteIndex !== undefined) {
     unique = unique.filter(v => {
-      const lowestStr = v.frets.findIndex(f => f !== -1);
-      if (lowestStr === -1) return false;
-      const openIdx = getNoteIndex(tuning[lowestStr]);
-      if (openIdx === -1) return false;
-      return noteIndexAtFret(openIdx, v.frets[lowestStr]) === bassNoteIndex;
+      const li = v.frets.findIndex(f => f !== -1);
+      if (li === -1) return false;
+      const base = getNoteIndex(tuning[li]);
+      return base !== -1 && noteIndexAtFret(base, v.frets[li]) === bassNoteIndex;
     });
   }
 
-  // Sort: full chords first, then by startingFret, then fewer muted strings
+  // Sort: full chord > fewer fingers > lower fret
   unique.sort((a, b) => {
-    const ao = a.omitted.length, bo = b.omitted.length;
-    if (ao !== bo) return ao - bo;
-    if (a.startingFret !== b.startingFret) return a.startingFret - b.startingFret;
-    return a.mutedStrings.length - b.mutedStrings.length;
+    if (a.omitted.length !== b.omitted.length) return a.omitted.length - b.omitted.length;
+    if (a.fingerCount !== b.fingerCount) return a.fingerCount - b.fingerCount;
+    return a.startingFret - b.startingFret;
   });
 
   return unique.slice(0, maxResults);
-}
-
-function detectBarres(frets: number[]): BarreDef[] {
-  const pressed = frets.filter(f => f > 0);
-  if (pressed.length < 2) return [];
-  const minFret = Math.min(...pressed);
-  let start = -1, end = -1;
-  for (let i = 0; i < frets.length; i++) {
-    if (frets[i] === minFret) {
-      if (start === -1) start = i;
-      end = i;
-    }
-  }
-  if (start !== -1 && end > start) return [{ fret: minFret, startString: start, endString: end }];
-  return [];
 }
