@@ -7,8 +7,8 @@ import { Label } from '@/components/ui/label';
 import { parseProgression, uniqueChords, type Measure } from '@/lib/progression';
 import { analyseProgression, type HarmonicAnalysis } from '@/lib/harmony';
 import { ProgressionGrid } from './ProgressionGrid';
-import { ProgressionAudio } from './ProgressionAudio';
 import { ChordDictionary } from './ChordDictionary';
+import { PercussionPlayers } from './PercussionPlayers';
 import type { Voicing } from '@/lib/chord-finder';
 
 interface StoredVoicing extends Voicing { tuning: string[] }
@@ -27,7 +27,6 @@ export function ProgressionEditor({
   instrument, stringCount, stringNames, markerColor, primaryColor
 }: Props) {
   const [input, setInput]               = useState(EXAMPLE);
-  const [activeMeasure, setActiveMeasure] = useState<number | null>(null);
   const [voicings, setVoicings]         = useState<Record<string, StoredVoicing>>({});
 
   const measures: Measure[] = useMemo(() => parseProgression(input), [input]);
@@ -49,13 +48,14 @@ export function ProgressionEditor({
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
+
         {/* Input */}
         <div className="space-y-1.5">
           <Label>
             Progressão{' '}
             <span className="text-xs text-muted-foreground font-normal">
               — use <code className="bg-muted px-1 rounded">|</code> para separar compassos,{' '}
-              <code className="bg-muted px-1 rounded">||</code> para 2 compassos, espaço entre acordes no mesmo compasso
+              <code className="bg-muted px-1 rounded">||</code> para 2 compassos
             </span>
           </Label>
           <Textarea
@@ -67,36 +67,35 @@ export function ProgressionEditor({
           />
         </div>
 
-        {/* Tabs */}
+        {/* Tabs: Progressão | Dicionário */}
         <Tabs defaultValue="progression">
           <TabsList className="w-full">
             <TabsTrigger value="progression" className="flex-1 gap-1.5">
               <Grid3X3 className="h-4 w-4" /> Progressão
             </TabsTrigger>
-            <TabsTrigger value="audio" className="flex-1 gap-1.5">
-              <Music2 className="h-4 w-4" /> Áudio
-            </TabsTrigger>
             <TabsTrigger value="dictionary" className="flex-1 gap-1.5">
-              <BookOpen className="h-4 w-4" /> Dicionário
+              <BookOpen className="h-4 w-4" /> Dicionário de Acordes
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="progression" className="pt-3">
+          {/* ── Aba Progressão ── */}
+          <TabsContent value="progression" className="pt-3 space-y-6">
+            {/* Grade harmônica */}
             <ProgressionGrid
               measures={measures}
               analysis={analysis}
-              activeMeasure={activeMeasure}
+              activeMeasure={null}
             />
+
+            {/* Separador */}
+            {measures.length > 0 && (
+              <div className="border-t pt-4">
+                <PercussionPlayers />
+              </div>
+            )}
           </TabsContent>
 
-          <TabsContent value="audio" className="pt-3">
-            <ProgressionAudio
-              measures={measures}
-              voicings={voicings}
-              onMeasureChange={setActiveMeasure}
-            />
-          </TabsContent>
-
+          {/* ── Aba Dicionário ── */}
           <TabsContent value="dictionary" className="pt-3">
             <ChordDictionary
               chordNames={chordNames}
@@ -110,6 +109,7 @@ export function ProgressionEditor({
             />
           </TabsContent>
         </Tabs>
+
       </CardContent>
     </Card>
   );
