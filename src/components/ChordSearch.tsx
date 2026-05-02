@@ -212,16 +212,18 @@ export function ChordSearch({
       } else if (fret === -1) {
         nutIndicators.push({ string: s, type: "muted" });
       } else {
-        markers.push({ string: s, fret, color: markerColor });
+        // sem color — o diagrama usa a cor global configurada pelo usuário
+        markers.push({ string: s, fret });
       }
     });
 
+    // sem color nas pestanas — usa primaryColor/markerColor global
     const barres: Barre[] = voicing.barres.map(b => ({
-      fret: b.fret, startString: b.startString, endString: b.endString, color: markerColor
+      fret: b.fret, startString: b.startString, endString: b.endString
     }));
 
     onSelectVoicing({ markers, barres, nutIndicators, startingFret: voicing.startingFret, chordName: query.trim() });
-  }, [markerColor, onSelectVoicing, query]);
+  }, [onSelectVoicing, query]);
 
   const handleInstrumentChange = (value: string) => {
     setInstrument(value);

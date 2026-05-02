@@ -71,6 +71,16 @@ function ChordGenerator() {
     setNutIndicators(data.nutIndicators);
     setStartingFret(data.startingFret);
     setChordTitle(data.chordName);
+
+    // Ajusta fretCount para mostrar todas as notas da posição
+    const pressedFrets = data.markers.map(m => m.fret).filter(f => f > 0);
+    if (pressedFrets.length > 0) {
+      const maxFret = Math.max(...pressedFrets);
+      const minFret = data.startingFret;
+      const span = maxFret - minFret + 2; // +2 para margem visual
+      setFretCount(prev => Math.max(prev, span));
+    }
+
     toast.success(`Acorde ${data.chordName} carregado!`);
   }, []);
 
