@@ -1,6 +1,6 @@
 import { useState, useMemo, useRef, useCallback } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Moon, Sun, Download, Circle, Square, Triangle, Trash2, Columns, Rows, Guitar, Music2, ChevronRight } from "lucide-react";
+import { Moon, Sun, Download, Circle, Square, Triangle, Trash2, Columns, Rows, Guitar, Music2, ChevronRight, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -39,6 +39,7 @@ export const Route = createFileRoute("/")({
 function ChordGenerator() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [activePage, setActivePage] = useState<'diagram' | 'progression'>('diagram');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [chordTitle, setChordTitle] = useState("C Major");
   const [startingFret, setStartingFret] = useState(1);
   const [fretCount, setFretCount] = useState(5);
@@ -445,14 +446,34 @@ function ChordGenerator() {
   return (
     <div className={`min-h-screen flex ${isDarkMode ? "dark bg-background text-foreground" : "bg-slate-50"}`}>
 
+      {/* ── Mobile overlay backdrop ─────────────────────────────────────── */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-30 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* ── Sidebar ──────────────────────────────────────────────────────── */}
-      <aside className="w-56 shrink-0 border-r bg-card flex flex-col sticky top-0 h-screen overflow-hidden z-20">
-        <div className="px-5 py-4 border-b">
-          <div className="flex items-center gap-2">
-            <Guitar className="h-5 w-5 text-primary" />
-            <span className="font-bold text-base">AppChords</span>
+      <aside className={`
+        fixed md:sticky top-0 left-0 h-screen z-40
+        w-56 shrink-0 border-r bg-card flex flex-col overflow-hidden
+        transition-transform duration-300 ease-in-out
+        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+        md:translate-x-0
+      `}>
+        <div className="px-5 py-4 border-b flex items-center justify-between">
+          <div>
+            <div className="flex items-center gap-2">
+              <Guitar className="h-5 w-5 text-primary" />
+              <span className="font-bold text-base">AppChords</span>
+            </div>
+            <p className="text-[10px] text-muted-foreground mt-0.5">Gerador de Acordes</p>
           </div>
-          <p className="text-[10px] text-muted-foreground mt-0.5">Gerador de Acordes</p>
+          {/* Close button — mobile only */}
+          <button onClick={() => setSidebarOpen(false)} className="md:hidden p-1 rounded hover:bg-muted">
+            <X className="h-4 w-4" />
+          </button>
         </div>
 
         <nav className="flex-1 p-2 space-y-1">
@@ -462,7 +483,7 @@ function ChordGenerator() {
           ].map(({ page, icon, label, sub }) => (
             <button
               key={page}
-              onClick={() => setActivePage(page)}
+              onClick={() => { setActivePage(page); setSidebarOpen(false); }}
               className={`w-full text-left rounded-lg px-3 py-2.5 flex items-center gap-3 transition-all group ${
                 activePage === page
                   ? 'bg-primary text-primary-foreground shadow-sm'
@@ -488,9 +509,13 @@ function ChordGenerator() {
       </aside>
 
       {/* ── Main content ─────────────────────────────────────────────────── */}
-      <div className="flex-1 flex flex-col min-w-0">
-        <header className="border-b bg-card px-6 py-3 flex items-center justify-between shadow-sm sticky top-0 z-10">
-          <h1 className="text-lg font-bold">
+      <div className="flex-1 flex flex-col min-w-0 md:ml-0">
+        <header className="border-b bg-card px-4 py-3 flex items-center gap-3 shadow-sm sticky top-0 z-10">
+          {/* Hamburger — mobile only */}
+          <button onClick={() => setSidebarOpen(true)} className="md:hidden p-1.5 rounded hover:bg-muted">
+            <Menu className="h-5 w-5" />
+          </button>
+          <h1 className="text-lg font-bold flex-1">
             {activePage === 'diagram' ? 'Diagrama de Acordes' : 'Progressão de Acordes'}
           </h1>
         </header>
