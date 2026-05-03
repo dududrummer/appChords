@@ -11,6 +11,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { toast } from "sonner";
 import { ChordSearch } from "@/components/ChordSearch";
 import { ProgressionEditor } from "@/components/ProgressionEditor";
+import { INSTRUMENT_PRESETS } from "@/lib/music-theory";
 
 interface Marker {
   string: number;
@@ -90,6 +91,20 @@ function ChordGenerator() {
 
   const handleInstrumentChange = useCallback((inst: string) => {
     setInstrument(inst);
+    // Atualiza afinação para o novo instrumento — necessário para o ChordDictionary
+    // na aba de progressão usar o tuning correto
+    const preset = INSTRUMENT_PRESETS[inst];
+    if (preset) {
+      setStringCount(preset.strings);
+      setStringNames(() => {
+        const next = Array(12).fill("") as string[];
+        preset.tuning.forEach((n, i) => { next[i] = n; });
+        return next;
+      });
+      setMarkers([]);
+      setBarres([]);
+      setNutIndicators([]);
+    }
   }, []);
 
   const handleTuningChange = useCallback((tuning: string[], count: number) => {
