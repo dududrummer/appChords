@@ -1,0 +1,33 @@
+name: Extract Cavaquinho Chords
+
+on:
+  workflow_dispatch: # Permite rodar manualmente clicando em "Run workflow"
+
+permissions:
+  contents: write # Permite que o bot faça o commit do JSON de volta no repositório
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Run Extraction Script
+        run: node extract-chords.mjs
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        
+      - name: Commit and Push Changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add src/config/cavaquinho-dictionary.json
+          git commit -m "feat: auto-generate cavaquinho chord dictionary via AI" || echo "No changes to commit"
+          git push
