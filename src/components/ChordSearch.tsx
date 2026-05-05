@@ -6,6 +6,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { parseChord, INSTRUMENT_PRESETS } from "@/lib/music-theory";
 import { findVoicings, Voicing } from "@/lib/chord-finder";
+import cavaquinhoDictRaw from '@/config/cavaquinho-dictionary.json';
+import violaoDictRaw from '@/config/violao-dictionary.json';
+import ukuleleDictRaw from '@/config/ukulele-dictionary.json';
+
+type DictType = Record<string, { chordName: string, frets: number[] }[]>;
+const DICTIONARIES: Record<string, DictType> = {
+  cavaquinho: cavaquinhoDictRaw as DictType,
+  violao: violaoDictRaw as DictType,
+  ukulele: ukuleleDictRaw as DictType,
+};
 
 interface Marker { string: number; fret: number; label?: string; color?: string }
 interface NutIndicator { string: number; type: "none" | "open" | "muted" }
@@ -184,32 +194,48 @@ export function ChordSearch({
     const tuning = getActiveTuning();
     const isCavaquinho = INSTRUMENT_PRESETS[instrument]?.strings <= 4;
 
-    const results = findVoicings(parsed.noteIndices, tuning, {
-      // Violão: sempre permite corda muda (acha X32000, x35453, etc.)
-      // Cavaquinho/ukulele: sem cordas mudas (usa omissões de notas em vez disso)
+    const baseResults = findVoicings(parsed.noteIndices, tuning, {
       allowMuted: !isCavaquinho,
       maxFret: 12,
-      // Cavaquinho: 12 resultados e limite interno 80 (configuração original)
-      // Violão: 24 resultados e limite interno 200 (necessário para achar x35453 e similares)
       maxResults: isCavaquinho ? 12 : 24,
       maxInternalResults: isCavaquinho ? 80 : 200,
       allowOmissions: isCavaquinho,
       rootNoteIndex: parsed.noteIndices[0],
-      // Violão: filtra pelo baixo = fundamental; slash chords usam o baixo explícito
       bassNoteIndex: isCavaquinho
         ? parsed.bassNoteIndex
         : (parsed.bassNoteIndex ?? parsed.noteIndices[0]),
       minBarreStrings: isCavaquinho ? 3 : 4,
     });
 
+    const activeDict = DICTIONARIES[instrument];
+    const searchName = value.trim();
 
+    let finalResults = baseResults;
 
+    if (activeDict && activeDict[searchName]) {
+      const dictVoicings: Voicing[] = activeDict[searchName].map(c => {
+        const pressed = c.frets.filter(f => f > 0);
+        const startingFret = pressed.length > 0 ? Math.min(...pressed) : 1;
+        return {
+          frets: c.frets,
+          startingFret,
+          barres: [],
+          mutedStrings: c.frets.map((f, i) => f === -1 ? i : -1).filter(i => i !== -1),
+          omitted: [],
+          fingerCount: pressed.length
+        };
+      });
 
-    if (results.length === 0) {
+      const dictFretStrings = dictVoicings.map(v => v.frets.join(','));
+      const others = baseResults.filter(v => !dictFretStrings.includes(v.frets.join(',')));
+      finalResults = [...dictVoicings, ...others].slice(0, 16);
+    }
+
+    if (finalResults.length === 0) {
       setError("Nenhuma posição encontrada. Verifique a afinação das cordas.");
       setVoicings([]); return;
     }
-    setVoicings(results);
+    setVoicings(finalResults);
   }, [getActiveTuning, instrument]);
 
   const handleSelectVoicing = useCallback((voicing: Voicing, idx: number) => {
