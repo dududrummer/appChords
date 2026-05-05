@@ -1,0 +1,33 @@
+{
+  "C": [ { "chordName": "C", "frets": [0, 0, 0, 3] } ],
+  "D": [ { "chordName": "D", "frets": [2, 2, 2, 0] } ],
+  "E": [ { "chordName": "E", "frets": [1, 4, 0, 2] }, { "chordName": "E", "frets": [4, 4, 4, 2] } ],
+  "F": [ { "chordName": "F", "frets": [2, 0, 1, 0] } ],
+  "G": [ { "chordName": "G", "frets": [0, 2, 3, 2] } ],
+  "A": [ { "chordName": "A", "frets": [2, 1, 0, 0] } ],
+  "B": [ { "chordName": "B", "frets": [4, 3, 2, 2] } ],
+
+  "Cm": [ { "chordName": "Cm", "frets": [0, 3, 3, 3] } ],
+  "Dm": [ { "chordName": "Dm", "frets": [2, 2, 1, 0] } ],
+  "Em": [ { "chordName": "Em", "frets": [0, 4, 3, 2] } ],
+  "Fm": [ { "chordName": "Fm", "frets": [1, 0, 1, 3] } ],
+  "Gm": [ { "chordName": "Gm", "frets": [0, 2, 3, 1] } ],
+  "Am": [ { "chordName": "Am", "frets": [2, 0, 0, 0] } ],
+  "Bm": [ { "chordName": "Bm", "frets": [4, 2, 2, 2] } ],
+
+  "C7": [ { "chordName": "C7", "frets": [0, 0, 0, 1] } ],
+  "D7": [ { "chordName": "D7", "frets": [2, 2, 2, 3] }, { "chordName": "D7", "frets": [2, 0, 2, 0] } ],
+  "E7": [ { "chordName": "E7", "frets": [1, 2, 0, 2] } ],
+  "F7": [ { "chordName": "F7", "frets": [2, 3, 1, 0] } ],
+  "G7": [ { "chordName": "G7", "frets": [0, 2, 1, 2] } ],
+  "A7": [ { "chordName": "A7", "frets": [0, 1, 0, 0] } ],
+  "B7": [ { "chordName": "B7", "frets": [2, 3, 2, 2] } ],
+
+  "Cm7": [ { "chordName": "Cm7", "frets": [3, 3, 3, 3] } ],
+  "Dm7": [ { "chordName": "Dm7", "frets": [2, 2, 1, 3] } ],
+  "Em7": [ { "chordName": "Em7", "frets": [0, 2, 0, 2] } ],
+  "Fm7": [ { "chordName": "Fm7", "frets": [1, 3, 1, 3] } ],
+  "Gm7": [ { "chordName": "Gm7", "frets": [0, 2, 1, 1] } ],
+  "Am7": [ { "chordName": "Am7", "frets": [0, 0, 0, 0] } ],
+  "Bm7": [ { "chordName": "Bm7", "frets": [2, 2, 2, 2] } ]
+}

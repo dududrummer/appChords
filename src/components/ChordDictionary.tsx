@@ -4,8 +4,19 @@ import { Input } from '@/components/ui/input';
 import { parseChord, INSTRUMENT_PRESETS } from '@/lib/music-theory';
 import { findVoicings, type Voicing } from '@/lib/chord-finder';
 import cavaquinhoDictRaw from '@/config/cavaquinho-dictionary.json';
+import violaoDictRaw from '@/config/violao-dictionary.json';
+import ukuleleDictRaw from '@/config/ukulele-dictionary.json';
 
-const cavaquinhoDict: Record<string, { chordName: string, frets: number[] }[]> = cavaquinhoDictRaw;
+type DictType = Record<string, { chordName: string, frets: number[] }[]>;
+const cavaquinhoDict: DictType = cavaquinhoDictRaw;
+const violaoDict: DictType = violaoDictRaw;
+const ukuleleDict: DictType = ukuleleDictRaw;
+
+const DICTIONARIES: Record<string, DictType> = {
+  cavaquinho: cavaquinhoDict,
+  violao: violaoDict,
+  ukulele: ukuleleDict,
+};
 
 interface StoredVoicing extends Voicing {
   tuning: string[];
@@ -87,8 +98,10 @@ export function ChordDictionary({
       bassNoteIndex: parsed.bassNoteIndex,
     });
 
-    if (instrument === 'cavaquinho' && cavaquinhoDict[chordName]) {
-      const dictVoicings: Voicing[] = cavaquinhoDict[chordName].map(c => {
+    const activeDict = DICTIONARIES[instrument];
+
+    if (activeDict && activeDict[chordName]) {
+      const dictVoicings: Voicing[] = activeDict[chordName].map(c => {
         const pressed = c.frets.filter(f => f > 0);
         const startingFret = pressed.length > 0 ? Math.min(...pressed) : 1;
         return {
