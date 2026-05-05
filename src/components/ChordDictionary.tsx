@@ -3,6 +3,9 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { parseChord, INSTRUMENT_PRESETS } from '@/lib/music-theory';
 import { findVoicings, type Voicing } from '@/lib/chord-finder';
+import cavaquinhoDictRaw from '@/config/cavaquinho-dictionary.json';
+
+const cavaquinhoDict: Record<string, { chordName: string, frets: number[] }[]> = cavaquinhoDictRaw;
 
 interface StoredVoicing extends Voicing {
   tuning: string[];
@@ -77,12 +80,33 @@ export function ChordDictionary({
     if (!parsed) return [];
     const tuning = getActiveTuning();
     const smallInstrument = (INSTRUMENT_PRESETS[instrument]?.strings ?? 6) <= 4;
-    return findVoicings(parsed.noteIndices, tuning, {
-      maxFret: 12, maxResults: 8,
+    const baseResults = findVoicings(parsed.noteIndices, tuning, {
+      maxFret: 12, maxResults: 12,
       allowOmissions: smallInstrument,
       rootNoteIndex: parsed.noteIndices[0],
       bassNoteIndex: parsed.bassNoteIndex,
     });
+
+    if (instrument === 'cavaquinho' && cavaquinhoDict[chordName]) {
+      const dictVoicings: Voicing[] = cavaquinhoDict[chordName].map(c => {
+        const pressed = c.frets.filter(f => f > 0);
+        const startingFret = pressed.length > 0 ? Math.min(...pressed) : 1;
+        return {
+          frets: c.frets,
+          startingFret,
+          barres: [],
+          mutedStrings: c.frets.map((f, i) => f === -1 ? i : -1).filter(i => i !== -1),
+          omitted: [],
+          fingerCount: pressed.length
+        };
+      });
+
+      const dictFretStrings = dictVoicings.map(v => v.frets.join(','));
+      const others = baseResults.filter(v => !dictFretStrings.includes(v.frets.join(',')));
+      return [...dictVoicings, ...others].slice(0, 8);
+    }
+
+    return baseResults.slice(0, 8);
   }, [getActiveTuning, instrument]);
 
   if (chordNames.length === 0) {
