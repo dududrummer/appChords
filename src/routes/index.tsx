@@ -45,7 +45,7 @@ function ChordGenerator() {
   const [chordTitle, setChordTitle] = useState("C Major");
   const [startingFret, setStartingFret] = useState(1);
   const [fretCount, setFretCount] = useState(5);
-  const [stringCount, setStringCount] = useState(6);
+  const [stringCount, setStringCount] = useState(4);
   const [markerSize, setMarkerSize] = useState([40]);
   const [strokeWidth, setStrokeWidth] = useState([2]);
   const [fontSize, setFontSize] = useState([16]);
@@ -59,7 +59,7 @@ function ChordGenerator() {
   const [markers, setMarkers] = useState<Marker[]>([]);
   const [nutIndicators, setNutIndicators] = useState<NutIndicator[]>([]);
   const [barres, setBarres] = useState<Barre[]>([]);
-  const [stringNames, setStringNames] = useState<string[]>(Array(12).fill(""));
+  const [stringNames, setStringNames] = useState<string[]>(["D", "G", "B", "D"]);
   const [dragStart, setDragStart] = useState<{ fret: number; string: number } | null>(null);
   const [dragEnd, setDragEnd] = useState<{ fret: number; string: number } | null>(null);
   const resultSvgRef = useRef<SVGSVGElement>(null);
