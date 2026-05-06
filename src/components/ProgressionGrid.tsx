@@ -105,13 +105,6 @@ function VoicingPicker({
                   <div className="text-[8px] text-center text-muted-foreground pb-1 px-1">
                     {v.frets.map(f => f === -1 ? 'X' : f).join(' ')}
                   </div>
-                  {v.omitted.length > 0 && (
-                    <div className="flex justify-center gap-0.5 pb-1">
-                      {v.omitted.map((tag, ti) => (
-                        <span key={ti} className="text-[6px] bg-amber-500 text-white rounded-full px-1">{tag}</span>
-                      ))}
-                    </div>
-                  )}
                 </button>
               );
             })}

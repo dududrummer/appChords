@@ -132,17 +132,9 @@ function MiniDiagram({
     <button
       onClick={onClick}
       className={`relative rounded-lg border-2 transition-all hover:scale-105 cursor-pointer bg-white dark:bg-zinc-900 ${selected ? "border-primary shadow-md shadow-primary/30 scale-105" : "border-border"}`}
-      title={`Traste ${voicing.startingFret}: ${voicing.frets.map(f => f === -1 ? "X" : f).join("-")}${hasOmissions ? ` (${voicing.omitted.join(", ")})` : ""}`}
+      title={`Traste ${voicing.startingFret}: ${voicing.frets.map(f => f === -1 ? "X" : f).join("-")}`}
     >
-      {hasOmissions && (
-        <div className="absolute -top-2 left-1/2 -translate-x-1/2 flex gap-1 flex-wrap justify-center">
-          {voicing.omitted.map((tag, i) => (
-            <span key={i} className="rounded-full bg-amber-500 text-white text-[8px] px-1.5 py-0.5 whitespace-nowrap font-bold leading-none">
-              {tag}
-            </span>
-          ))}
-        </div>
-      )}
+      {/* Omitted tags removed */}
       <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} style={{ backgroundColor: "transparent" }}>
         {elements}
       </svg>
@@ -337,12 +329,7 @@ export function ChordSearch({
               ))}
             </div>
           </div>
-          {isSmallInstrument && (
-            <div className="flex items-center gap-1.5 pb-1">
-              <span className="rounded-full bg-amber-500 text-white text-[10px] px-2 py-0.5 font-bold">Auto</span>
-              <span className="text-xs text-muted-foreground">Omissões de 5ª/fund. ativadas para instrumento de 4 cordas</span>
-            </div>
-          )}
+          {/* Omitted notes message removed */}
         </div>
 
         {/* Search */}
@@ -369,7 +356,6 @@ export function ChordSearch({
           <div className="space-y-2">
             <Label className="text-xs text-muted-foreground">
               Clique numa posição para carregar no diagrama principal
-              {isSmallInstrument && " · Tags amarelas indicam notas omitidas"}
             </Label>
             <div className="flex flex-wrap gap-4 pt-2">
               {voicings.map((v, i) => (

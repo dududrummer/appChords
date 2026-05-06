@@ -94,12 +94,7 @@ export function ChordDictionaryPage({
               ))}
             </div>
           </div>
-          {isSmallInstrument && (
-            <div className="flex items-center gap-1.5 pb-1">
-              <span className="rounded-full bg-amber-500 text-white text-[10px] px-2 py-0.5 font-bold">Auto</span>
-              <span className="text-xs text-muted-foreground">Omissões de 5ª/fund. ativadas</span>
-            </div>
-          )}
+          {/* Removed omission badge */}
         </div>
 
         {/* Search input */}
@@ -126,7 +121,6 @@ export function ChordDictionaryPage({
           <div className="space-y-2">
             <Label className="text-xs text-muted-foreground">
               Diagramas de posições disponíveis
-              {isSmallInstrument && ' · Tags amarelas indicam notas omitidas'}
             </Label>
             <div className="flex flex-wrap gap-4 pt-2">
               {voicings.map((v, i) => (
@@ -146,13 +140,6 @@ export function ChordDictionaryPage({
                   <div className="text-[10px] text-center text-muted-foreground pb-1 px-1">
                     {v.frets.map(f => f === -1 ? 'X' : f).join(' ')}
                   </div>
-                  {v.omitted.length > 0 && (
-                    <div className="flex justify-center gap-0.5 pb-1">
-                      {v.omitted.map((tag, ti) => (
-                        <span key={ti} className="text-[7px] bg-amber-500 text-white rounded-full px-1">{tag}</span>
-                      ))}
-                    </div>
-                  )}
                 </div>
               ))}
             </div>
