@@ -193,8 +193,8 @@ export function ChordSearch({
     const baseResults = findVoicings(parsed.noteIndices, tuning, {
       allowMuted: !isCavaquinho,
       maxFret: 12,
-      maxResults: isCavaquinho ? 12 : 24,
-      maxInternalResults: isCavaquinho ? 80 : 200,
+      maxResults: isCavaquinho ? 48 : 24,
+      maxInternalResults: isCavaquinho ? 150 : 200,
       allowOmissions: isCavaquinho,
       rootNoteIndex: parsed.noteIndices[0],
       bassNoteIndex: isCavaquinho
@@ -224,7 +224,7 @@ export function ChordSearch({
 
       const dictFretStrings = dictVoicings.map(v => v.frets.join(','));
       const others = baseResults.filter(v => !dictFretStrings.includes(v.frets.join(',')));
-      finalResults = [...dictVoicings, ...others].slice(0, 16);
+      finalResults = [...dictVoicings, ...others].slice(0, 48);
     }
 
     if (finalResults.length === 0) {

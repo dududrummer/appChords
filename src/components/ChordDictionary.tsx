@@ -86,7 +86,7 @@ export function ChordDictionary({
     const tuning = getActiveTuning();
     const smallInstrument = (INSTRUMENT_PRESETS[instrument]?.strings ?? 6) <= 4;
     const baseResults = findVoicings(parsed.noteIndices, tuning, {
-      maxFret: 12, maxResults: 12,
+      maxFret: 12, maxResults: 48,
       allowOmissions: smallInstrument,
       rootNoteIndex: parsed.noteIndices[0],
       bassNoteIndex: parsed.bassNoteIndex,
@@ -110,10 +110,10 @@ export function ChordDictionary({
 
       const dictFretStrings = dictVoicings.map(v => v.frets.join(','));
       const others = baseResults.filter(v => !dictFretStrings.includes(v.frets.join(',')));
-      return [...dictVoicings, ...others].slice(0, 8);
+      return [...dictVoicings, ...others].slice(0, 48);
     }
 
-    return baseResults.slice(0, 8);
+    return baseResults.slice(0, 48);
   }, [getActiveTuning, instrument]);
 
   if (chordNames.length === 0) {
