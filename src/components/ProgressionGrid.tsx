@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import type { Measure } from '@/lib/progression';
 import type { HarmonicAnalysis } from '@/lib/harmony';
 import type { Voicing } from '@/lib/chord-finder';
 import { VoicingMiniSvg } from './VoicingMiniSvg';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 interface StoredVoicing extends Voicing { tuning: string[] }
 
@@ -27,12 +29,105 @@ interface Props {
   stringCount?: number;
   markerColor?: string;
   primaryColor?: string;
+  /** Provides all available voicings for a chord name (for the picker) */
+  getVoicingsForChord?: (chordName: string) => Voicing[];
+  /** Called when user selects a new voicing in the picker */
+  onVoicingSelect?: (chordName: string, voicing: Voicing) => void;
 }
 
+// ── Voicing Picker Popover ──────────────────────────────────────────────────
+function VoicingPicker({
+  chordName, current, allVoicings, stringCount, markerColor, primaryColor, onSelect,
+}: {
+  chordName: string;
+  current: StoredVoicing;
+  allVoicings: Voicing[];
+  stringCount: number;
+  markerColor: string;
+  primaryColor: string;
+  onSelect: (v: Voicing) => void;
+}) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <button
+          className="mt-1 rounded overflow-hidden bg-white/60 dark:bg-black/30 cursor-pointer
+                     ring-1 ring-transparent hover:ring-primary/50 transition-all hover:scale-105"
+          title={`Clique para trocar posição de ${chordName}`}
+        >
+          <VoicingMiniSvg
+            voicing={current}
+            stringCount={current.tuning?.length ?? stringCount}
+            markerColor={markerColor}
+            primaryColor={primaryColor}
+            width={58}
+            height={72}
+          />
+          <div className="text-[7px] text-center opacity-50 pb-0.5">
+            {current.frets.map(f => f === -1 ? 'X' : f).join(' ')}
+          </div>
+        </button>
+      </PopoverTrigger>
+      <PopoverContent
+        className="w-auto max-w-[360px] p-3"
+        align="center"
+        side="bottom"
+        onClick={e => e.stopPropagation()}
+        onMouseDown={e => e.stopPropagation()}
+      >
+        <div className="space-y-2">
+          <div className="text-sm font-bold">{chordName}</div>
+          <p className="text-[10px] text-muted-foreground">
+            Selecione uma posição diferente:
+          </p>
+          <div className="flex flex-wrap gap-2 max-h-[300px] overflow-y-auto">
+            {allVoicings.map((v, i) => {
+              const isSelected = current.frets.join(',') === v.frets.join(',');
+              return (
+                <button
+                  key={i}
+                  onClick={() => { onSelect(v); setOpen(false); }}
+                  className={`rounded-lg border-2 transition-all hover:scale-105 cursor-pointer bg-white dark:bg-zinc-900 ${
+                    isSelected ? 'border-primary shadow-md scale-105' : 'border-border'
+                  }`}
+                  title={`Traste ${v.startingFret}: ${v.frets.map(f => f === -1 ? 'X' : f).join('-')}`}
+                >
+                  <VoicingMiniSvg
+                    voicing={v}
+                    stringCount={current.tuning?.length ?? stringCount}
+                    markerColor={markerColor}
+                    primaryColor={primaryColor}
+                    width={64}
+                    height={80}
+                  />
+                  <div className="text-[8px] text-center text-muted-foreground pb-1 px-1">
+                    {v.frets.map(f => f === -1 ? 'X' : f).join(' ')}
+                  </div>
+                  {v.omitted.length > 0 && (
+                    <div className="flex justify-center gap-0.5 pb-1">
+                      {v.omitted.map((tag, ti) => (
+                        <span key={ti} className="text-[6px] bg-amber-500 text-white rounded-full px-1">{tag}</span>
+                      ))}
+                    </div>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+}
+
+// ── Main Grid ───────────────────────────────────────────────────────────────
 export function ProgressionGrid({
   measures, analysis, activeMeasure,
   voicings = {}, stringCount = 6,
   markerColor = '#000', primaryColor = '#000',
+  getVoicingsForChord, onVoicingSelect,
 }: Props) {
   const hasVoicings = Object.keys(voicings).length > 0;
 
@@ -86,6 +181,11 @@ export function ProgressionGrid({
                   const color = a?.color ?? 'zinc';
                   const voicing = voicings[beat.chordName];
 
+                  // Get all voicings for the picker
+                  const allVoicings = getVoicingsForChord
+                    ? getVoicingsForChord(beat.chordName)
+                    : [];
+
                   return (
                     <div key={bi}
                       className={`flex-1 min-w-0 rounded border px-1.5 py-1 flex flex-col items-center ${FUNC_COLORS[color]}`}
@@ -101,8 +201,18 @@ export function ProgressionGrid({
                       <div className="text-xs font-bold truncate w-full leading-tight text-center">
                         {beat.chordName}
                       </div>
-                      {/* Mini voicing diagram */}
-                      {voicing ? (
+                      {/* Mini voicing diagram — clickable */}
+                      {voicing && getVoicingsForChord && onVoicingSelect ? (
+                        <VoicingPicker
+                          chordName={beat.chordName}
+                          current={voicing}
+                          allVoicings={allVoicings}
+                          stringCount={voicing.tuning?.length ?? stringCount}
+                          markerColor={markerColor}
+                          primaryColor={primaryColor}
+                          onSelect={(v) => onVoicingSelect(beat.chordName, v)}
+                        />
+                      ) : voicing ? (
                         <div className="mt-1.5 rounded overflow-hidden bg-white/60 dark:bg-black/30">
                           <VoicingMiniSvg
                             voicing={voicing}
@@ -137,12 +247,6 @@ export function ProgressionGrid({
           );
         })}
       </div>
-
-      {!hasVoicings && (
-        <p className="text-[11px] text-muted-foreground text-center">
-          💡 Selecione posições no <strong>Dicionário de Acordes</strong> para ver os diagramas aqui.
-        </p>
-      )}
     </div>
   );
 }

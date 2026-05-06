@@ -1,6 +1,6 @@
 import { useState, useMemo, useRef, useCallback } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Moon, Sun, Download, Circle, Square, Triangle, Trash2, Columns, Rows, Guitar, Music2, ChevronRight, Menu, X } from "lucide-react";
+import { Moon, Sun, Download, Circle, Square, Triangle, Trash2, Columns, Rows, Guitar, Music2, BookOpen, ChevronRight, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { toast } from "sonner";
 import { ChordSearch } from "@/components/ChordSearch";
 import { ProgressionEditor } from "@/components/ProgressionEditor";
+import { ChordDictionaryPage } from "@/components/ChordDictionaryPage";
 import { INSTRUMENT_PRESETS } from "@/lib/music-theory";
 
 interface Marker {
@@ -39,7 +40,7 @@ export const Route = createFileRoute("/")({
 
 function ChordGenerator() {
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [activePage, setActivePage] = useState<'diagram' | 'progression'>('diagram');
+  const [activePage, setActivePage] = useState<'diagram' | 'progression' | 'dictionary'>('diagram');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [instrument, setInstrument] = useState('cavaquinho');
   const [chordTitle, setChordTitle] = useState("C Major");
@@ -498,8 +499,9 @@ function ChordGenerator() {
 
         <nav className="flex-1 p-2 space-y-1">
           {[
-            { page: 'diagram' as const,     icon: <Guitar  className="h-4 w-4" />, label: 'Diagrama de Acordes', sub: 'Construtor SVG' },
-            { page: 'progression' as const, icon: <Music2  className="h-4 w-4" />, label: 'Progressão',          sub: 'Análise + Áudio' },
+            { page: 'diagram' as const,     icon: <Guitar   className="h-4 w-4" />, label: 'Diagrama de Acordes', sub: 'Construtor SVG' },
+            { page: 'progression' as const, icon: <Music2   className="h-4 w-4" />, label: 'Progressão',          sub: 'Análise + Áudio' },
+            { page: 'dictionary' as const,  icon: <BookOpen className="h-4 w-4" />, label: 'Dicionário',          sub: 'Buscar Acordes' },
           ].map(({ page, icon, label, sub }) => (
             <button
               key={page}
@@ -536,13 +538,22 @@ function ChordGenerator() {
             <Menu className="h-5 w-5" />
           </button>
           <h1 className="text-lg font-bold flex-1">
-            {activePage === 'diagram' ? 'Diagrama de Acordes' : 'Progressão de Acordes'}
+            {activePage === 'diagram' ? 'Diagrama de Acordes' : activePage === 'progression' ? 'Progressão de Acordes' : 'Dicionário de Acordes'}
           </h1>
         </header>
 
         <main className="flex-1 overflow-y-auto p-6 space-y-8">
           {activePage === 'progression' ? (
             <ProgressionEditor
+              instrument={instrument}
+              stringCount={stringCount}
+              stringNames={stringNames}
+              markerColor={markerColor}
+              primaryColor={primaryColor}
+              onInstrumentChange={handleInstrumentChange}
+            />
+          ) : activePage === 'dictionary' ? (
+            <ChordDictionaryPage
               instrument={instrument}
               stringCount={stringCount}
               stringNames={stringNames}
