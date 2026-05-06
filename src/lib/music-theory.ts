@@ -48,6 +48,10 @@ export const CHORD_FORMULAS: Record<string, { intervals: number[]; name: string 
   'm7b5':   { intervals: [0, 3, 6, 10],             name: 'Menor 7b5 (ø)' },
   'm(b5)':  { intervals: [0, 3, 6, 10],             name: 'Menor 7b5 (ø)' }, // BR
   'm7-5':   { intervals: [0, 3, 6, 10],             name: 'Menor 7b5 (ø)' }, // BR
+  'm7(b5)': { intervals: [0, 3, 6, 10],             name: 'Menor 7b5 (ø)' }, // alias
+  'm7(9)':  { intervals: [0, 3, 7, 10, 2],          name: 'Menor 9' },       // alias
+  'm79':    { intervals: [0, 3, 7, 10, 2],          name: 'Menor 9' },       // alias
+  '79':     { intervals: [0, 4, 7, 10, 2],          name: 'Dominante 9' },   // alias
   'mmaj7':  { intervals: [0, 3, 7, 11],             name: 'Menor com Maior 7' },
   'm7M':    { intervals: [0, 3, 7, 11],             name: 'Menor com Maior 7' }, // BR
   'm7+':    { intervals: [0, 3, 7, 11],             name: 'Menor com Maior 7' }, // BR
