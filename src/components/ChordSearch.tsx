@@ -237,7 +237,7 @@ export function ChordSearch({
       const regionMap: Record<number, Voicing[]> = { 1: [], 2: [], 3: [], 4: [] };
       allVoicings.forEach(v => {
         const reg = getRegion(v.startingFret);
-        if (regionMap[reg] && regionMap[reg].length < 2) {
+        if (regionMap[reg] && regionMap[reg].length < 4) {
           regionMap[reg].push(v);
         }
       });
@@ -253,7 +253,7 @@ export function ChordSearch({
       const regionMap: Record<number, Voicing[]> = { 1: [], 2: [], 3: [], 4: [] };
       baseResults.forEach(v => {
         const reg = getRegion(v.startingFret);
-        if (regionMap[reg] && regionMap[reg].length < 2) {
+        if (regionMap[reg] && regionMap[reg].length < 4) {
           regionMap[reg].push(v);
         }
       });
