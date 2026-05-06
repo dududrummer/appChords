@@ -41,7 +41,7 @@ function ChordGenerator() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [activePage, setActivePage] = useState<'diagram' | 'progression'>('diagram');
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [instrument, setInstrument] = useState('violao');
+  const [instrument, setInstrument] = useState('cavaquinho');
   const [chordTitle, setChordTitle] = useState("C Major");
   const [startingFret, setStartingFret] = useState(1);
   const [fretCount, setFretCount] = useState(5);

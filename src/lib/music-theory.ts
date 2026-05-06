@@ -243,7 +243,5 @@ export function parseChord(input: string): ParsedChord | null {
 }
 
 export const INSTRUMENT_PRESETS: Record<string, { label: string; tuning: string[]; strings: number }> = {
-  violao:     { label: 'Violão / Guitarra (6)', tuning: ['E', 'A', 'D', 'G', 'B', 'E'], strings: 6 },
-  ukulele:    { label: 'Ukulele (4)',            tuning: ['G', 'C', 'E', 'A'],            strings: 4 },
-  cavaquinho: { label: 'Cavaquinho (4)',          tuning: ['D', 'G', 'B', 'D'],            strings: 4 },
+  cavaquinho: { label: 'Cavaquinho (4)', tuning: ['D', 'G', 'B', 'D'], strings: 4 },
 };

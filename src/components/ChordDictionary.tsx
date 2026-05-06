@@ -4,18 +4,12 @@ import { Input } from '@/components/ui/input';
 import { parseChord, INSTRUMENT_PRESETS } from '@/lib/music-theory';
 import { findVoicings, type Voicing } from '@/lib/chord-finder';
 import cavaquinhoDictRaw from '@/config/cavaquinho-dictionary.json';
-import violaoDictRaw from '@/config/violao-dictionary.json';
-import ukuleleDictRaw from '@/config/ukulele-dictionary.json';
 
 type DictType = Record<string, { chordName: string, frets: number[] }[]>;
 const cavaquinhoDict: DictType = cavaquinhoDictRaw;
-const violaoDict: DictType = violaoDictRaw;
-const ukuleleDict: DictType = ukuleleDictRaw;
 
 const DICTIONARIES: Record<string, DictType> = {
   cavaquinho: cavaquinhoDict,
-  violao: violaoDict,
-  ukulele: ukuleleDict,
 };
 
 interface StoredVoicing extends Voicing {
@@ -83,7 +77,7 @@ export function ChordDictionary({
   const getActiveTuning = useCallback((): string[] => {
     const filled = stringNames.slice(0, stringCount).filter(n => n.trim());
     if (filled.length === stringCount) return stringNames.slice(0, stringCount);
-    return INSTRUMENT_PRESETS[instrument]?.tuning ?? INSTRUMENT_PRESETS.violao.tuning;
+    return INSTRUMENT_PRESETS[instrument]?.tuning ?? INSTRUMENT_PRESETS.cavaquinho.tuning;
   }, [stringNames, stringCount, instrument]);
 
   const getVoicings = useCallback((chordName: string): Voicing[] => {
