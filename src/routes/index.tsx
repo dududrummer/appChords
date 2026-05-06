@@ -499,9 +499,9 @@ function ChordGenerator() {
 
         <nav className="flex-1 p-2 space-y-1">
           {[
-            { page: 'diagram' as const,     icon: <Guitar   className="h-4 w-4" />, label: 'Editor de Diagramas', sub: 'Construtor SVG/PDF' },
-            { page: 'progression' as const, icon: <Music2   className="h-4 w-4" />, label: 'Progressão',          sub: 'Análise + Áudio' },
-            { page: 'dictionary' as const,  icon: <BookOpen className="h-4 w-4" />, label: 'Dicionário',          sub: 'Buscar Acordes' },
+            { page: 'dictionary' as const,  icon: <BookOpen className="h-4 w-4" />, label: 'Dicionário',             sub: 'Buscar Acordes' },
+            { page: 'progression' as const, icon: <Music2   className="h-4 w-4" />, label: 'Estudo de Progressões',  sub: 'Sequências e Acordes' },
+            { page: 'diagram' as const,     icon: <Guitar   className="h-4 w-4" />, label: 'Editor de Diagramas',    sub: 'Construtor SVG/PDF' },
           ].map(({ page, icon, label, sub }) => (
             <button
               key={page}
@@ -538,7 +538,7 @@ function ChordGenerator() {
             <Menu className="h-5 w-5" />
           </button>
           <h1 className="text-lg font-bold flex-1">
-            {activePage === 'diagram' ? 'Editor de Diagramas' : activePage === 'progression' ? 'Progressão de Acordes' : 'Dicionário de Acordes'}
+            {activePage === 'diagram' ? 'Editor de Diagramas' : activePage === 'progression' ? 'Estudo de Progressões' : 'Dicionário de Acordes'}
           </h1>
         </header>
 
@@ -562,143 +562,169 @@ function ChordGenerator() {
               onInstrumentChange={handleInstrumentChange}
             />
           ) : (<>
-            <ChordSearch
-              stringCount={stringCount}
-              stringNames={stringNames}
-              markerColor={markerColor}
-              primaryColor={primaryColor}
-              bgColor={bgColor}
-              markerShape={markerShape}
-              markerSize={markerSize}
-              instrument={instrument}
-              onInstrumentChange={handleInstrumentChange}
-              onSelectVoicing={handleSelectVoicing}
-              onTuningChange={handleTuningChange}
-            />
-        <Card>
-          <CardHeader><CardTitle className="text-lg">Configurações</CardTitle></CardHeader>
-          <CardContent className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="space-y-2"><Label>Título</Label><Input value={chordTitle} onChange={(e) => setChordTitle(e.target.value)} /></div>
-              <div className="space-y-2"><Label>Traste Inicial</Label><Input type="number" value={startingFret} onChange={(e) => setStartingFret(Number(e.target.value))} /></div>
-              <div className="space-y-2"><Label>Trastes</Label><Input type="number" value={fretCount} onChange={(e) => setFretCount(Number(e.target.value))} /></div>
-              <div className="space-y-2"><Label>Cordas</Label><Input type="number" value={stringCount} onChange={(e) => setStringCount(Number(e.target.value))} /></div>
-              
-              <div className="space-y-2">
-                <Label>Orientação do Diagrama</Label>
-                <ToggleGroup type="single" value={orientation} onValueChange={(v) => v && setOrientation(v as any)} className="justify-start border p-1 rounded-md w-fit">
-                  <ToggleGroupItem value="vertical" className="px-3 gap-2" title="Vertical">
-                    <Rows className="h-4 w-4" /> <span>Vertical</span>
-                  </ToggleGroupItem>
-                  <ToggleGroupItem value="horizontal" className="px-3 gap-2" title="Horizontal">
-                    <Columns className="h-4 w-4" /> <span>Horizontal</span>
-                  </ToggleGroupItem>
-                </ToggleGroup>
+        {/* ── Editor de Diagramas — layout lado a lado ── */}
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          {/* Coluna esquerda: Busca de Acordes */}
+          <ChordSearch
+            stringCount={stringCount}
+            stringNames={stringNames}
+            markerColor={markerColor}
+            primaryColor={primaryColor}
+            bgColor={bgColor}
+            markerShape={markerShape}
+            markerSize={markerSize}
+            instrument={instrument}
+            onInstrumentChange={handleInstrumentChange}
+            onSelectVoicing={handleSelectVoicing}
+            onTuningChange={handleTuningChange}
+          />
+
+          {/* Coluna direita: Configurações compactas */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg">Configurações</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {/* Título + Traste + Trastes + Cordas */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="space-y-1 col-span-2">
+                  <Label className="text-xs">Título</Label>
+                  <Input value={chordTitle} onChange={(e) => setChordTitle(e.target.value)} className="h-9" />
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs">Traste Inicial</Label>
+                  <Input type="number" value={startingFret} onChange={(e) => setStartingFret(Number(e.target.value))} className="h-9" />
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs">Trastes</Label>
+                  <Input type="number" value={fretCount} onChange={(e) => setFretCount(Number(e.target.value))} className="h-9" />
+                </div>
               </div>
-              <div className="space-y-4">
-                <Label>Conicidade ({taper}%)</Label>
-                <Slider value={taper} onValueChange={setTaper} min={0} max={30} step={1} />
+
+              {/* Cordas + Orientação */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <Label className="text-xs">Cordas</Label>
+                  <Input type="number" value={stringCount} onChange={(e) => setStringCount(Number(e.target.value))} className="h-9" />
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs">Orientação</Label>
+                  <ToggleGroup type="single" value={orientation} onValueChange={(v) => v && setOrientation(v as any)} className="justify-start border p-1 rounded-md w-fit h-9">
+                    <ToggleGroupItem value="vertical" className="px-2 gap-1 h-7 text-xs" title="Vertical">
+                      <Rows className="h-3.5 w-3.5" /> V
+                    </ToggleGroupItem>
+                    <ToggleGroupItem value="horizontal" className="px-2 gap-1 h-7 text-xs" title="Horizontal">
+                      <Columns className="h-3.5 w-3.5" /> H
+                    </ToggleGroupItem>
+                  </ToggleGroup>
+                </div>
               </div>
-              <div className="space-y-4"><Label>Tamanho Nota ({markerSize}%)</Label><Slider value={markerSize} onValueChange={setMarkerSize} min={10} max={80} /></div>
-              <div className="space-y-4"><Label>Linha ({strokeWidth}px)</Label><Slider value={strokeWidth} onValueChange={setStrokeWidth} min={1} max={10} step={0.5} /></div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="space-y-2">
-                <Label>Forma</Label>
-                <ToggleGroup type="single" value={markerShape} onValueChange={(v) => v && setMarkerShape(v)} className="justify-start">
-                  <ToggleGroupItem value="circle"><Circle /></ToggleGroupItem><ToggleGroupItem value="square"><Square /></ToggleGroupItem><ToggleGroupItem value="triangle"><Triangle /></ToggleGroupItem>
-                </ToggleGroup>
+
+              {/* Sliders: Conicidade, Nota, Linha */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="space-y-1">
+                  <Label className="text-xs">Conicidade ({taper}%)</Label>
+                  <Slider value={taper} onValueChange={setTaper} min={0} max={30} step={1} />
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs">Nota ({markerSize}%)</Label>
+                  <Slider value={markerSize} onValueChange={setMarkerSize} min={10} max={80} />
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs">Linha ({strokeWidth}px)</Label>
+                  <Slider value={strokeWidth} onValueChange={setStrokeWidth} min={1} max={10} step={0.5} />
+                </div>
               </div>
-              <div className="space-y-4">
-                <Label>Tamanho Fonte ({fontSize}px)</Label>
-                <Slider value={fontSize} onValueChange={setFontSize} min={8} max={36} step={1} />
+
+              {/* Forma + Fontes */}
+              <div className="grid grid-cols-3 gap-3">
+                <div className="space-y-1">
+                  <Label className="text-xs">Forma</Label>
+                  <ToggleGroup type="single" value={markerShape} onValueChange={(v) => v && setMarkerShape(v)} className="justify-start">
+                    <ToggleGroupItem value="circle" className="h-8 w-8 p-0"><Circle className="h-3.5 w-3.5" /></ToggleGroupItem>
+                    <ToggleGroupItem value="square" className="h-8 w-8 p-0"><Square className="h-3.5 w-3.5" /></ToggleGroupItem>
+                    <ToggleGroupItem value="triangle" className="h-8 w-8 p-0"><Triangle className="h-3.5 w-3.5" /></ToggleGroupItem>
+                  </ToggleGroup>
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs">Fonte ({fontSize}px)</Label>
+                  <Slider value={fontSize} onValueChange={setFontSize} min={8} max={36} step={1} />
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs">Marcador ({labelFontSize}px)</Label>
+                  <Slider value={labelFontSize} onValueChange={setLabelFontSize} min={6} max={24} step={1} />
+                </div>
               </div>
-              <div className="space-y-4">
-                <Label>Fonte no Marcador ({labelFontSize}px)</Label>
-                <Slider value={labelFontSize} onValueChange={setLabelFontSize} min={6} max={24} step={1} />
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="space-y-2">
-                  <Label>Cor Principal</Label>
+
+              {/* Cores lado a lado */}
+              <div className="grid grid-cols-3 gap-3">
+                <div className="space-y-1">
+                  <Label className="text-xs">Cor Principal</Label>
                   <Popover>
                     <PopoverTrigger asChild>
-                      <Button variant="outline" className="w-full h-10 p-1">
+                      <Button variant="outline" className="w-full h-9 p-1">
                         <div className="w-full h-full rounded-sm border" style={{ backgroundColor: primaryColor }} />
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-48 p-2">
                       <div className="grid grid-cols-3 gap-2">
                         {["#000000", "#3b82f6", "#22c55e", "#a855f7", "#f97316", "#eab308"].map((c) => (
-                          <button
-                            key={c}
-                            className={`w-10 h-10 rounded-full border-2 transition-transform hover:scale-110 ${primaryColor === c ? "border-primary" : "border-transparent"}`}
-                            style={{ backgroundColor: c }}
-                            onClick={() => setPrimaryColor(c)}
-                          />
+                          <button key={c} className={`w-10 h-10 rounded-full border-2 transition-transform hover:scale-110 ${primaryColor === c ? "border-primary" : "border-transparent"}`} style={{ backgroundColor: c }} onClick={() => setPrimaryColor(c)} />
                         ))}
                       </div>
                     </PopoverContent>
                   </Popover>
                 </div>
-
-                <div className="space-y-2">
-                  <Label>Cor Forma</Label>
+                <div className="space-y-1">
+                  <Label className="text-xs">Cor Forma</Label>
                   <Popover>
                     <PopoverTrigger asChild>
-                      <Button variant="outline" className="w-full h-10 p-1">
+                      <Button variant="outline" className="w-full h-9 p-1">
                         <div className="w-full h-full rounded-sm border" style={{ backgroundColor: markerColor }} />
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-48 p-2">
                       <div className="grid grid-cols-3 gap-2">
                         {["#000000", "#3b82f6", "#22c55e", "#a855f7", "#f97316", "#eab308"].map((c) => (
-                          <button
-                            key={c}
-                            className={`w-10 h-10 rounded-full border-2 transition-transform hover:scale-110 ${markerColor === c ? "border-primary" : "border-transparent"}`}
-                            style={{ backgroundColor: c }}
-                            onClick={() => setMarkerColor(c)}
-                          />
+                          <button key={c} className={`w-10 h-10 rounded-full border-2 transition-transform hover:scale-110 ${markerColor === c ? "border-primary" : "border-transparent"}`} style={{ backgroundColor: c }} onClick={() => setMarkerColor(c)} />
                         ))}
                       </div>
                     </PopoverContent>
                   </Popover>
                 </div>
-
-                <div className="space-y-2">
-                  <Label>Cor Fundo</Label>
+                <div className="space-y-1">
+                  <Label className="text-xs">Cor Fundo</Label>
                   <Popover>
                     <PopoverTrigger asChild>
-                      <Button variant="outline" className="w-full h-10 p-1">
+                      <Button variant="outline" className="w-full h-9 p-1">
                         <div className="w-full h-full rounded-sm border" style={{ backgroundColor: bgColor }} />
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-48 p-2">
                       <div className="grid grid-cols-3 gap-2">
                         {["#ffffff", "#f8fafc", "#f1f5f9", "#e2e8f0", "#000000", "#1a1a1a"].map((c) => (
-                          <button
-                            key={c}
-                            className={`w-10 h-10 rounded-full border-2 transition-transform hover:scale-110 ${bgColor === c ? "border-primary" : "border-transparent"}`}
-                            style={{ backgroundColor: c }}
-                            onClick={() => setBgColor(c)}
-                          />
+                          <button key={c} className={`w-10 h-10 rounded-full border-2 transition-transform hover:scale-110 ${bgColor === c ? "border-primary" : "border-transparent"}`} style={{ backgroundColor: c }} onClick={() => setBgColor(c)} />
                         ))}
                       </div>
                     </PopoverContent>
                   </Popover>
                 </div>
               </div>
-            </div>
-            <div className="space-y-2">
-              <Label>Nomes das Cordas ({isVertical ? "Abaixo" : "À direita"})</Label>
-              <div className="flex flex-wrap gap-2">
-                {Array.from({ length: stringCount }).map((_, i) => (
-                  <Input key={i} className="w-12 h-8 text-center" placeholder={`S${i+1}`} value={stringNames[i] || ""} onChange={(e) => handleStringNameChange(i, e.target.value)} />
-                ))}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
 
+              {/* Nomes das cordas */}
+              <div className="space-y-1">
+                <Label className="text-xs">Cordas ({isVertical ? "Abaixo" : "À direita"})</Label>
+                <div className="flex flex-wrap gap-1.5">
+                  {Array.from({ length: stringCount }).map((_, i) => (
+                    <Input key={i} className="w-10 h-8 text-center text-xs" placeholder={`S${i+1}`} value={stringNames[i] || ""} onChange={(e) => handleStringNameChange(i, e.target.value)} />
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Diagrama interativo — abaixo */}
         <div className="flex justify-center">
           <Card className="w-full max-w-2xl">
             <CardHeader className="bg-muted/50">
