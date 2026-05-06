@@ -147,7 +147,9 @@ export function ProgressionEditor({
                 </SelectTrigger>
                 <SelectContent>
                   {filteredTemplates.map(tpl => (
-                    <SelectItem key={tpl.id} value={tpl.id}>{tpl.name}</SelectItem>
+                    <SelectItem key={tpl.id} value={tpl.id} className="font-mono text-xs">
+                      {tpl.degrees}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
