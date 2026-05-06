@@ -50,6 +50,7 @@ export const CHORD_FORMULAS: Record<string, { intervals: number[]; name: string 
   '6':      { intervals: [0, 4, 7, 9],              name: 'Maior 6' },
   'm6':     { intervals: [0, 3, 7, 9],              name: 'Menor 6' },
   '6/9':    { intervals: [0, 4, 7, 9, 2],           name: 'Maior 6/9' },
+  '69':     { intervals: [0, 4, 7, 9, 2],           name: 'Maior 6/9' },
   // ── Nonas ────────────────────────────────────────────────────────────────
   '9':      { intervals: [0, 4, 7, 10, 2],          name: 'Dominante 9' },
   'maj9':   { intervals: [0, 4, 7, 11, 2],          name: 'Maior 9' },
@@ -92,6 +93,7 @@ export const CHORD_FORMULAS: Record<string, { intervals: number[]; name: string 
   'm7#5':     { intervals: [0, 3, 8, 10],           name: 'Menor 7(#5)' },
   'madd9':    { intervals: [0, 3, 7, 2],            name: 'Menor Add9' },
   'm6/9':     { intervals: [0, 3, 7, 9, 2],         name: 'Menor 6/9' },
+  'm69':      { intervals: [0, 3, 7, 9, 2],         name: 'Menor 6/9' },
   'm(b5)':    { intervals: [0, 3, 6, 10],           name: 'Menor 7b5 (ø)' },  // BR
   // ── Décimas ──────────────────────────────────────────────────────────────
   '11':       { intervals: [0, 4, 7, 10, 2, 5],     name: 'Dominante 11' },
