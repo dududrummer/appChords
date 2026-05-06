@@ -40,12 +40,17 @@ export const CHORD_FORMULAS: Record<string, { intervals: number[]; name: string 
   'maj7':   { intervals: [0, 4, 7, 11],             name: 'Maior 7' },
   'M7':     { intervals: [0, 4, 7, 11],             name: 'Maior 7' },
   '7M':     { intervals: [0, 4, 7, 11],             name: 'Maior 7' },     // BR
+  '7+':     { intervals: [0, 4, 7, 11],             name: 'Maior 7' },     // BR
   'm7':     { intervals: [0, 3, 7, 10],             name: 'Menor 7' },
   'min7':   { intervals: [0, 3, 7, 10],             name: 'Menor 7' },
   'dim7':   { intervals: [0, 3, 6, 9],              name: 'Diminuto 7' },
+  '°':      { intervals: [0, 3, 6, 9],              name: 'Diminuto 7' },  // BR
   'm7b5':   { intervals: [0, 3, 6, 10],             name: 'Menor 7b5 (ø)' },
   'm(b5)':  { intervals: [0, 3, 6, 10],             name: 'Menor 7b5 (ø)' }, // BR
+  'm7-5':   { intervals: [0, 3, 6, 10],             name: 'Menor 7b5 (ø)' }, // BR
   'mmaj7':  { intervals: [0, 3, 7, 11],             name: 'Menor com Maior 7' },
+  'm7M':    { intervals: [0, 3, 7, 11],             name: 'Menor com Maior 7' }, // BR
+  'm7+':    { intervals: [0, 3, 7, 11],             name: 'Menor com Maior 7' }, // BR
   // ── Sextas ───────────────────────────────────────────────────────────────
   '6':      { intervals: [0, 4, 7, 9],              name: 'Maior 6' },
   'm6':     { intervals: [0, 3, 7, 9],              name: 'Menor 6' },
@@ -53,21 +58,29 @@ export const CHORD_FORMULAS: Record<string, { intervals: number[]; name: string 
   '69':     { intervals: [0, 4, 7, 9, 2],           name: 'Maior 6/9' },
   // ── Nonas ────────────────────────────────────────────────────────────────
   '9':      { intervals: [0, 4, 7, 10, 2],          name: 'Dominante 9' },
+  '7/9':    { intervals: [0, 4, 7, 10, 2],          name: 'Dominante 9' }, // BR
+  '7(9)':   { intervals: [0, 4, 7, 10, 2],          name: 'Dominante 9' }, // BR
   'maj9':   { intervals: [0, 4, 7, 11, 2],          name: 'Maior 9' },
   '9M':     { intervals: [0, 4, 7, 11, 2],          name: 'Maior 9' },     // BR
   'm9':     { intervals: [0, 3, 7, 10, 2],          name: 'Menor 9' },
+  'm7/9':   { intervals: [0, 3, 7, 10, 2],          name: 'Menor 9' },     // BR
   'add9':   { intervals: [0, 4, 7, 2],              name: 'Add9' },
   'com9':   { intervals: [0, 4, 7, 2],              name: 'Add9' },        // BR
   // ── Sus com sétima ───────────────────────────────────────────────────────
   '7sus2':    { intervals: [0, 2, 7, 10],           name: 'Dominante 7 Sus2' },
   '7sus4':    { intervals: [0, 5, 7, 10],           name: 'Dominante 7 Sus4' },
+  '7/4':      { intervals: [0, 5, 7, 10],           name: 'Dominante 7 Sus4' }, // BR
+  '7(4)':     { intervals: [0, 5, 7, 10],           name: 'Dominante 7 Sus4' }, // BR
   '9sus4':    { intervals: [0, 5, 7, 10, 2],        name: 'Dominante 9 Sus4' },
   '13sus4':   { intervals: [0, 5, 7, 10, 2, 9],     name: 'Dominante 13 Sus4' },
   // ── Alterados / Jazz ─────────────────────────────────────────────────────
   '7b5':      { intervals: [0, 4, 6, 10],           name: 'Dominante 7(b5)' },
   '7#5':      { intervals: [0, 4, 8, 10],           name: 'Dominante 7(#5)' },
+  '5+':       { intervals: [0, 4, 8],               name: 'Aumentado' },   // BR
   '7b9':      { intervals: [0, 4, 7, 10, 1],        name: 'Dominante 7(b9)' },
+  '7/b9':     { intervals: [0, 4, 7, 10, 1],        name: 'Dominante 7(b9)' }, // BR
   '7#9':      { intervals: [0, 4, 7, 10, 3],        name: 'Dominante 7(#9)' },
+  '7/#9':     { intervals: [0, 4, 7, 10, 3],        name: 'Dominante 7(#9)' }, // BR
   '7b9b13':   { intervals: [0, 4, 7, 10, 1, 8],     name: 'Dominante 7(b9b13)' },
   '7#9b13':   { intervals: [0, 4, 7, 10, 3, 8],     name: 'Dominante 7(#9b13)' },
   '7b9#9':    { intervals: [0, 4, 7, 10, 1, 3],     name: 'Dominante 7(b9#9)' },
@@ -75,6 +88,7 @@ export const CHORD_FORMULAS: Record<string, { intervals: number[]; name: string 
   '7#9#11':   { intervals: [0, 4, 7, 10, 3, 6],     name: 'Dominante 7(#9#11)' },
   '7#11':     { intervals: [0, 4, 7, 10, 6],        name: 'Dominante 7(#11)' },
   '7b13':     { intervals: [0, 4, 7, 10, 8],        name: 'Dominante 7(b13)' },
+  '7/b13':    { intervals: [0, 4, 7, 10, 8],        name: 'Dominante 7(b13)' }, // BR
   '7#5b9':    { intervals: [0, 4, 8, 10, 1],        name: 'Dominante 7(#5b9)' },
   '7#5#9':    { intervals: [0, 4, 8, 10, 3],        name: 'Dominante 7(#5#9)' },
   '7alt':     { intervals: [0, 4, 7, 10, 1, 3, 8],  name: 'Dominante 7 Alt' },
@@ -88,18 +102,18 @@ export const CHORD_FORMULAS: Record<string, { intervals: number[]; name: string 
   'maj7#11':  { intervals: [0, 4, 7, 11, 6],        name: 'Maior 7(#11)' },
   'maj9#11':  { intervals: [0, 4, 7, 11, 2, 6],     name: 'Maior 9(#11)' },
   // ── Menor com alterações ──────────────────────────────────────────────────
-  'mmaj7':    { intervals: [0, 3, 7, 11],           name: 'Menor com Maior 7' },
   'mmaj9':    { intervals: [0, 3, 7, 11, 2],        name: 'Menor com Maior 9' },
   'm7#5':     { intervals: [0, 3, 8, 10],           name: 'Menor 7(#5)' },
   'madd9':    { intervals: [0, 3, 7, 2],            name: 'Menor Add9' },
   'm6/9':     { intervals: [0, 3, 7, 9, 2],         name: 'Menor 6/9' },
   'm69':      { intervals: [0, 3, 7, 9, 2],         name: 'Menor 6/9' },
-  'm(b5)':    { intervals: [0, 3, 6, 10],           name: 'Menor 7b5 (ø)' },  // BR
   // ── Décimas ──────────────────────────────────────────────────────────────
   '11':       { intervals: [0, 4, 7, 10, 2, 5],     name: 'Dominante 11' },
   'm11':      { intervals: [0, 3, 7, 10, 2, 5],     name: 'Menor 11' },
   'maj11':    { intervals: [0, 4, 7, 11, 2, 5],     name: 'Maior 11' },
   '13':       { intervals: [0, 4, 7, 10, 2, 9],     name: 'Dominante 13' },
+  '7/13':     { intervals: [0, 4, 7, 10, 2, 9],     name: 'Dominante 13' }, // BR
+  '7(13)':    { intervals: [0, 4, 7, 10, 2, 9],     name: 'Dominante 13' }, // BR
   'm13':      { intervals: [0, 3, 7, 10, 2, 5, 9],  name: 'Menor 13' },
   'maj13':    { intervals: [0, 4, 7, 11, 2, 9],     name: 'Maior 13' },
 };
