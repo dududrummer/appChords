@@ -110,10 +110,41 @@ export function ChordDictionary({
 
       const dictFretStrings = dictVoicings.map(v => v.frets.join(','));
       const others = baseResults.filter(v => !dictFretStrings.includes(v.frets.join(',')));
-      return [...dictVoicings, ...others].slice(0, 48);
+      
+      const allVoicings = [...dictVoicings, ...others];
+      
+      const getRegion = (sf: number) => {
+        if (sf <= 3) return 1;
+        if (sf <= 6) return 2;
+        if (sf <= 9) return 3;
+        return 4;
+      };
+      
+      const regionMap: Record<number, Voicing[]> = { 1: [], 2: [], 3: [], 4: [] };
+      allVoicings.forEach(v => {
+        const reg = getRegion(v.startingFret);
+        if (regionMap[reg] && regionMap[reg].length < 2) {
+          regionMap[reg].push(v);
+        }
+      });
+      
+      return [...regionMap[1], ...regionMap[2], ...regionMap[3], ...regionMap[4]];
     }
 
-    return baseResults.slice(0, 48);
+    const getRegion = (sf: number) => {
+      if (sf <= 3) return 1;
+      if (sf <= 6) return 2;
+      if (sf <= 9) return 3;
+      return 4;
+    };
+    const regionMap: Record<number, Voicing[]> = { 1: [], 2: [], 3: [], 4: [] };
+    baseResults.forEach(v => {
+      const reg = getRegion(v.startingFret);
+      if (regionMap[reg] && regionMap[reg].length < 2) {
+        regionMap[reg].push(v);
+      }
+    });
+    return [...regionMap[1], ...regionMap[2], ...regionMap[3], ...regionMap[4]];
   }, [getActiveTuning, instrument]);
 
   if (chordNames.length === 0) {

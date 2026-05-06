@@ -31,6 +31,13 @@ function generate(quality, templates) {
       [baseFret, baseFret + 12].forEach(bf => {
         const frets = t.shape.map(offset => offset === -1 ? -1 : bf + offset);
         addChord(chordName, frets);
+        
+        // Cavaquinho specific: The 1st and 4th strings are both D. 
+        // We can swap the frets played on those strings to get another valid voicing (inversion/different bass).
+        if (frets[0] !== frets[3] && frets[0] !== -1 && frets[3] !== -1) {
+          const invertedFrets = [frets[3], frets[1], frets[2], frets[0]];
+          addChord(chordName, invertedFrets);
+        }
       });
     });
   }
