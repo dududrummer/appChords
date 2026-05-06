@@ -499,7 +499,7 @@ function ChordGenerator() {
 
         <nav className="flex-1 p-2 space-y-1">
           {[
-            { page: 'diagram' as const,     icon: <Guitar   className="h-4 w-4" />, label: 'Diagrama de Acordes', sub: 'Construtor SVG' },
+            { page: 'diagram' as const,     icon: <Guitar   className="h-4 w-4" />, label: 'Editor de Diagramas', sub: 'Construtor SVG/PDF' },
             { page: 'progression' as const, icon: <Music2   className="h-4 w-4" />, label: 'Progressão',          sub: 'Análise + Áudio' },
             { page: 'dictionary' as const,  icon: <BookOpen className="h-4 w-4" />, label: 'Dicionário',          sub: 'Buscar Acordes' },
           ].map(({ page, icon, label, sub }) => (
@@ -538,7 +538,7 @@ function ChordGenerator() {
             <Menu className="h-5 w-5" />
           </button>
           <h1 className="text-lg font-bold flex-1">
-            {activePage === 'diagram' ? 'Diagrama de Acordes' : activePage === 'progression' ? 'Progressão de Acordes' : 'Dicionário de Acordes'}
+            {activePage === 'diagram' ? 'Editor de Diagramas' : activePage === 'progression' ? 'Progressão de Acordes' : 'Dicionário de Acordes'}
           </h1>
         </header>
 
