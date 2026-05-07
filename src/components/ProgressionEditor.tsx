@@ -118,8 +118,8 @@ export function ProgressionEditor({
 
         {/* 1️⃣ Categoria — botões */}
         <div className="space-y-1.5">
-          <Label className="text-xs font-semibold">Tipo de Sequência</Label>
-          <div className="flex gap-2">
+          <Label className="text-xs font-semibold">Sequências</Label>
+          <div className="flex flex-wrap gap-2">
             {CATEGORIES.map(cat => (
               <button
                 key={cat}
@@ -148,7 +148,7 @@ export function ProgressionEditor({
                 <SelectContent>
                   {filteredTemplates.map(tpl => (
                     <SelectItem key={tpl.id} value={tpl.id} className="font-mono text-xs">
-                      {tpl.degrees}
+                      {tpl.degreesClean}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -178,7 +178,7 @@ export function ProgressionEditor({
         {/* Graus da sequência selecionada */}
         {selectedTpl && (
           <div className="rounded-md bg-muted/50 px-3 py-2 text-xs font-mono text-muted-foreground">
-            <span className="font-semibold text-foreground">Graus:</span> {selectedTpl.degrees}
+            <span className="font-semibold text-foreground">Graus:</span> {selectedTpl.degreesClean}
           </div>
         )}
 
