@@ -17,29 +17,32 @@ export type Category = typeof CATEGORIES[number];
 
 export const PROGRESSION_TEMPLATES: ProgressionTemplate[] = [
   // ── Quadradas Maiores ───────────────────────────────────────────────────
-  { id: 'q-maior-1', category: 'Quadradas Maiores', name: 'Cadência Quadrada 1', degreesClean: 'I | V7(VIm) | VIm | V7(IIm)', degrees: 'I | % | III7 | % | VIm | % | IIm | V7' },
-  { id: 'q-maior-2', category: 'Quadradas Maiores', name: 'Cadência Quadrada 2', degreesClean: 'I | IIIm | IV | V7',          degrees: 'I | % | IIIm | % | IV | % | V7 | %' },
-  { id: 'q-maior-3', category: 'Quadradas Maiores', name: 'Cadência Quadrada 3', degreesClean: 'I | I7(IV) | IV | V7',        degrees: 'I | % | I7 | % | IV | % | V7 | %' },
+  { id: 'q-maior-1', category: 'Quadradas Maiores', name: 'I | V7(VIm) | VIm | V7(IIm)', degreesClean: 'I | V7(VIm) | VIm | V7(IIm)', degrees: 'I | % | III7 | % | VIm | % | IIm | V7' },
+  { id: 'q-maior-2', category: 'Quadradas Maiores', name: 'I | IIIm | IV | V7',          degreesClean: 'I | IIIm | IV | V7',          degrees: 'I | % | IIIm | % | IV | % | V7 | %' },
+  { id: 'q-maior-3', category: 'Quadradas Maiores', name: 'I | I7(IV) | IV | V7',        degreesClean: 'I | I7(IV) | IV | V7',        degrees: 'I | % | I7 | % | IV | % | V7 | %' },
 
   // ── Maiores ─────────────────────────────────────────────────────────────
-  { id: 'maior-1', category: 'Maiores', name: 'Cadência Maior 1', degreesClean: 'I | IIm7(b5) | V7(VIm) | VIm | IIm | V7(IV) | IV | V7 | I',                      degrees: 'I | % | IIm7(b5) | III7 | VIm | % | IIm | I7 | IV | V7 | I' },
-  { id: 'maior-2', category: 'Maiores', name: 'Cadência Maior 2', degreesClean: 'I | IIm7(b5) | V7(VIm) | VIm | IIm | V7(IV) | IV | IVm | IIIm | V7(IIm) | IIm | V7 | I', degrees: 'I | % | IIm7(b5) | III7 | VIm | % | IIm | I7 | IV | IVm | IIIm | VI7 | IIm | V7 | I' },
-  { id: 'maior-3', category: 'Maiores', name: 'Cadência Maior 3', degreesClean: 'I | V7(IIm) | IIm | V7 | IIm | V7(IV) | IV | IVm | IIIm | V7(IIm) | IIm | V7 | I',     degrees: 'I | VI7 | IIm | V7 | IIm | I7 | IV | IVm | IIIm | VI7 | IIm | V7 | I' },
-  { id: 'maior-4', category: 'Maiores', name: 'Cadência Maior 4', degreesClean: 'I | IIIm | IIm | V7(IV) | IV | IVm | IIIm | V7(IIm) | II7 | IIm | V7 | I',             degrees: 'I | % | IIIm | % | IIm | I7 | IV | IVm | IIIm | VI7 | II7 | % | IIm | V7 | I' },
-  { id: 'maior-5', category: 'Maiores', name: 'Cadência Maior 5', degreesClean: 'I | V | VIm | IIIm | IV | IIIm | IIm | V7',                                          degrees: 'I | % | V | % | VIm | % | IIIm | % | IV | IIIm | IIm | V7' },
-  { id: 'maior-6', category: 'Maiores', name: 'Cadência Maior 6', degreesClean: 'I | V | V7(VIm) | VIm | IV | V7',                                                    degrees: 'I | % | V | III7 | VIm | % | IV | V7' },
+  { id: 'maior-1', category: 'Maiores', name: 'I | IIm7(b5) | V7(VIm) | VIm | IIm | V7(IV) | IV | V7 | I',                      degreesClean: 'I | IIm7(b5) | V7(VIm) | VIm | IIm | V7(IV) | IV | V7 | I',                      degrees: 'I | % | IIm7(b5) | III7 | VIm | % | IIm | I7 | IV | V7 | I' },
+  { id: 'maior-2', category: 'Maiores', name: 'I | IIm7(b5) | V7(VIm) | VIm | IIm | V7(IV) | IV | IVm | IIIm | V7(IIm) | IIm | V7 | I', degreesClean: 'I | IIm7(b5) | V7(VIm) | VIm | IIm | V7(IV) | IV | IVm | IIIm | V7(IIm) | IIm | V7 | I', degrees: 'I | % | IIm7(b5) | III7 | VIm | % | IIm | I7 | IV | IVm | IIIm | VI7 | IIm | V7 | I' },
+  { id: 'maior-3', category: 'Maiores', name: 'I | V7(IIm) | IIm | V7 | IIm | V7(IV) | IV | IVm | IIIm | V7(IIm) | IIm | V7 | I',     degreesClean: 'I | V7(IIm) | IIm | V7 | IIm | V7(IV) | IV | IVm | IIIm | V7(IIm) | IIm | V7 | I',     degrees: 'I | VI7 | IIm | V7 | IIm | I7 | IV | IVm | IIIm | VI7 | IIm | V7 | I' },
+  { id: 'maior-4', category: 'Maiores', name: 'I | IIIm | IIm | V7(IV) | IV | IVm | IIIm | V7(IIm) | II7 | IIm | V7 | I',             degreesClean: 'I | IIIm | IIm | V7(IV) | IV | IVm | IIIm | V7(IIm) | II7 | IIm | V7 | I',             degrees: 'I | % | IIIm | % | IIm | I7 | IV | IVm | IIIm | VI7 | II7 | % | IIm | V7 | I' },
+  { id: 'maior-5', category: 'Maiores', name: 'I | V | VIm | IIIm | IV | IIIm | IIm | V7',                                          degreesClean: 'I | V | VIm | IIIm | IV | IIIm | IIm | V7',                                          degrees: 'I | % | V | % | VIm | % | IIIm | % | IV | IIIm | IIm | V7' },
+  { id: 'maior-6', category: 'Maiores', name: 'I | V | V7(VIm) | VIm | IV | V7',                                                    degreesClean: 'I | V | V7(VIm) | VIm | IV | V7',                                                    degrees: 'I | % | V | III7 | VIm | % | IV | V7' },
+
+  // ── Quadradas Menores ───────────────────────────────────────────────────
+  { id: 'q-menor-1', category: 'Quadradas Menores', name: 'Im | I7 | IVm | V7', degreesClean: 'Im | I7 | IVm | V7', degrees: 'Im | I7 | IVm | V7' },
 
   // ── Menores ─────────────────────────────────────────────────────────────
-  { id: 'menor-1', category: 'Menores', name: 'Cadência Menor 1', degreesClean: 'Im | V7(VI) | VI | V7(Im)',                                                          degrees: 'Im | % | III7 | % | VI | % | V7 | %' },
-  { id: 'menor-2', category: 'Menores', name: 'Cadência Menor 2', degreesClean: 'Im | IIm | V7(VI) | VI | IIm7(b5) | V7(Im)',                                         degrees: 'Im | % | VIIm | III7 | VI | % | IIm7(b5) | V7' },
-  { id: 'menor-3', category: 'Menores', name: 'Cadência Menor 3', degreesClean: 'Im | I7(IVm) | IVm | V7(Im)',                                                        degrees: 'Im | % | I7 | % | IVm | % | V7 | %' },
-  { id: 'menor-4', category: 'Menores', name: 'Cadência Menor 4', degreesClean: 'Im | I7(IVm) | IVm | VII7 | III | VI | IIm7(b5) | V7(Im)',                           degrees: 'Im | I7 | IVm | VII7 | III | VI | IIm7(b5) | V7' },
-  { id: 'menor-5', category: 'Menores', name: 'Cadência Menor 5', degreesClean: 'Im | IIm | V7(VI) | VI | bII | IIm7(b5) | V7(Im)',                                   degrees: 'Im | % | VIIm | III7 | VI | bII | IIm7(b5) | V7' },
-  { id: 'menor-6', category: 'Menores', name: 'Cadência Menor 6', degreesClean: 'Im | V7(VI) | VI | V7(Im) | Im | I7(IVm) | IVm | VII7 | III | VI | IIm7(b5) | V7(Im)', degrees: 'Im | III7 | VI | V7 | Im | I7 | IVm | VII7 | III | VI | IIm7(b5) | V7' },
+  { id: 'menor-1', category: 'Menores', name: 'Im | V7(VI) | VI | V7(Im)',                                                          degreesClean: 'Im | V7(VI) | VI | V7(Im)',                                                          degrees: 'Im | % | III7 | % | VI | % | V7 | %' },
+  { id: 'menor-2', category: 'Menores', name: 'Im | IIm | V7(VI) | VI | IIm7(b5) | V7(Im)',                                         degreesClean: 'Im | IIm | V7(VI) | VI | IIm7(b5) | V7(Im)',                                         degrees: 'Im | % | VIIm | III7 | VI | % | IIm7(b5) | V7' },
+  { id: 'menor-3', category: 'Menores', name: 'Im | I7(IVm) | IVm | V7(Im)',                                                        degreesClean: 'Im | I7(IVm) | IVm | V7(Im)',                                                        degrees: 'Im | % | I7 | % | IVm | % | V7 | %' },
+  { id: 'menor-4', category: 'Menores', name: 'Im | I7(IVm) | IVm | VII7 | III | VI | IIm7(b5) | V7(Im)',                           degreesClean: 'Im | I7(IVm) | IVm | VII7 | III | VI | IIm7(b5) | V7(Im)',                           degrees: 'Im | I7 | IVm | VII7 | III | VI | IIm7(b5) | V7' },
+  { id: 'menor-5', category: 'Menores', name: 'Im | IIm | V7(VI) | VI | IIb | IIm7(b5) | V7(Im)',                                   degreesClean: 'Im | IIm | V7(VI) | VI | IIb | IIm7(b5) | V7(Im)',                                   degrees: 'Im | % | VIIm | III7 | VI | bII | IIm7(b5) | V7' },
+  { id: 'menor-6', category: 'Menores', name: 'Im | V7(VI) | VI | V7(Im) | Im | I7(IVm) | IVm | VII7 | III | VI | IIm7(b5) | V7(Im)', degreesClean: 'Im | V7(VI) | VI | V7(Im) | Im | I7(IVm) | IVm | VII7 | III | VI | IIm7(b5) | V7(Im)', degrees: 'Im | III7 | VI | V7 | Im | I7 | IVm | VII7 | III | VI | IIm7(b5) | V7' },
 
   // ── Dissonantes ─────────────────────────────────────────────────────────
-  { id: 'diss-maior', category: 'Dissonante Maior', name: 'Sequência Dissonante Maior', degreesClean: 'I6/9 | I7(13) | IV7M | V7(9) | Vm7 | I7(9) | #IVm7(b5) | IVm7(9) | IIIm7(9) | VI7(9) | II7 | V7(4) | V7', degrees: 'I6/9 | I7(13) | IV7M | V7(9) | Vm7 | I7(9) | #IVm7(b5) | % | IVm7(9) | % | IIIm7(9) | % | VI7(9) | % | II7 | % | V7(4) | V7' },
-  { id: 'diss-menor', category: 'Dissonante Menor', name: 'Sequência Dissonante Menor', degreesClean: 'Im7(9) | I7 | IVm7(9) | VII7 | III7M | VI7M | IIm7(b5) | V7(13)',                                       degrees: 'Im7(9) | I7 | IVm7(9) | VII7 | III7M | VI7M | IIm7(b5) | V7(13)' },
+  { id: 'diss-maior', category: 'Dissonante Maior', name: 'I6/9 | I7(13) | IV7M | V7(9) | Vm7 | I7(9) | #IVm7(b5) | IVm7(9) | IIIm7(9) | VI7(9) | II7 | V7(4) | V7', degreesClean: 'I6/9 | I7(13) | IV7M | V7(9) | Vm7 | I7(9) | #IVm7(b5) | IVm7(9) | IIIm7(9) | VI7(9) | II7 | V7(4) | V7', degrees: 'I6/9 | I7(13) | IV7M | V7(9) | Vm7 | I7(9) | #IVm7(b5) | % | IVm7(9) | % | IIIm7(9) | % | VI7(9) | % | II7 | % | V7(4) | V7' },
+  { id: 'diss-menor', category: 'Dissonante Menor', name: 'Im7(9) | I7 | IVm7(9) | VII7 | III7M | VI7M | IIm7(b5) | V7(13)', degreesClean: 'Im7(9) | I7 | IVm7(9) | VII7 | III7M | VI7M | IIm7(b5) | V7(13)',                                       degrees: 'Im7(9) | I7 | IVm7(9) | VII7 | III7M | VI7M | IIm7(b5) | V7(13)' },
 ];
 
 // ── Key options ─────────────────────────────────────────────────────────────
