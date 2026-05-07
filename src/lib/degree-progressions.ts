@@ -125,12 +125,20 @@ function transposeDegree(degree: string, key: string): string {
 }
 
 export function transposeDegrees(degreesStr: string, key: string): string {
+  let lastChord = '';
   return degreesStr
     .split(/(\s*\|\s*)/)
     .map(part => {
       const trimmed = part.trim();
       if (trimmed === '|' || trimmed === '||' || trimmed === '') return part;
-      return trimmed.split(/\s+/).map(t => transposeDegree(t, key)).join(' ');
+      return trimmed.split(/\s+/).map(t => {
+        if (t === '%') {
+          return lastChord || '%';
+        }
+        const transposed = transposeDegree(t, key);
+        lastChord = transposed;
+        return transposed;
+      }).join(' ');
     })
     .join('');
 }
