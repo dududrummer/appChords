@@ -501,7 +501,7 @@ function ChordGenerator() {
           {[
             { page: 'dictionary' as const,  icon: <BookOpen className="h-4 w-4" />, label: 'Dicionário',             sub: 'Buscar Acordes' },
             { page: 'progression' as const, icon: <Music2   className="h-4 w-4" />, label: 'Estudo de Sequências',   sub: 'Sequências e Acordes' },
-            { page: 'diagram' as const,     icon: <Guitar   className="h-4 w-4" />, label: 'Editor de Diagramas',    sub: 'Construtor SVG/PDF' },
+            { page: 'diagram' as const,     icon: <Guitar   className="h-4 w-4" />, label: 'Criador de Diagramas',   sub: 'SVG/PNG' },
           ].map(({ page, icon, label, sub }) => (
             <button
               key={page}
@@ -538,7 +538,7 @@ function ChordGenerator() {
             <Menu className="h-5 w-5" />
           </button>
           <h1 className="text-lg font-bold flex-1">
-            {activePage === 'diagram' ? 'Editor de Diagramas' : activePage === 'progression' ? 'Estudo de Sequências' : 'Dicionário de Acordes'}
+            {activePage === 'diagram' ? 'Criador de Diagramas' : activePage === 'progression' ? 'Estudo de Sequências' : 'Dicionário de Acordes'}
           </h1>
         </header>
 
@@ -562,7 +562,7 @@ function ChordGenerator() {
               onInstrumentChange={handleInstrumentChange}
             />
           ) : (<>
-        {/* ── Editor de Diagramas — layout lado a lado ── */}
+        {/* ── Criador de Diagramas — layout lado a lado ── */}
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
           {/* Coluna esquerda: Busca de Acordes */}
           <ChordSearch

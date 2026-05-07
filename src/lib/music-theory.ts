@@ -226,7 +226,19 @@ export function parseChord(input: string): ParsedChord | null {
   if (!rootMatch) return null;
 
   const root = rootMatch[1];
-  const quality = chordPart.slice(root.length);
+  let quality = chordPart.slice(root.length);
+
+  // Clean up quality: remove parentheses
+  quality = quality.replace(/[()]/g, '');
+  // Parse '-' as 'm' if at the beginning, else as 'b'
+  if (quality.startsWith('-')) {
+    quality = 'm' + quality.slice(1).replace(/-/g, 'b');
+  } else {
+    quality = quality.replace(/-/g, 'b');
+  }
+  // Parse '+' as '#' if followed by a number (e.g., 7+9 -> 7#9), else leave it for '7+' or '+' aliases
+  quality = quality.replace(/\+(?=\d)/g, '#');
+
   const formula = CHORD_FORMULAS[quality]; // may be undefined — fallback below
   const rootIndex = getNoteIndex(root);
   if (rootIndex === -1) return null;
