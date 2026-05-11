@@ -1,775 +1,220 @@
-import { useState, useMemo, useRef, useCallback } from "react";
-import { createFileRoute } from "@tanstack/react-router";
-import { Moon, Sun, Download, Circle, Square, Triangle, Trash2, Columns, Rows, Guitar, Music2, BookOpen, ChevronRight, Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Slider } from "@/components/ui/slider";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { toast } from "sonner";
-import { ChordSearch } from "@/components/ChordSearch";
-import { ProgressionEditor } from "@/components/ProgressionEditor";
-import { ChordDictionaryPage } from "@/components/ChordDictionaryPage";
-import { INSTRUMENT_PRESETS } from "@/lib/music-theory";
-
-interface Marker {
-  string: number;
-  fret: number;
-  label?: string;
-  color?: string;
-}
-
-interface NutIndicator {
-  string: number;
-  type: "none" | "open" | "muted";
-}
-
-interface Barre {
-  fret: number;
-  startString: number;
-  endString: number;
-  label?: string;
-  color?: string;
-}
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { NeubrutalistButton } from "@/components/ui/NeubrutalistButton";
+import { NeubrutalistCard } from "@/components/ui/NeubrutalistCard";
+import { Guitar, Music2, BookOpen, ChevronRight, Check, Play, Zap, Star } from "lucide-react";
 
 export const Route = createFileRoute("/")({
-  component: ChordGenerator,
+  component: LandingPage,
 });
 
-function ChordGenerator() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const [activePage, setActivePage] = useState<'diagram' | 'progression' | 'dictionary'>('diagram');
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [instrument, setInstrument] = useState('cavaquinho');
-  const [chordTitle, setChordTitle] = useState("C Major");
-  const [startingFret, setStartingFret] = useState(1);
-  const [fretCount, setFretCount] = useState(5);
-  const [stringCount, setStringCount] = useState(4);
-  const [markerSize, setMarkerSize] = useState([40]);
-  const [strokeWidth, setStrokeWidth] = useState([2]);
-  const [fontSize, setFontSize] = useState([16]);
-  const [labelFontSize, setLabelFontSize] = useState([10]);
-  const [primaryColor, setPrimaryColor] = useState("#000000");
-  const [markerColor, setMarkerColor] = useState("#000000");
-  const [markerShape, setMarkerShape] = useState("circle");
-  const [bgColor, setBgColor] = useState("#ffffff");
-  const [orientation, setOrientation] = useState<"vertical" | "horizontal">("vertical");
-  const [taper, setTaper] = useState([10]);
-  const [markers, setMarkers] = useState<Marker[]>([]);
-  const [nutIndicators, setNutIndicators] = useState<NutIndicator[]>([]);
-  const [barres, setBarres] = useState<Barre[]>([]);
-  const [stringNames, setStringNames] = useState<string[]>(["D", "G", "B", "D"]);
-  const [dragStart, setDragStart] = useState<{ fret: number; string: number } | null>(null);
-  const [dragEnd, setDragEnd] = useState<{ fret: number; string: number } | null>(null);
-  const resultSvgRef = useRef<SVGSVGElement>(null);
-
-  const handleSelectVoicing = useCallback((data: {
-    markers: Marker[];
-    barres: Barre[];
-    nutIndicators: NutIndicator[];
-    startingFret: number;
-    chordName: string;
-  }) => {
-    setMarkers(data.markers);
-    setBarres(data.barres);
-    setNutIndicators(data.nutIndicators);
-    setStartingFret(data.startingFret);
-    setChordTitle(data.chordName);
-
-    // Ajusta fretCount para mostrar todas as notas da posição
-    // Os frets agora são relativos (slot 1 = startingFret), então max relativo = tamanho do shape
-    const pressedFrets = data.markers.map(m => m.fret).filter(f => f > 0);
-    if (pressedFrets.length > 0) {
-      const maxRelFret = Math.max(...pressedFrets);
-      const span = maxRelFret + 1; // +1 para margem visual
-      setFretCount(prev => Math.max(prev, span));
-    }
-
-    toast.success(`Acorde ${data.chordName} carregado!`);
-  }, []);
-
-  const handleInstrumentChange = useCallback((inst: string) => {
-    setInstrument(inst);
-    // Atualiza afinação para o novo instrumento — necessário para o ChordDictionary
-    // na aba de progressão usar o tuning correto
-    const preset = INSTRUMENT_PRESETS[inst];
-    if (preset) {
-      setStringCount(preset.strings);
-      setStringNames(() => {
-        const next = Array(12).fill("") as string[];
-        preset.tuning.forEach((n, i) => { next[i] = n; });
-        return next;
-      });
-      setMarkers([]);
-      setBarres([]);
-      setNutIndicators([]);
-    }
-  }, []);
-
-  const handleTuningChange = useCallback((tuning: string[], count: number) => {
-    setStringCount(count);
-    setStringNames(prev => {
-      const next = Array(12).fill("");
-      tuning.forEach((n, i) => { next[i] = n; });
-      return next;
-    });
-    setMarkers([]);
-    setBarres([]);
-    setNutIndicators([]);
-  }, []);
-
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-    document.documentElement.classList.toggle("dark");
-  };
-
-  const handleStringNameChange = (index: number, name: string) => {
-    const newNames = [...stringNames];
-    newNames[index] = name.substring(0, 2);
-    setStringNames(newNames);
-  };
-
-  const updateMarker = (stringIndex: number, fretIndex: number, updates: Partial<Marker>) => {
-    setMarkers((prev) =>
-      prev.map((m) => (m.string === stringIndex && m.fret === fretIndex ? { ...m, ...updates } : m))
-    );
-  };
-
-  const updateBarre = (fretIndex: number, updates: Partial<Barre>) => {
-    setBarres((prev) =>
-      prev.map((b) => (b.fret === fretIndex ? { ...b, ...updates } : b))
-    );
-  };
-
-  const toggleNutIndicator = (stringIndex: number) => {
-    setNutIndicators((prev) => {
-      const existing = prev.find((n) => n.string === stringIndex);
-      if (!existing) return [...prev, { string: stringIndex, type: "open" }];
-      if (existing.type === "open") return prev.map((n) => (n.string === stringIndex ? { ...n, type: "muted" } : n));
-      if (existing.type === "muted") return prev.filter((n) => n.string !== stringIndex);
-      return prev;
-    });
-  };
-
-  const removeMarker = (stringIndex: number, fretIndex: number) => {
-    setMarkers(prev => prev.filter(m => !(m.string === stringIndex && m.fret === fretIndex)));
-  };
-
-  const onMouseDown = (stringIndex: number, fretIndex: number) => {
-    setDragStart({ string: stringIndex, fret: fretIndex });
-    setDragEnd({ string: stringIndex, fret: fretIndex });
-  };
-
-  const onMouseEnter = (stringIndex: number, fretIndex: number) => {
-    if (dragStart) setDragEnd({ string: stringIndex, fret: fretIndex });
-  };
-
-  const onMouseUp = () => {
-    if (dragStart && dragEnd && dragStart.fret === dragEnd.fret) {
-      if (dragStart.string !== dragEnd.string) {
-        const fret = dragStart.fret;
-        const startString = Math.min(dragStart.string, dragEnd.string);
-        const endString = Math.max(dragStart.string, dragEnd.string);
-        setBarres(prev => {
-          const filtered = prev.filter(b => b.fret !== fret);
-          return [...filtered, { fret, startString, endString, color: markerColor, label: "" }];
-        });
-      } else {
-        const existingBarre = barres.find(b => b.fret === dragStart.fret && dragStart.string >= b.startString && dragStart.string <= b.endString);
-        if (existingBarre) {
-          // Do nothing on single click if it's a barre, the Popover will handle it
-        } else {
-          const exists = markers.find(m => m.string === dragStart.string && m.fret === dragStart.fret);
-          if (!exists) {
-            setMarkers(prev => [...prev, { string: dragStart.string, fret: dragStart.fret, label: "", color: markerColor }]);
-          }
-        }
-      }
-    }
-    setDragStart(null);
-    setDragEnd(null);
-  };
-
-  const isVertical = orientation === "vertical";
-  const svgWidth = isVertical ? 300 : 450;
-  const svgHeight = isVertical ? 450 : 300;
-  const margin = 50;
-  const chartWidth = (isVertical ? svgWidth : svgHeight) - margin * 2;
-  const chartHeight = (isVertical ? svgHeight : svgWidth) - margin * 2.5;
-  const fretDistance = chartHeight / fretCount;
-  const stringDistance = chartWidth / (stringCount - 1);
-  const taperFactor = taper[0] / 100;
-
-  const getCoords = (s: number, f: number) => {
-    const p = f / fretCount; // 0 at top (nut), 1 at bottom
-    const scale = (1 - taperFactor / 2) + p * taperFactor;
-    const middlePos = margin + (stringCount - 1) * stringDistance / 2;
-    const distFromCenter = (s * stringDistance) - ((stringCount - 1) * stringDistance / 2);
-    const variablePos = middlePos + distFromCenter * scale;
-    const constantPos = margin + f * fretDistance;
-
-    return isVertical 
-      ? { x: variablePos, y: constantPos } 
-      : { x: constantPos, y: variablePos };
-  };
-
-  const getFretboardContent = (isReadOnly: boolean) => {
-    const lines = [];
-    // Strings
-    for (let i = 0; i < stringCount; i++) {
-      const p1 = getCoords(i, 0);
-      const p2 = getCoords(i, fretCount);
-      lines.push(<line key={`string-${i}`} x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} stroke={primaryColor} strokeWidth={strokeWidth[0]} />);
-    }
-    // Frets
-    for (let i = 0; i <= fretCount; i++) {
-      const p1 = getCoords(0, i);
-      const p2 = getCoords(stringCount - 1, i);
-      const isNut = i === 0 && startingFret === 1;
-      lines.push(<line key={`fret-${i}`} x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} stroke={primaryColor} strokeWidth={isNut ? strokeWidth[0] * 3 : strokeWidth[0]} />);
-    }
-
-    const nutElements = [];
-    for (let s = 0; s < stringCount; s++) {
-      const pNut = getCoords(s, 0);
-      const indicator = nutIndicators.find((n) => n.string === s);
-      const offset = 15;
-      const x = isVertical ? pNut.x : pNut.x - offset;
-      const y = isVertical ? pNut.y - offset : pNut.y;
-      
-      nutElements.push(
-        <g key={`nut-${s}`} className={isReadOnly ? "" : "cursor-pointer group"} onClick={isReadOnly ? undefined : () => toggleNutIndicator(s)}>
-          {!isReadOnly && <rect x={x - 10} y={y - 10} width={20} height={20} fill="transparent" />}
-          {indicator?.type === "open" && <circle cx={x} cy={y} r={6} fill="none" stroke={primaryColor} strokeWidth={strokeWidth[0]} />}
-          {indicator?.type === "muted" && (
-            <g stroke={primaryColor} strokeWidth={strokeWidth[0]}><line x1={x - 5} y1={y - 5} x2={x + 5} y2={y + 5} /><line x1={x + 5} y1={y - 5} x2={x - 5} y2={y + 5} /></g>
-          )}
-        </g>
-      );
-    }
-
-    const stringNameElements = [];
-    for (let s = 0; s < stringCount; s++) {
-      const pEnd = getCoords(s, fretCount);
-      const offset = 20;
-      const x = isVertical ? pEnd.x : pEnd.x + offset;
-      const y = isVertical ? pEnd.y + offset : pEnd.y;
-      
-      if (stringNames[s]) {
-        stringNameElements.push(
-          <text key={`name-${s}`} x={x} y={y} textAnchor={isVertical ? "middle" : "start"} dominantBaseline="middle" fill={primaryColor} style={{ fontSize: fontSize[0] * 0.7, fontWeight: 'bold' }}>
-            {stringNames[s]}
-          </text>
-        );
-      }
-    }
-
-    const barreElements: React.ReactNode[] = [];
-    barres.forEach((barre, idx) => {
-      const pStart = getCoords(barre.startString, barre.fret - 0.5);
-      const pEnd = getCoords(barre.endString, barre.fret - 0.5);
-      const thickness = (markerSize[0] / 200) * Math.min(stringDistance, fretDistance) * 2;
-      
-      const barreColor = barre.color || primaryColor;
-      
-      const renderBarre = () => {
-        if (isVertical) {
-          return <rect x={pStart.x - thickness / 2} y={pStart.y - thickness / 2} width={pEnd.x - pStart.x + thickness} height={thickness} rx={thickness / 2} fill={barreColor} />;
-        } else {
-          return <rect x={pStart.x - thickness / 2} y={pStart.y - thickness / 2} width={thickness} height={pEnd.y - pStart.y + thickness} rx={thickness / 2} fill={barreColor} />;
-        }
-      };
-
-      if (isReadOnly) {
-        barreElements.push(
-          <g key={`barre-${idx}`}>
-            {renderBarre()}
-            <text 
-              x={(pStart.x + pEnd.x) / 2} 
-              y={(pStart.y + pEnd.y) / 2} 
-              textAnchor="middle" 
-              dominantBaseline="central" 
-              fill={bgColor} 
-              style={{ fontSize: labelFontSize[0], fontWeight: 'bold' }}
-            >
-              {barre.label}
-            </text>
-          </g>
-        );
-      } else {
-        barreElements.push(
-          <Popover key={`barre-${idx}`}>
-            <PopoverTrigger asChild>
-              <g className="cursor-pointer">
-                {renderBarre()}
-                <text 
-                  x={(pStart.x + pEnd.x) / 2} 
-                  y={(pStart.y + pEnd.y) / 2} 
-                  textAnchor="middle" 
-                  dominantBaseline="central" 
-                  fill="white" 
-                  style={{ fontSize: labelFontSize[0], fontWeight: 'bold', pointerEvents: 'none' }}
-                >
-                  {barre.label}
-                </text>
-              </g>
-            </PopoverTrigger>
-            <PopoverContent className="w-56 p-3 space-y-4" onClick={(e) => e.stopPropagation()} onMouseDown={(e) => e.stopPropagation()}>
-              <div className="space-y-2">
-                <Label className="text-xs">Texto e Cor da Pestana</Label>
-                <div className="flex gap-2 mb-2">
-                  <Input maxLength={2} className="h-8" value={barre.label || ""} onChange={(e) => updateBarre(barre.fret, { label: e.target.value })} onKeyDown={(e) => e.stopPropagation()} placeholder="1, T..." />
-                  <Input type="color" className="h-8 w-12 p-1 cursor-pointer" value={barreColor} onChange={(e) => updateBarre(barre.fret, { color: e.target.value })} onKeyDown={(e) => e.stopPropagation()} />
-                </div>
-                <div className="flex flex-wrap gap-1">
-                  {["#000000", "#3b82f6", "#22c55e", "#f97316", "#eab308", "#a855f7"].map((c) => (
-                    <button
-                      key={c}
-                      className="w-5 h-5 rounded-full border border-border transition-transform hover:scale-110"
-                      style={{ backgroundColor: c }}
-                      onClick={() => updateBarre(barre.fret, { color: c })}
-                    />
-                  ))}
-                </div>
-              </div>
-              <Button variant="destructive" size="sm" className="w-full gap-2" onClick={() => setBarres(prev => prev.filter(b => b.fret !== barre.fret))}>
-                <Trash2 className="h-4 w-4" /> Remover Pestana
-              </Button>
-            </PopoverContent>
-          </Popover>
-        );
-      }
-    });
-
-    const interactiveElements = [];
-    for (let s = 0; s < stringCount; s++) {
-      for (let f = 1; f <= fretCount; f++) {
-        const p = getCoords(s, f - 0.5);
-        const { x, y } = p;
-        const marker = markers.find(m => m.string === s && m.fret === f);
-        const radius = (markerSize[0] / 200) * Math.min(stringDistance, fretDistance);
-        
-        const renderShape = (isGhost = false, color = markerColor) => {
-          const props = { fill: color, fillOpacity: isGhost ? "0.2" : "1", className: isGhost ? "opacity-0 group-hover:opacity-100 transition-opacity" : "" };
-          if (markerShape === "circle") return <circle cx={x} cy={y} r={radius} {...props} />;
-          if (markerShape === "square") return <rect x={x - radius} y={y - radius} width={radius * 2} height={radius * 2} {...props} />;
-          if (markerShape === "triangle") {
-            const points = isVertical 
-              ? `${x},${y - radius} ${x - radius},${y + radius} ${x + radius},${y + radius}`
-              : `${x + radius},${y} ${x - radius},${y - radius} ${x - radius},${y + radius}`;
-            return <polygon points={points} {...props} />;
-          }
-          return null;
-        };
-
-        if (isReadOnly) {
-          if (marker) {
-            interactiveElements.push(
-              <g key={`cell-${s}-${f}`}>
-                {renderShape(false, marker.color || markerColor)}
-                <text x={x} y={y} textAnchor="middle" dominantBaseline="central" fill={bgColor} style={{ fontSize: labelFontSize[0], fontWeight: 'bold' }}>{marker.label}</text>
-              </g>
-            );
-          }
-          continue;
-        }
-
-        const p1 = getCoords(s, f-1);
-        const hitWidth = isVertical ? stringDistance : fretDistance;
-        const hitHeight = isVertical ? fretDistance : stringDistance;
-        const hitX = isVertical ? x - stringDistance / 2 : p1.x;
-        const hitY = isVertical ? p1.y : y - stringDistance / 2;
-
-        interactiveElements.push(
-          <g key={`cell-${s}-${f}`} onMouseDown={() => onMouseDown(s, f)} onMouseEnter={() => onMouseEnter(s, f)} onMouseUp={onMouseUp}>
-            <rect x={hitX} y={hitY} width={hitWidth} height={hitHeight} fill="transparent" className="cursor-pointer" />
-            {!marker && renderShape(true)}
-            {marker && (
-              <Popover>
-                <PopoverTrigger asChild>
-                  <g className="cursor-pointer">
-                    {renderShape(false, marker.color || markerColor)}
-                    <text x={x} y={y} textAnchor="middle" dominantBaseline="central" fill="white" style={{ fontSize: labelFontSize[0], fontWeight: 'bold', pointerEvents: 'none' }}>{marker.label}</text>
-                  </g>
-                </PopoverTrigger>
-                <PopoverContent className="w-56 p-3 space-y-4" onClick={(e) => e.stopPropagation()} onMouseDown={(e) => e.stopPropagation()}>
-                  <div className="space-y-2">
-                    <Label className="text-xs">Texto e Cor</Label>
-                    <div className="flex gap-2 mb-2">
-                      <Input maxLength={2} className="h-8" value={marker.label || ""} onChange={(e) => updateMarker(s, f, { label: e.target.value })} onKeyDown={(e) => e.stopPropagation()} placeholder="1, T..." />
-                      <Input type="color" className="h-8 w-12 p-1 cursor-pointer" value={marker.color || markerColor} onChange={(e) => updateMarker(s, f, { color: e.target.value })} onKeyDown={(e) => e.stopPropagation()} />
-                    </div>
-                    <div className="flex flex-wrap gap-1">
-                      {["#000000", "#3b82f6", "#22c55e", "#f97316", "#eab308", "#a855f7"].map((c) => (
-                        <button
-                          key={c}
-                          className="w-5 h-5 rounded-full border border-border transition-transform hover:scale-110"
-                          style={{ backgroundColor: c }}
-                          onClick={() => updateMarker(s, f, { color: c })}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                  <Button variant="destructive" size="sm" className="w-full gap-2" onClick={() => removeMarker(s, f)}><Trash2 className="h-4 w-4" /> Remover Nota</Button>
-                </PopoverContent>
-              </Popover>
-            )}
-          </g>
-        );
-      }
-    }
-    return { lines, nutElements, barreElements, interactiveElements, stringNameElements };
-  };
-
-  const editorSvg = useMemo(() => {
-    const { lines, nutElements, barreElements, interactiveElements, stringNameElements } = getFretboardContent(false);
-    const startFretPos = getCoords(0, 0.5);
-    const fretLabelX = isVertical ? margin - 15 : startFretPos.x;
-    const fretLabelY = isVertical ? startFretPos.y : margin - 15;
-    
-    return (
-      <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full h-full" style={{ backgroundColor: bgColor }}>
-        <text x={svgWidth / 2} y={isVertical ? margin / 2 : 25} textAnchor="middle" fill={primaryColor} style={{ fontSize: fontSize[0], fontWeight: 'bold' }}>{chordTitle}</text>
-        {lines}{nutElements}{barreElements}{interactiveElements}{stringNameElements}
-        {startingFret > 1 && (
-          <text x={fretLabelX} y={fretLabelY} textAnchor={isVertical ? "end" : "middle"} dominantBaseline={isVertical ? "middle" : "auto"} fill={primaryColor} style={{ fontSize: fontSize[0] * 0.8 }}>
-            {startingFret}ª
-          </text>
-        )}
-      </svg>
-    );
-  }, [chordTitle, startingFret, fretCount, stringCount, markerSize, strokeWidth, fontSize, primaryColor, markerColor, bgColor, markers, markerShape, nutIndicators, barres, dragStart, dragEnd, stringDistance, fretDistance, stringNames, orientation, taper]);
-
-  const exportSvg = useMemo(() => {
-    const { lines, nutElements, barreElements, interactiveElements, stringNameElements } = getFretboardContent(true);
-    const startFretPos = getCoords(0, 0.5);
-    const fretLabelX = isVertical ? margin - 15 : startFretPos.x;
-    const fretLabelY = isVertical ? startFretPos.y : margin - 15;
-
-    return (
-      <svg ref={resultSvgRef} viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full h-full" xmlns="http://www.w3.org/2000/svg" style={{ backgroundColor: bgColor }}>
-        <rect width="100%" height="100%" fill={bgColor} />
-        <text x={svgWidth / 2} y={isVertical ? margin / 2 : 25} textAnchor="middle" fill={primaryColor} style={{ fontSize: fontSize[0], fontWeight: 'bold' }}>{chordTitle}</text>
-        {lines}{nutElements}{barreElements}{interactiveElements}{stringNameElements}
-        {startingFret > 1 && (
-          <text x={fretLabelX} y={fretLabelY} textAnchor={isVertical ? "end" : "middle"} dominantBaseline={isVertical ? "middle" : "auto"} fill={primaryColor} style={{ fontSize: fontSize[0] * 0.8 }}>
-            {startingFret}ª
-          </text>
-        )}
-      </svg>
-    );
-  }, [chordTitle, startingFret, fretCount, stringCount, markerSize, strokeWidth, fontSize, primaryColor, markerColor, bgColor, markers, markerShape, nutIndicators, barres, stringNames, orientation, taper]);
-
-  const downloadFilename = (chordTitle || "chord").toLowerCase().replace(/[^a-z0-9]/g, "-");
-
+function LandingPage() {
   return (
-    <div className={`min-h-screen flex ${isDarkMode ? "dark bg-background text-foreground" : "bg-slate-50"}`}>
+    <div className="min-h-screen bg-neo-bg text-black font-sans selection:bg-neo-orange selection:text-white">
+      {/* Dot Grid Overlay */}
+      <div className="fixed inset-0 dot-grid pointer-events-none z-0" />
 
-      {/* ── Mobile overlay backdrop ─────────────────────────────────────── */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/40 z-30 md:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-
-      {/* ── Sidebar ──────────────────────────────────────────────────────── */}
-      <aside className={`
-        fixed md:sticky top-0 left-0 h-screen z-40
-        w-56 shrink-0 border-r bg-card flex flex-col overflow-hidden
-        transition-transform duration-300 ease-in-out
-        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-        md:translate-x-0
-      `}>
-        <div className="px-5 py-4 border-b flex items-center justify-between">
-          <div>
-            <div className="flex items-center gap-2">
-              <Guitar className="h-5 w-5 text-primary" />
-              <span className="font-bold text-base">AppChords</span>
+      {/* Navigation */}
+      <nav className="sticky top-0 z-50 border-b-2 border-black bg-neo-bg px-6 py-4">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <div className="bg-black p-1.5 border-2 border-black">
+              <Guitar className="h-6 w-6 text-neo-orange" />
             </div>
-            <p className="text-[10px] text-muted-foreground mt-0.5">Gerador de Acordes</p>
+            <span className="text-2xl font-black uppercase tracking-tighter italic">appChords</span>
           </div>
-          {/* Close button — mobile only */}
-          <button onClick={() => setSidebarOpen(false)} className="md:hidden p-1 rounded hover:bg-muted">
-            <X className="h-4 w-4" />
-          </button>
+          <div className="hidden md:flex gap-8 font-bold uppercase text-sm tracking-tight">
+            <a href="#features" className="hover:text-neo-orange transition-colors">Recursos</a>
+            <a href="#demo" className="hover:text-neo-orange transition-colors">Demonstração</a>
+            <a href="#testimonials" className="hover:text-neo-orange transition-colors">Músicos</a>
+          </div>
+          <Link href="/app">
+            <NeubrutalistButton size="sm">Entrar no App</NeubrutalistButton>
+          </Link>
         </div>
+      </nav>
 
-        <nav className="flex-1 p-2 space-y-1">
-          {[
-            { page: 'dictionary' as const,  icon: <BookOpen className="h-4 w-4" />, label: 'Dicionário',             sub: 'Buscar Acordes' },
-            { page: 'progression' as const, icon: <Music2   className="h-4 w-4" />, label: 'Estudo de Sequências',   sub: 'Sequências e Acordes' },
-            { page: 'diagram' as const,     icon: <Guitar   className="h-4 w-4" />, label: 'Criador de Diagramas',   sub: 'SVG/PNG' },
-          ].map(({ page, icon, label, sub }) => (
-            <button
-              key={page}
-              onClick={() => { setActivePage(page); setSidebarOpen(false); }}
-              className={`w-full text-left rounded-lg px-3 py-2.5 flex items-center gap-3 transition-all group ${
-                activePage === page
-                  ? 'bg-primary text-primary-foreground shadow-sm'
-                  : 'hover:bg-muted text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              {icon}
-              <div className="flex-1 min-w-0">
-                <div className="text-sm font-medium truncate">{label}</div>
-                <div className={`text-[10px] truncate ${activePage === page ? 'opacity-70' : 'opacity-50'}`}>{sub}</div>
-              </div>
-              <ChevronRight className={`h-3.5 w-3.5 opacity-0 group-hover:opacity-100 transition-opacity ${ activePage === page ? 'opacity-70' : '' }`} />
-            </button>
-          ))}
-        </nav>
-
-        <div className="p-3 border-t">
-          <Button variant="outline" size="sm" onClick={toggleDarkMode} className="w-full gap-2">
-            {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            {isDarkMode ? 'Modo Claro' : 'Modo Escuro'}
-          </Button>
-        </div>
-      </aside>
-
-      {/* ── Main content ─────────────────────────────────────────────────── */}
-      <div className="flex-1 flex flex-col min-w-0 md:ml-0">
-        <header className="border-b bg-card px-4 py-3 flex items-center gap-3 shadow-sm sticky top-0 z-10">
-          {/* Hamburger — mobile only */}
-          <button onClick={() => setSidebarOpen(true)} className="md:hidden p-1.5 rounded hover:bg-muted">
-            <Menu className="h-5 w-5" />
-          </button>
-          <h1 className="text-lg font-bold flex-1">
-            {activePage === 'diagram' ? 'Criador de Diagramas' : activePage === 'progression' ? 'Estudo de Sequências' : 'Dicionário de Acordes'}
-          </h1>
-        </header>
-
-        <main className="flex-1 overflow-y-auto p-6 space-y-8">
-          {activePage === 'progression' ? (
-            <ProgressionEditor
-              instrument={instrument}
-              stringCount={stringCount}
-              stringNames={stringNames}
-              markerColor={markerColor}
-              primaryColor={primaryColor}
-              onInstrumentChange={handleInstrumentChange}
-            />
-          ) : activePage === 'dictionary' ? (
-            <ChordDictionaryPage
-              instrument={instrument}
-              stringCount={stringCount}
-              stringNames={stringNames}
-              markerColor={markerColor}
-              primaryColor={primaryColor}
-              onInstrumentChange={handleInstrumentChange}
-            />
-          ) : (<>
-        {/* ── Criador de Diagramas — layout lado a lado ── */}
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-          {/* Coluna esquerda: Busca de Acordes */}
-          <ChordSearch
-            stringCount={stringCount}
-            stringNames={stringNames}
-            markerColor={markerColor}
-            primaryColor={primaryColor}
-            bgColor={bgColor}
-            markerShape={markerShape}
-            markerSize={markerSize}
-            instrument={instrument}
-            onInstrumentChange={handleInstrumentChange}
-            onSelectVoicing={handleSelectVoicing}
-            onTuningChange={handleTuningChange}
-          />
-
-          {/* Coluna direita: Configurações compactas */}
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg">Configurações</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {/* Título + Traste + Trastes + Cordas */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <div className="space-y-1 col-span-2">
-                  <Label className="text-xs">Título</Label>
-                  <Input value={chordTitle} onChange={(e) => setChordTitle(e.target.value)} className="h-9" />
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-xs">Traste Inicial</Label>
-                  <Input type="number" value={startingFret} onChange={(e) => setStartingFret(Number(e.target.value))} className="h-9" />
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-xs">Trastes</Label>
-                  <Input type="number" value={fretCount} onChange={(e) => setFretCount(Number(e.target.value))} className="h-9" />
-                </div>
-              </div>
-
-              {/* Cordas + Orientação */}
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <Label className="text-xs">Cordas</Label>
-                  <Input type="number" value={stringCount} onChange={(e) => setStringCount(Number(e.target.value))} className="h-9" />
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-xs">Orientação</Label>
-                  <ToggleGroup type="single" value={orientation} onValueChange={(v) => v && setOrientation(v as any)} className="justify-start border p-1 rounded-md w-fit h-9">
-                    <ToggleGroupItem value="vertical" className="px-2 gap-1 h-7 text-xs" title="Vertical">
-                      <Rows className="h-3.5 w-3.5" /> V
-                    </ToggleGroupItem>
-                    <ToggleGroupItem value="horizontal" className="px-2 gap-1 h-7 text-xs" title="Horizontal">
-                      <Columns className="h-3.5 w-3.5" /> H
-                    </ToggleGroupItem>
-                  </ToggleGroup>
-                </div>
-              </div>
-
-              {/* Sliders: Conicidade, Nota, Linha */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="space-y-1">
-                  <Label className="text-xs">Conicidade ({taper}%)</Label>
-                  <Slider value={taper} onValueChange={setTaper} min={0} max={30} step={1} />
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-xs">Nota ({markerSize}%)</Label>
-                  <Slider value={markerSize} onValueChange={setMarkerSize} min={10} max={80} />
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-xs">Linha ({strokeWidth}px)</Label>
-                  <Slider value={strokeWidth} onValueChange={setStrokeWidth} min={1} max={10} step={0.5} />
-                </div>
-              </div>
-
-              {/* Forma + Fontes */}
-              <div className="grid grid-cols-3 gap-3">
-                <div className="space-y-1">
-                  <Label className="text-xs">Forma</Label>
-                  <ToggleGroup type="single" value={markerShape} onValueChange={(v) => v && setMarkerShape(v)} className="justify-start">
-                    <ToggleGroupItem value="circle" className="h-8 w-8 p-0"><Circle className="h-3.5 w-3.5" /></ToggleGroupItem>
-                    <ToggleGroupItem value="square" className="h-8 w-8 p-0"><Square className="h-3.5 w-3.5" /></ToggleGroupItem>
-                    <ToggleGroupItem value="triangle" className="h-8 w-8 p-0"><Triangle className="h-3.5 w-3.5" /></ToggleGroupItem>
-                  </ToggleGroup>
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-xs">Fonte ({fontSize}px)</Label>
-                  <Slider value={fontSize} onValueChange={setFontSize} min={8} max={36} step={1} />
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-xs">Marcador ({labelFontSize}px)</Label>
-                  <Slider value={labelFontSize} onValueChange={setLabelFontSize} min={6} max={24} step={1} />
-                </div>
-              </div>
-
-              {/* Cores lado a lado */}
-              <div className="grid grid-cols-3 gap-3">
-                <div className="space-y-1">
-                  <Label className="text-xs">Cor Principal</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button variant="outline" className="w-full h-9 p-1">
-                        <div className="w-full h-full rounded-sm border" style={{ backgroundColor: primaryColor }} />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-48 p-2">
-                      <div className="grid grid-cols-3 gap-2">
-                        {["#000000", "#3b82f6", "#22c55e", "#a855f7", "#f97316", "#eab308"].map((c) => (
-                          <button key={c} className={`w-10 h-10 rounded-full border-2 transition-transform hover:scale-110 ${primaryColor === c ? "border-primary" : "border-transparent"}`} style={{ backgroundColor: c }} onClick={() => setPrimaryColor(c)} />
-                        ))}
-                      </div>
-                    </PopoverContent>
-                  </Popover>
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-xs">Cor Forma</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button variant="outline" className="w-full h-9 p-1">
-                        <div className="w-full h-full rounded-sm border" style={{ backgroundColor: markerColor }} />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-48 p-2">
-                      <div className="grid grid-cols-3 gap-2">
-                        {["#000000", "#3b82f6", "#22c55e", "#a855f7", "#f97316", "#eab308"].map((c) => (
-                          <button key={c} className={`w-10 h-10 rounded-full border-2 transition-transform hover:scale-110 ${markerColor === c ? "border-primary" : "border-transparent"}`} style={{ backgroundColor: c }} onClick={() => setMarkerColor(c)} />
-                        ))}
-                      </div>
-                    </PopoverContent>
-                  </Popover>
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-xs">Cor Fundo</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button variant="outline" className="w-full h-9 p-1">
-                        <div className="w-full h-full rounded-sm border" style={{ backgroundColor: bgColor }} />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-48 p-2">
-                      <div className="grid grid-cols-3 gap-2">
-                        {["#ffffff", "#f8fafc", "#f1f5f9", "#e2e8f0", "#000000", "#1a1a1a"].map((c) => (
-                          <button key={c} className={`w-10 h-10 rounded-full border-2 transition-transform hover:scale-110 ${bgColor === c ? "border-primary" : "border-transparent"}`} style={{ backgroundColor: c }} onClick={() => setBgColor(c)} />
-                        ))}
-                      </div>
-                    </PopoverContent>
-                  </Popover>
-                </div>
-              </div>
-
-              {/* Nomes das cordas */}
-              <div className="space-y-1">
-                <Label className="text-xs">Cordas ({isVertical ? "Abaixo" : "À direita"})</Label>
-                <div className="flex flex-wrap gap-1.5">
-                  {Array.from({ length: stringCount }).map((_, i) => (
-                    <Input key={i} className="w-10 h-8 text-center text-xs" placeholder={`S${i+1}`} value={stringNames[i] || ""} onChange={(e) => handleStringNameChange(i, e.target.value)} />
+      {/* Hero Section */}
+      <section className="relative pt-20 pb-32 px-6 overflow-hidden">
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
+          <div className="z-10">
+            <div className="inline-block bg-neo-yellow border-2 border-black px-4 py-1 font-black uppercase text-xs mb-6 transform -rotate-1 shadow-[2px_2px_0px_rgba(0,0,0,1)]">
+              🚀 A ferramenta definitiva para músicos
+            </div>
+            <h1 className="text-6xl md:text-8xl font-black uppercase leading-[0.9] mb-8 tracking-tighter">
+              DOMINE SEU <br />
+              <span className="text-neo-orange outline-text">INSTRUMENTO</span> <br />
+              COM PRECISÃO.
+            </h1>
+            <p className="text-xl font-bold max-w-xl mb-10 leading-snug">
+              Dicionário inteligente, gerador de diagramas SVG e editor de progressões. Tudo que você precisa para estudar ou ensinar música em um só lugar.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-6">
+              <Link href="/app">
+                <NeubrutalistButton size="xl" className="w-full sm:w-auto">
+                  Começar Agora <ChevronRight className="ml-2 h-8 w-8" />
+                </NeubrutalistButton>
+              </Link>
+              <div className="flex items-center gap-4 px-4">
+                <div className="flex -space-x-3">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div key={i} className="w-12 h-12 rounded-full border-2 border-black bg-neo-yellow flex items-center justify-center font-black">
+                      {String.fromCharCode(64 + i)}
+                    </div>
                   ))}
                 </div>
+                <div className="text-sm font-black uppercase">
+                  +1.000 músicos <br /> já utilizam
+                </div>
               </div>
-            </CardContent>
-          </Card>
-        </div>
+            </div>
+          </div>
 
-        {/* Diagrama interativo — abaixo */}
-        <div className="flex justify-center">
-          <Card className="w-full max-w-2xl">
-            <CardHeader className="bg-muted/50">
-              <CardTitle>Diagrama</CardTitle>
-            </CardHeader>
-            <CardContent className="p-4 flex justify-center">
-              <div className={`w-full ${isVertical ? "max-w-[350px]" : "max-w-[500px]"} border rounded-lg bg-white/50 dark:bg-black/20`}>
-                {editorSvg}
+          <div className="relative">
+            <NeubrutalistCard className="relative z-10 p-0 overflow-hidden transform rotate-2">
+              <div className="bg-black text-white px-4 py-2 font-black uppercase text-xs flex justify-between items-center">
+                <span>Diagram_C_Major.svg</span>
+                <div className="flex gap-1">
+                   <div className="w-2 h-2 rounded-full bg-red-500 border border-white" />
+                   <div className="w-2 h-2 rounded-full bg-yellow-500 border border-white" />
+                   <div className="w-2 h-2 rounded-full bg-green-500 border border-white" />
+                </div>
               </div>
-            </CardContent>
-          </Card>
+              <div className="p-8 bg-white flex justify-center">
+                {/* Simplified Mock SVG */}
+                <svg width="240" height="320" viewBox="0 0 240 320" className="drop-shadow-[8px_8px_0px_rgba(0,0,0,0.1)]">
+                  <rect width="240" height="320" fill="white" />
+                  {[0, 1, 2, 3].map(i => (
+                    <line key={i} x1={40 + i * 53} y1={40} x2={40 + i * 53} y2={280} stroke="black" strokeWidth="3" />
+                  ))}
+                  {[0, 1, 2, 3, 4].map(i => (
+                    <line key={i} x1={40} y1={40 + i * 60} x2={200} y2={40 + i * 60} stroke="black" strokeWidth={i === 0 ? "8" : "3"} />
+                  ))}
+                  <circle cx="93" cy="130" r="18" fill="#FF5722" stroke="black" strokeWidth="3" />
+                  <circle cx="146" cy="190" r="18" fill="#FF5722" stroke="black" strokeWidth="3" />
+                  <circle cx="200" cy="250" r="18" fill="#FF5722" stroke="black" strokeWidth="3" />
+                </svg>
+              </div>
+            </NeubrutalistCard>
+            <div className="absolute -bottom-6 -right-6 w-full h-full bg-neo-yellow border-2 border-black -z-10" />
+          </div>
         </div>
+      </section>
 
-        <div className="hidden">
-          {exportSvg}
-        </div>
+      {/* Features Grid */}
+      <section id="features" className="py-24 px-6 bg-white border-y-4 border-black">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-20">
+            <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter mb-4">
+              RECURSOS <span className="text-neo-orange">PROFISSIONAIS</span>
+            </h2>
+            <p className="text-xl font-bold opacity-70 italic">Tudo o que você precisa para levar seu som ao próximo nível.</p>
+          </div>
 
-        <div className="flex justify-center gap-4 py-4">
-          <Button variant="secondary" onClick={() => {
-            if (!resultSvgRef.current) return;
-            const svgData = new XMLSerializer().serializeToString(resultSvgRef.current);
-            const canvas = document.createElement("canvas");
-            const ctx = canvas.getContext("2d");
-            const img = new Image();
-            canvas.width = svgWidth * 2; canvas.height = svgHeight * 2;
-            img.onload = () => {
-              if (!ctx) return;
-              ctx.fillStyle = bgColor; ctx.fillRect(0, 0, canvas.width, canvas.height);
-              ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-              const link = document.createElement("a"); link.download = `${downloadFilename}.png`; link.href = canvas.toDataURL(); link.click();
-            };
-            img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)));
-          }}><Download className="mr-2 h-4 w-4" /> PNG</Button>
-          <Button onClick={() => {
-            if (!resultSvgRef.current) return;
-            const svgData = new XMLSerializer().serializeToString(resultSvgRef.current);
-            const link = document.createElement("a"); link.download = `${downloadFilename}.svg`;
-            link.href = URL.createObjectURL(new Blob([svgData], { type: "image/svg+xml" })); link.click();
-          }}><Download className="mr-2 h-4 w-4" /> SVG</Button>
+          <div className="grid md:grid-cols-3 gap-8">
+            <NeubrutalistCard className="hover:bg-neo-yellow transition-colors group">
+              <div className="bg-black w-14 h-14 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <BookOpen className="text-neo-orange h-8 w-8" />
+              </div>
+              <h3 className="text-2xl font-black uppercase mb-4 tracking-tight">Dicionário Inteligente</h3>
+              <p className="font-bold leading-tight">Milhares de posições para Cavaquinho, Violão e Ukulele. Encontre o shape perfeito para qualquer música.</p>
+            </NeubrutalistCard>
+
+            <NeubrutalistCard className="bg-neo-orange text-white">
+              <div className="bg-white w-14 h-14 flex items-center justify-center mb-6">
+                <Music2 className="text-neo-orange h-8 w-8" />
+              </div>
+              <h3 className="text-2xl font-black uppercase mb-4 tracking-tight">Editor de Progressões</h3>
+              <p className="font-bold leading-tight">Crie sequências harmônicas complexas em segundos. Visualize o braço do instrumento enquanto compõe.</p>
+            </NeubrutalistCard>
+
+            <NeubrutalistCard className="hover:bg-neo-yellow transition-colors group">
+              <div className="bg-black w-14 h-14 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <Zap className="text-neo-orange h-8 w-8" />
+              </div>
+              <h3 className="text-2xl font-black uppercase mb-4 tracking-tight">Exportação em Alta</h3>
+              <p className="font-bold leading-tight">Gere diagramas em SVG ou PNG de alta qualidade para seus métodos, livros ou redes sociais.</p>
+            </NeubrutalistCard>
+          </div>
         </div>
-        </>) /* end diagram page */}
-        </main>
-      </div> {/* end main content */}
+      </section>
+
+      {/* Social Proof */}
+      <section id="testimonials" className="py-24 px-6 overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row gap-12 items-center">
+            <div className="flex-1">
+               <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-8 leading-none">
+                 O QUE OS <br /> <span className="bg-black text-white px-2">MESTRES</span> <br /> ESTÃO DIZENDO
+               </h2>
+               <NeubrutalistCard variant="yellow" className="relative transform -rotate-1">
+                 <p className="text-2xl font-black italic mb-4">"O appChords mudou a forma como eu preparo meus materiais de aula. A precisão dos diagramas é imbatível."</p>
+                 <div className="flex items-center gap-4">
+                   <div className="w-12 h-12 bg-black rounded-full" />
+                   <div>
+                     <p className="font-black uppercase text-sm">Ricardo Silva</p>
+                     <p className="font-bold text-xs opacity-60">Professor de Cavaquinho</p>
+                   </div>
+                 </div>
+                 <Star className="absolute -top-6 -right-6 h-12 w-12 text-black fill-neo-orange" />
+               </NeubrutalistCard>
+            </div>
+            <div className="flex-1 grid grid-cols-2 gap-4">
+               <div className="space-y-4 pt-12">
+                  <NeubrutalistCard className="h-40 flex items-center justify-center text-center p-4">
+                    <p className="font-black uppercase text-sm">Intuitivo & Rápido</p>
+                  </NeubrutalistCard>
+                  <NeubrutalistCard className="h-40 bg-neo-orange text-white flex items-center justify-center text-center p-4">
+                    <p className="font-black uppercase text-sm">Design <br /> Premium</p>
+                  </NeubrutalistCard>
+               </div>
+               <div className="space-y-4">
+                  <NeubrutalistCard className="h-40 bg-black text-white flex items-center justify-center text-center p-4">
+                    <p className="font-black uppercase text-sm">Focado em <br /> Resultados</p>
+                  </NeubrutalistCard>
+                  <NeubrutalistCard className="h-40 flex items-center justify-center text-center p-4">
+                    <p className="font-black uppercase text-sm">Suporte <br /> Especializado</p>
+                  </NeubrutalistCard>
+               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="py-32 px-6 bg-neo-yellow border-t-4 border-black text-center relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+          <div className="text-[20rem] font-black uppercase tracking-tighter text-black select-none leading-none transform -rotate-12 translate-y-20">
+             CHORDS
+          </div>
+        </div>
+        <div className="relative z-10 max-w-3xl mx-auto">
+          <h2 className="text-5xl md:text-8xl font-black uppercase tracking-tighter mb-8 leading-none">
+            PRONTO PARA <br /> COMEÇAR?
+          </h2>
+          <p className="text-xl font-bold mb-12">Junte-se a centenas de músicos e simplifique seus estudos hoje mesmo.</p>
+          <Link href="/app">
+            <NeubrutalistButton size="xl" className="px-16">
+              Acessar Agora
+            </NeubrutalistButton>
+          </Link>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-black text-white py-12 px-6 border-t-4 border-black">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="flex items-center gap-2">
+            <Guitar className="h-6 w-6 text-neo-orange" />
+            <span className="text-2xl font-black uppercase tracking-tighter italic">appChords</span>
+          </div>
+          <p className="font-bold text-sm opacity-60">© 2026 appChords. Todos os direitos reservados.</p>
+          <div className="flex gap-6 font-bold uppercase text-xs tracking-widest">
+            <a href="#" className="hover:text-neo-orange transition-colors">Privacy</a>
+            <a href="#" className="hover:text-neo-orange transition-colors">Terms</a>
+            <a href="#" className="hover:text-neo-orange transition-colors">Contact</a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
-
-export default ChordGenerator;

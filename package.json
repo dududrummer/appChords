@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "^1.25.5",
-    "tone": "^14.7.77",
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.15",
@@ -62,6 +61,7 @@
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.2.1",
+    "tone": "^14.7.77",
     "tw-animate-css": "^1.3.4",
     "vaul": "^1.1.2",
     "vite-tsconfig-paths": "^6.0.2",
@@ -80,7 +80,10 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^15.15.0",
+    "pdf-lib": "^1.17.1",
+    "pdf2pic": "^3.2.0",
     "prettier": "^3.7.3",
+    "sharp": "^0.34.5",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.56.1",
     "vite": "^7.3.1"

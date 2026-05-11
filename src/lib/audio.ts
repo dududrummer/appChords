@@ -7,13 +7,14 @@ export type Style     = LoopStyle;
 export type AudioMode = 'harmony' | 'percussion' | 'both';
 
 export const DEFAULT_BPM: Record<Style, number> = {
-  batucada: 90, sambaenredo: 140, jazz: 170, bossanova: 108,
+  batucada: 90, sambaenredo: 140, jazz: 170, bossanova: 108, metronome: 90
 };
 export const BPM_RANGE: Record<Style, [number,number]> = {
   batucada:   [60, 120],
   sambaenredo:[125, 160],
   jazz:       [150, 200],
   bossanova:  [70, 150],
+  metronome:  [40, 200]
 };
 
 // ── Re-export helpers for UI ──────────────────────────────────────────────────
@@ -74,6 +75,13 @@ function initHarmony() {
   harmonyReady = true;
 }
 
+let clickSynth: Tone.MembraneSynth | null = null;
+function initClick() {
+  if (clickSynth) return;
+  clickSynth = new Tone.MembraneSynth().toDestination();
+  clickSynth.volume.value = -10;
+}
+
 // ── Comping patterns ──────────────────────────────────────────────────────────
 const SAMBA_COMP = [
   {time:0,   type:'full'  as const, vel:0.75},{time:0.75,type:'upper' as const,vel:0.50},
@@ -92,6 +100,9 @@ const COMP: Record<Style,{time:number;type:'full'|'upper';vel:number}[]> = {
     {time:0,   type:'full',  vel:0.62},{time:0.75,type:'upper',vel:0.48},
     {time:1.5, type:'upper', vel:0.52},{time:2.25,type:'full', vel:0.58},
     {time:3,   type:'upper', vel:0.48},{time:3.75,type:'upper',vel:0.44},
+  ],
+  metronome:[
+    {time:0, type:'full', vel:0.8}, // Apenas na cabeça do tempo
   ],
 };
 
@@ -129,11 +140,24 @@ export async function startPlayback(
     Tone.getTransport().swing = style === 'jazz' ? 0.5 : 0;
     Tone.getTransport().swingSubdivision = '8n';
 
+    if (_metronome || style === 'metronome') {
+      initClick();
+    }
+
     const beatSec=60/bpm, barSec=beatSec*4;
 
     measures.forEach((measure,mi) => {
       const barStart = mi * barSec;
       Tone.getTransport().schedule(() => onMeasure(mi), barStart);
+
+      // Metronome clicks
+      if (clickSynth && (_metronome || style === 'metronome')) {
+        for(let b=0; b<4; b++){
+          Tone.getTransport().schedule(time => {
+            clickSynth!.triggerAttackRelease(b === 0 ? 'C3' : 'C2', '16n', time);
+          }, barStart + b * beatSec);
+        }
+      }
 
       let cursor=0;
       for(const beat of measure.beats){

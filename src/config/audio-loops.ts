@@ -4,7 +4,7 @@
  * O app seleciona automaticamente o BPM mais próximo ao andamento escolhido.
  */
 
-export type LoopStyle = 'batucada' | 'sambaenredo' | 'jazz' | 'bossanova';
+export type LoopStyle = 'batucada' | 'sambaenredo' | 'jazz' | 'bossanova' | 'metronome';
 
 export interface AudioLoop {
   style: LoopStyle;

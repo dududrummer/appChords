@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
-import { Music2 } from 'lucide-react';
+import { Music2, Play, Square } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
@@ -15,6 +16,7 @@ import {
 import { ProgressionGrid } from './ProgressionGrid';
 import { PercussionPlayers } from './PercussionPlayers';
 import type { Voicing } from '@/lib/chord-finder';
+import { startPlayback, stopPlayback, setBpm as setAudioBpm } from '@/lib/audio';
 
 interface StoredVoicing extends Voicing { tuning: string[] }
 
@@ -35,31 +37,72 @@ export function ProgressionEditor({
   const [selectedKey, setSelectedKey]           = useState('');
   const [input, setInput]                       = useState('');
   const [voicings, setVoicings]                 = useState<Record<string, StoredVoicing>>({});
+  
+  const [isPlaying, setIsPlaying]               = useState(false);
+  const [activeMeasure, setActiveMeasure]       = useState<number | null>(null);
+  const [bpm, setBpm]                           = useState(90);
+
+  // Stop playback on unmount
+  useEffect(() => {
+    return () => { stopPlayback(); };
+  }, []);
+
+  const measures: Measure[] = useMemo(() => parseProgression(input), [input]);
+  const analysis: HarmonicAnalysis | null = useMemo(
+    () => (measures.length > 0 ? analyseProgression(measures) : null),
+    [measures]
+  );
+  const chordNames = useMemo(() => uniqueChords(measures), [measures]);
+
+  const togglePlayback = useCallback(async () => {
+    if (isPlaying) {
+      stopPlayback();
+      setIsPlaying(false);
+      setActiveMeasure(null);
+    } else {
+      if (measures.length === 0) return;
+      setIsPlaying(true);
+      try {
+        await startPlayback(
+          measures,
+          "metronome",
+          bpm,
+          true,
+          "harmony",
+          voicings,
+          (mi) => setActiveMeasure(mi),
+          true
+        );
+      } catch (err) {
+        console.error(err);
+        setIsPlaying(false);
+      }
+    }
+  }, [isPlaying, measures, bpm, voicings]);
 
   // Templates filtered by selected category
-  const filteredTemplates = useMemo(() =>
-    selectedCategory ? PROGRESSION_TEMPLATES.filter(t => t.category === selectedCategory) : [],
+  const filteredTemplates = useMemo(
+    () =>
+      selectedCategory
+        ? PROGRESSION_TEMPLATES.filter((t) => t.category === selectedCategory)
+        : [],
     [selectedCategory]
   );
 
   // Reset template when category changes
-  useEffect(() => { setSelectedTemplate(''); }, [selectedCategory]);
+  useEffect(() => {
+    setSelectedTemplate("");
+  }, [selectedCategory]);
 
   // Transpose when template + key are both set
   useEffect(() => {
     if (!selectedTemplate || !selectedKey) return;
-    const tpl = PROGRESSION_TEMPLATES.find(t => t.id === selectedTemplate);
+    const tpl = PROGRESSION_TEMPLATES.find((t) => t.id === selectedTemplate);
     if (!tpl) return;
     const transposed = transposeDegrees(tpl.degrees, selectedKey);
     setInput(transposed);
     setVoicings({});
   }, [selectedTemplate, selectedKey]);
-
-  const measures: Measure[] = useMemo(() => parseProgression(input), [input]);
-  const analysis: HarmonicAnalysis | null = useMemo(
-    () => measures.length > 0 ? analyseProgression(measures) : null, [measures]
-  );
-  const chordNames = useMemo(() => uniqueChords(measures), [measures]);
 
   const getActiveTuning = useCallback((): string[] => {
     const filled = stringNames.slice(0, stringCount).filter(n => n.trim());
@@ -203,7 +246,7 @@ export function ProgressionEditor({
         <ProgressionGrid
           measures={measures}
           analysis={analysis}
-          activeMeasure={null}
+          activeMeasure={activeMeasure}
           voicings={voicings}
           stringCount={stringCount}
           markerColor={markerColor}
@@ -211,6 +254,37 @@ export function ProgressionEditor({
           getVoicingsForChord={getVoicingsForChord}
           onVoicingSelect={handleVoicingSelect}
         />
+
+        {measures.length > 0 && (
+          <div className="flex items-center gap-4 bg-muted/30 p-3 rounded-lg border border-border mt-4">
+            <Button
+              variant={isPlaying ? "destructive" : "default"}
+              className="gap-2"
+              onClick={togglePlayback}
+            >
+              {isPlaying ? <Square className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+              {isPlaying ? "Parar" : "Tocar Metrônomo"}
+            </Button>
+            
+            <div className="flex-1 max-w-[200px] flex flex-col gap-1.5">
+              <div className="flex justify-between text-xs text-muted-foreground font-medium">
+                <span>Andamento</span>
+                <span>{bpm} BPM</span>
+              </div>
+              <input 
+                type="range" 
+                min={40} max={200} step={1} 
+                value={bpm} 
+                onChange={e => {
+                  const val = Number(e.target.value);
+                  setBpm(val);
+                  if (isPlaying) setAudioBpm(val);
+                }}
+                className="w-full h-1.5 bg-muted rounded-lg appearance-none cursor-pointer accent-primary" 
+              />
+            </div>
+          </div>
+        )}
 
         {measures.length > 0 && (
           <div className="border-t pt-4">

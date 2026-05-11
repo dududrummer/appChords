@@ -59,6 +59,11 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-neo-bg: var(--neo-bg);
+  --color-neo-orange: var(--neo-orange);
+  --color-neo-yellow: var(--neo-yellow);
+  --color-neo-border: var(--neo-border);
+  --color-neo-shadow: var(--neo-shadow);
 }
 
 :root {
@@ -95,6 +100,11 @@
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
   --sidebar-border: oklch(0.929 0.013 255.508);
   --sidebar-ring: oklch(0.704 0.04 256.788);
+  --neo-bg: oklch(0.95 0.01 70);
+  --neo-orange: oklch(0.65 0.23 45);
+  --neo-yellow: oklch(0.85 0.18 85);
+  --neo-border: oklch(0 0 0);
+  --neo-shadow: oklch(0 0 0);
 }
 
 .dark {
@@ -140,5 +150,35 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+  }
+
+  .neo-brutalism-card {
+    border: 2px solid var(--color-neo-border);
+    box-shadow: 4px 4px 0px var(--color-neo-shadow);
+    transition: all 0.2s ease;
+  }
+
+  .neo-brutalism-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px var(--color-neo-shadow);
+  }
+
+  .neo-brutalism-button {
+    border: 2px solid var(--color-neo-border);
+    box-shadow: 4px 4px 0px var(--color-neo-shadow);
+    transition: all 0.1s ease;
+    cursor: pointer;
+  }
+
+  .neo-brutalism-button:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0px 0px 0px var(--color-neo-shadow);
+  }
+
+  .dot-grid {
+    background-image: radial-gradient(var(--color-neo-border) 1px, transparent 0);
+    background-size: 24px 24px;
+    background-position: -19px -19px;
+    opacity: 0.05;
   }
 }
