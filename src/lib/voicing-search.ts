@@ -159,9 +159,47 @@ export function resolveAutoVoicings(
   opts: SearchVoicingsOptions,
 ): Record<string, Voicing> {
   const result: Record<string, Voicing> = {};
+  let lastVoicing: Voicing | null = null;
+
   for (const name of chordNames) {
-    const v = pickDefaultVoicing(name, opts);
-    if (v) result[name] = v;
+    const all = searchVoicings(name, opts);
+    if (all.length === 0) continue;
+
+    let best: Voicing;
+
+    if (!lastVoicing) {
+      // For the first chord, use the default logic (prefers priority, then region 1)
+      const priority = all.filter(v => v.isPriority);
+      if (priority.length > 0) {
+        best = priority[0];
+      } else {
+        const region1 = all.filter(v => getRegion(v.startingFret) === 1);
+        best = region1.length > 0 ? region1[0] : all[0];
+      }
+    } else {
+      // For subsequent chords, pick the CLOSEST priority shape
+      const priority = all.filter(v => v.isPriority);
+      const targetFret = lastVoicing.startingFret;
+
+      if (priority.length > 0) {
+        // Pick priority shape closest to the last one
+        best = priority.reduce((prev, curr) => {
+          const prevDiff = Math.abs(prev.startingFret - targetFret);
+          const currDiff = Math.abs(curr.startingFret - targetFret);
+          return currDiff < prevDiff ? curr : prev;
+        });
+      } else {
+        // Fallback: pick closest algorithmic shape
+        best = all.reduce((prev, curr) => {
+          const prevDiff = Math.abs(prev.startingFret - targetFret);
+          const currDiff = Math.abs(curr.startingFret - targetFret);
+          return currDiff < prevDiff ? curr : prev;
+        });
+      }
+    }
+
+    result[name] = best;
+    lastVoicing = best;
   }
   return result;
 }
