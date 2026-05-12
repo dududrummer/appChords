@@ -1,6 +1,6 @@
 import { useState, useMemo, useRef, useCallback } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Moon, Sun, Download, Circle, Square, Triangle, Trash2, Columns, Rows, Guitar, Music2, BookOpen, ChevronRight, Menu, X, Dumbbell, GraduationCap } from "lucide-react";
+import { Moon, Sun, Download, Circle, Square, Triangle, Trash2, Columns, Rows, Guitar, Music2, BookOpen, ChevronRight, Menu, X, Dumbbell, GraduationCap, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -41,7 +41,7 @@ export const Route = createFileRoute("/app")({
 
 function ChordGenerator() {
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [activePage, setActivePage] = useState<'diagram' | 'progression' | 'dictionary' | 'exercises' | 'plan'>('diagram');
+  const [activePage, setActivePage] = useState<'diagram' | 'progression' | 'dictionary' | 'exercises' | 'plan' | 'community'>('diagram');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [instrument, setInstrument] = useState('cavaquinho');
   const [chordTitle, setChordTitle] = useState("C Major");
@@ -500,6 +500,7 @@ function ChordGenerator() {
 
         <nav className="flex-1 p-2 space-y-1">
           {[
+            { page: 'community' as const,   icon: <Users className="h-4 w-4" />,         label: 'Comunidade',           sub: 'Troca de Experiências' },
             { page: 'plan' as const,        icon: <GraduationCap className="h-4 w-4" />, label: 'Plano de Estudos',     sub: 'Cronograma e Metas' },
             { page: 'dictionary' as const,  icon: <BookOpen className="h-4 w-4" />, label: 'Dicionário',             sub: 'Buscar Acordes' },
             { page: 'progression' as const, icon: <Music2   className="h-4 w-4" />, label: 'Estudo de Sequências',   sub: 'Sequências e Acordes' },
@@ -541,12 +542,18 @@ function ChordGenerator() {
             <Menu className="h-5 w-5" />
           </button>
           <h1 className="text-lg font-bold flex-1">
-            {activePage === 'diagram' ? 'Criador de Diagramas' : activePage === 'progression' ? 'Estudo de Sequências' : activePage === 'exercises' ? 'Exercícios' : activePage === 'plan' ? 'Plano de Estudos' : 'Dicionário de Acordes'}
+            {activePage === 'diagram' ? 'Criador de Diagramas' : activePage === 'progression' ? 'Estudo de Sequências' : activePage === 'exercises' ? 'Exercícios' : activePage === 'plan' ? 'Plano de Estudos' : activePage === 'community' ? 'Comunidade' : 'Dicionário de Acordes'}
           </h1>
         </header>
 
         <main className="flex-1 overflow-y-auto p-6 space-y-8">
-          {activePage === 'plan' ? (
+          {activePage === 'community' ? (
+            <div className="flex flex-col items-center justify-center h-64 border-2 border-dashed rounded-xl opacity-60">
+              <Users className="h-12 w-12 mb-4" />
+              <h2 className="text-xl font-bold">Comunidade de Músicos</h2>
+              <p>Em breve: compartilhe suas progressões e aprenda com outros usuários.</p>
+            </div>
+          ) : activePage === 'plan' ? (
             <div className="flex flex-col items-center justify-center h-64 border-2 border-dashed rounded-xl opacity-60">
               <GraduationCap className="h-12 w-12 mb-4" />
               <h2 className="text-xl font-bold">Plano de Estudos Personalizado</h2>
