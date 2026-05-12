@@ -500,12 +500,12 @@ function ChordGenerator() {
 
         <nav className="flex-1 p-2 space-y-1">
           {[
-            { page: 'community' as const,   icon: <Users className="h-4 w-4" />,         label: 'Comunidade',           sub: 'Troca de Experiências' },
+            { page: 'dictionary' as const,  icon: <BookOpen className="h-4 w-4" />,      label: 'Dicionário',           sub: 'Buscar Acordes' },
+            { page: 'exercises' as const,   icon: <Dumbbell className="h-4 w-4" />,      label: 'Exercícios Técnicos',  sub: 'Treino Prático' },
+            { page: 'progression' as const, icon: <Music2   className="h-4 w-4" />,      label: 'Estudo de Sequências', sub: 'Sequências e Acordes' },
             { page: 'plan' as const,        icon: <GraduationCap className="h-4 w-4" />, label: 'Plano de Estudos',     sub: 'Cronograma e Metas' },
-            { page: 'dictionary' as const,  icon: <BookOpen className="h-4 w-4" />, label: 'Dicionário',             sub: 'Buscar Acordes' },
-            { page: 'progression' as const, icon: <Music2   className="h-4 w-4" />, label: 'Estudo de Sequências',   sub: 'Sequências e Acordes' },
-            { page: 'exercises' as const,   icon: <Dumbbell className="h-4 w-4" />, label: 'Exercícios',             sub: 'Treino Prático' },
-            { page: 'diagram' as const,     icon: <Guitar   className="h-4 w-4" />, label: 'Criador de Diagramas',   sub: 'SVG/PNG' },
+            { page: 'diagram' as const,     icon: <Guitar   className="h-4 w-4" />,      label: 'Criador de Diagramas', sub: 'SVG/PNG' },
+            { page: 'community' as const,   icon: <Users className="h-4 w-4" />,         label: 'Comunidade',           sub: 'Troca de Experiências' },
           ].map(({ page, icon, label, sub }) => (
             <button
               key={page}

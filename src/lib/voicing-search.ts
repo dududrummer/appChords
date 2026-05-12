@@ -20,9 +20,13 @@ async function getCavaquinhoDict(): Promise<DictType> {
 
 // Synchronous import for consumers that need it right away
 import cavaquinhoDictRaw from '@/config/cavaquinho-dictionary.json';
+import priorityDictRaw from '../../extracted-chords.json';
+
 const DICTIONARIES: Record<string, DictType> = {
   cavaquinho: cavaquinhoDictRaw as DictType,
 };
+
+const PRIORITY_DICTS: Record<string, any> = priorityDictRaw;
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 function getRegion(sf: number): number {
@@ -94,9 +98,24 @@ export function searchVoicings(
     minBarreStrings: smallInstrument ? 3 : 4,
   });
 
+  let dictVoicings: Voicing[] = [];
   const activeDict = DICTIONARIES[instrument];
   if (activeDict && activeDict[chordName]) {
-    const dictVoicings = activeDict[chordName].map(dictEntryToVoicing);
+    dictVoicings = activeDict[chordName].map(dictEntryToVoicing);
+  }
+
+  // Inject Priority Shapes from PDF Extraction
+  const priorityDict = PRIORITY_DICTS[instrument];
+  if (priorityDict && priorityDict[chordName]) {
+    const priorityEntry = priorityDict[chordName];
+    const priorityVoicing = dictEntryToVoicing({ chordName, frets: priorityEntry.frets });
+    // Remove any duplicate from dictVoicings
+    dictVoicings = dictVoicings.filter(v => v.frets.join(',') !== priorityVoicing.frets.join(','));
+    // Put the priority shape at the very top
+    dictVoicings.unshift(priorityVoicing);
+  }
+
+  if (dictVoicings.length > 0) {
     return mergeAndGroupByRegion(dictVoicings, baseResults, maxPerRegion);
   }
 

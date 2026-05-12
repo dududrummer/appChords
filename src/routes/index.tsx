@@ -79,20 +79,8 @@ function LandingPage() {
                    <div className="w-2 h-2 rounded-full bg-green-500 border border-white" />
                 </div>
               </div>
-              <div className="p-8 bg-white flex justify-center">
-                {/* Simplified Mock SVG */}
-                <svg width="240" height="320" viewBox="0 0 240 320" className="drop-shadow-[8px_8px_0px_rgba(0,0,0,0.1)]">
-                  <rect width="240" height="320" fill="white" />
-                  {[0, 1, 2, 3].map(i => (
-                    <line key={i} x1={40 + i * 53} y1={40} x2={40 + i * 53} y2={280} stroke="black" strokeWidth="3" />
-                  ))}
-                  {[0, 1, 2, 3, 4].map(i => (
-                    <line key={i} x1={40} y1={40 + i * 60} x2={200} y2={40 + i * 60} stroke="black" strokeWidth={i === 0 ? "8" : "3"} />
-                  ))}
-                  <circle cx="93" cy="130" r="18" fill="#FF5722" stroke="black" strokeWidth="3" />
-                  <circle cx="146" cy="190" r="18" fill="#FF5722" stroke="black" strokeWidth="3" />
-                  <circle cx="200" cy="250" r="18" fill="#FF5722" stroke="black" strokeWidth="3" />
-                </svg>
+              <div className="bg-white flex justify-center border-t-2 border-black overflow-hidden">
+                <img src="/hero-cavaquinho.png" alt="Músico tocando cavaquinho" className="w-full h-auto object-cover max-w-sm hover:scale-105 transition-transform duration-500" />
               </div>
             </NeubrutalistCard>
             <div className="absolute -bottom-6 -right-6 w-full h-full bg-neo-yellow border-2 border-black -z-10" />
