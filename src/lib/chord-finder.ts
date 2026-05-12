@@ -7,6 +7,7 @@ export interface Voicing {
   mutedStrings: number[];
   omitted: string[];
   fingerCount: number;
+  isPriority?: boolean;
 }
 
 export interface BarreDef {

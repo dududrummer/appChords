@@ -46,6 +46,7 @@ function dictEntryToVoicing(c: DictEntry): Voicing {
     mutedStrings: c.frets.map((f, i) => (f === -1 ? i : -1)).filter(i => i !== -1),
     omitted: [],
     fingerCount: pressed.length,
+    isPriority: true,
   };
 }
 
@@ -98,21 +99,24 @@ export function searchVoicings(
     minBarreStrings: smallInstrument ? 3 : 4,
   });
 
+  const normalizedName = parsed.displayName;
+
   let dictVoicings: Voicing[] = [];
   const activeDict = DICTIONARIES[instrument];
-  if (activeDict && activeDict[chordName]) {
-    dictVoicings = activeDict[chordName].map(dictEntryToVoicing);
+  if (activeDict && activeDict[normalizedName]) {
+    dictVoicings = activeDict[normalizedName].map(dictEntryToVoicing);
   }
 
   // Inject Priority Shapes from PDF Extraction
   const priorityDict = PRIORITY_DICTS[instrument];
-  if (priorityDict && priorityDict[chordName]) {
-    const priorityEntries = Array.isArray(priorityDict[chordName])
-      ? priorityDict[chordName]
-      : [priorityDict[chordName]];
+  if (priorityDict && (priorityDict[normalizedName] || priorityDict[chordName])) {
+    const entryData = priorityDict[normalizedName] || priorityDict[chordName];
+    const priorityEntries = Array.isArray(entryData)
+      ? entryData
+      : [entryData];
 
     for (const entry of priorityEntries) {
-      const priorityVoicing = dictEntryToVoicing({ chordName, frets: entry.frets });
+      const priorityVoicing = dictEntryToVoicing({ chordName: normalizedName, frets: entry.frets });
       // Remove any duplicate from dictVoicings
       dictVoicings = dictVoicings.filter(v => v.frets.join(',') !== priorityVoicing.frets.join(','));
       // Put the priority shape at the top (maintaining relative order if multiple)
@@ -138,9 +142,14 @@ export function pickDefaultVoicing(
   const all = searchVoicings(chordName, opts);
   if (all.length === 0) return null;
 
-  // Prefer region 1 (frets 1-3), then lowest startingFret
+  // 1. Prefer Priority shapes (from our extracted list)
+  const priority = all.filter(v => v.isPriority);
+  if (priority.length > 0) return priority[0];
+
+  // 2. Prefer region 1 (frets 1-3)
   const region1 = all.filter(v => getRegion(v.startingFret) === 1);
   if (region1.length > 0) return region1[0];
+
   return all[0];
 }
 
