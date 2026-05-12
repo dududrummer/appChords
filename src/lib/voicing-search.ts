@@ -107,12 +107,19 @@ export function searchVoicings(
   // Inject Priority Shapes from PDF Extraction
   const priorityDict = PRIORITY_DICTS[instrument];
   if (priorityDict && priorityDict[chordName]) {
-    const priorityEntry = priorityDict[chordName];
-    const priorityVoicing = dictEntryToVoicing({ chordName, frets: priorityEntry.frets });
-    // Remove any duplicate from dictVoicings
-    dictVoicings = dictVoicings.filter(v => v.frets.join(',') !== priorityVoicing.frets.join(','));
-    // Put the priority shape at the very top
-    dictVoicings.unshift(priorityVoicing);
+    const priorityEntries = Array.isArray(priorityDict[chordName])
+      ? priorityDict[chordName]
+      : [priorityDict[chordName]];
+
+    for (const entry of priorityEntries) {
+      const priorityVoicing = dictEntryToVoicing({ chordName, frets: entry.frets });
+      // Remove any duplicate from dictVoicings
+      dictVoicings = dictVoicings.filter(v => v.frets.join(',') !== priorityVoicing.frets.join(','));
+      // Put the priority shape at the top (maintaining relative order if multiple)
+      dictVoicings.push(priorityVoicing);
+    }
+    // Sort dictVoicings by startingFret to ensure the most grave ones are prioritized in pickDefaultVoicing
+    dictVoicings.sort((a, b) => a.startingFret - b.startingFret);
   }
 
   if (dictVoicings.length > 0) {
