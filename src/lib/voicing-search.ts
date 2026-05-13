@@ -39,6 +39,26 @@ function dictEntryToVoicing(c: DictEntry, isPriority = false): Voicing {
   };
 }
 
+/** Calculate distance between two voicings for voice leading (minimal movement) */
+function calculateVoicingDistance(v1: Voicing, v2: Voicing): number {
+  let distance = 0;
+  // Compare fret by fret
+  for (let i = 0; i < v1.frets.length; i++) {
+    const f1 = v1.frets[i];
+    const f2 = v2.frets[i];
+    
+    if (f1 === -1 || f2 === -1) {
+      if (f1 === f2) continue;
+      distance += 4; // Penalty for changing string active/muted status
+    } else {
+      distance += Math.abs(f1 - f2);
+    }
+  }
+  // Weight starting fret movement
+  distance += Math.abs(v1.startingFret - v2.startingFret) * 1.5;
+  return distance;
+}
+
 /** Look up chord in dictionary, trying multiple name variants */
 function lookupDict(dict: DictType, chordName: string, normalizedName?: string): DictEntry[] | null {
   // Try exact match first
@@ -157,21 +177,20 @@ export function resolveAutoVoicings(
         best = region1.length > 0 ? region1[0] : all[0];
       }
     } else {
-      // Subsequent chords: pick closest to last voicing, preferring priority shapes
+      // Subsequent chords: pick closest to last voicing (minimal movement)
       const priority = all.filter(v => v.isPriority);
-      const targetFret = lastVoicing.startingFret;
 
       if (priority.length > 0) {
         best = priority.reduce((prev, curr) => {
-          const prevDiff = Math.abs(prev.startingFret - targetFret);
-          const currDiff = Math.abs(curr.startingFret - targetFret);
-          return currDiff < prevDiff ? curr : prev;
+          const prevDist = calculateVoicingDistance(prev, lastVoicing!);
+          const currDist = calculateVoicingDistance(curr, lastVoicing!);
+          return currDist < prevDist ? curr : prev;
         });
       } else {
         best = all.reduce((prev, curr) => {
-          const prevDiff = Math.abs(prev.startingFret - targetFret);
-          const currDiff = Math.abs(curr.startingFret - targetFret);
-          return currDiff < prevDiff ? curr : prev;
+          const prevDist = calculateVoicingDistance(prev, lastVoicing!);
+          const currDist = calculateVoicingDistance(curr, lastVoicing!);
+          return currDist < prevDist ? curr : prev;
         });
       }
     }
