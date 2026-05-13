@@ -94,8 +94,13 @@ export function ChordDictionary({
 
     const activeDict = DICTIONARIES[instrument];
 
-    if (activeDict && activeDict[chordName]) {
-      const dictVoicings: Voicing[] = activeDict[chordName].map(c => {
+    // Try both exact name and parsed displayName for alias support
+    const normalizedName = parsed.displayName;
+    const dictEntries = activeDict?.[chordName] ?? activeDict?.[normalizedName];
+
+    if (dictEntries) {
+      // Dictionary voicings ONLY — no mixing with algorithmic results
+      return dictEntries.map(c => {
         const pressed = c.frets.filter(f => f > 0);
         const startingFret = pressed.length > 0 ? Math.min(...pressed) : 1;
         return {
@@ -107,28 +112,6 @@ export function ChordDictionary({
           fingerCount: pressed.length
         };
       });
-
-      const dictFretStrings = dictVoicings.map(v => v.frets.join(','));
-      const others = baseResults.filter(v => !dictFretStrings.includes(v.frets.join(',')));
-      
-      const allVoicings = [...dictVoicings, ...others];
-      
-      const getRegion = (sf: number) => {
-        if (sf <= 3) return 1;
-        if (sf <= 6) return 2;
-        if (sf <= 9) return 3;
-        return 4;
-      };
-      
-      const regionMap: Record<number, Voicing[]> = { 1: [], 2: [], 3: [], 4: [] };
-      allVoicings.forEach(v => {
-        const reg = getRegion(v.startingFret);
-        if (regionMap[reg] && regionMap[reg].length < 4) {
-          regionMap[reg].push(v);
-        }
-      });
-      
-      return [...regionMap[1], ...regionMap[2], ...regionMap[3], ...regionMap[4]];
     }
 
     const getRegion = (sf: number) => {

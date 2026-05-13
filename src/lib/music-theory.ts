@@ -31,6 +31,8 @@ export const CHORD_FORMULAS: Record<string, { intervals: number[]; name: string 
   'aug':    { intervals: [0, 4, 8],                 name: 'Aumentado' },
   'aum':    { intervals: [0, 4, 8],                 name: 'Aumentado' },   // BR
   '+':      { intervals: [0, 4, 8],                 name: 'Aumentado' },
+  '5#':     { intervals: [0, 4, 8],                 name: 'Aumentado' },   // BR
+  'm5#':    { intervals: [0, 3, 8],                 name: 'Menor com 5ª Aumentada' }, // BR
   '5':      { intervals: [0, 7],                    name: 'Power Chord' },
   // ── Suspensas ─────────────────────────────────────────────────────────────
   'sus2':   { intervals: [0, 2, 7],                 name: 'Sus2' },
@@ -238,6 +240,8 @@ export function parseChord(input: string): ParsedChord | null {
   }
   // Parse '+' as '#' if followed by a number (e.g., 7+9 -> 7#9), else leave it for '7+' or '+' aliases
   quality = quality.replace(/\+(?=\d)/g, '#');
+  // Brazilian notation: swap degree+accidental → accidental+degree (e.g., 11# → #11, 9b → b9)
+  quality = quality.replace(/(\d{2})(#|b)/g, '$2$1');
 
   const formula = CHORD_FORMULAS[quality]; // may be undefined — fallback below
   const rootIndex = getNoteIndex(root);

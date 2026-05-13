@@ -1,6 +1,9 @@
 /**
  * Shared voicing-search utility.
  * Used by ChordSearch, ChordDictionary AND ProgressionEditor for auto-voicing.
+ * 
+ * Priority system: dictionary voicings (from diagramas/jsons) come first,
+ * sorted by lowest position. Algorithmic fallback for chords not in dictionary.
  */
 import { parseChord, INSTRUMENT_PRESETS } from './music-theory';
 import { findVoicings, type Voicing } from './chord-finder';
@@ -8,25 +11,11 @@ import { findVoicings, type Voicing } from './chord-finder';
 type DictEntry = { chordName: string; frets: number[] };
 type DictType = Record<string, DictEntry[]>;
 
-// Lazy-load dictionaries so every consumer shares the same data
-let _cavaquinhoDict: DictType | null = null;
-async function getCavaquinhoDict(): Promise<DictType> {
-  if (!_cavaquinhoDict) {
-    const mod = await import('@/config/cavaquinho-dictionary.json');
-    _cavaquinhoDict = mod.default as DictType;
-  }
-  return _cavaquinhoDict;
-}
-
-// Synchronous import for consumers that need it right away
 import cavaquinhoDictRaw from '@/config/cavaquinho-dictionary.json';
-import priorityDictRaw from '../../extracted-chords.json';
 
 const DICTIONARIES: Record<string, DictType> = {
   cavaquinho: cavaquinhoDictRaw as DictType,
 };
-
-const PRIORITY_DICTS: Record<string, any> = priorityDictRaw;
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 function getRegion(sf: number): number {
@@ -36,7 +25,7 @@ function getRegion(sf: number): number {
   return 4;
 }
 
-function dictEntryToVoicing(c: DictEntry): Voicing {
+function dictEntryToVoicing(c: DictEntry, isPriority = false): Voicing {
   const pressed = c.frets.filter(f => f > 0);
   const startingFret = pressed.length > 0 ? Math.min(...pressed) : 1;
   return {
@@ -46,8 +35,17 @@ function dictEntryToVoicing(c: DictEntry): Voicing {
     mutedStrings: c.frets.map((f, i) => (f === -1 ? i : -1)).filter(i => i !== -1),
     omitted: [],
     fingerCount: pressed.length,
-    isPriority: true,
+    isPriority,
   };
+}
+
+/** Look up chord in dictionary, trying multiple name variants */
+function lookupDict(dict: DictType, chordName: string, normalizedName?: string): DictEntry[] | null {
+  // Try exact match first
+  if (dict[chordName]) return dict[chordName];
+  // Try normalized name (from parseChord displayName)
+  if (normalizedName && dict[normalizedName]) return dict[normalizedName];
+  return null;
 }
 
 function mergeAndGroupByRegion(
@@ -100,41 +98,21 @@ export function searchVoicings(
   });
 
   const normalizedName = parsed.displayName;
-
-  let dictVoicings: Voicing[] = [];
   const activeDict = DICTIONARIES[instrument];
-  if (activeDict && activeDict[normalizedName]) {
-    dictVoicings = activeDict[normalizedName].map(dictEntryToVoicing);
+
+  // Look up dictionary entries (tries exact name + normalized name)
+  const dictEntries = activeDict ? lookupDict(activeDict, chordName, normalizedName) : null;
+
+  if (dictEntries) {
+    // Dictionary voicings ONLY — no mixing with algorithmic results
+    return dictEntries.map(entry => dictEntryToVoicing(entry, true));
   }
 
-  // Inject Priority Shapes from PDF Extraction
-  const priorityDict = PRIORITY_DICTS[instrument];
-  if (priorityDict && (priorityDict[normalizedName] || priorityDict[chordName])) {
-    const entryData = priorityDict[normalizedName] || priorityDict[chordName];
-    const priorityEntries = Array.isArray(entryData)
-      ? entryData
-      : [entryData];
-
-    for (const entry of priorityEntries) {
-      const priorityVoicing = dictEntryToVoicing({ chordName: normalizedName, frets: entry.frets });
-      // Remove any duplicate from dictVoicings
-      dictVoicings = dictVoicings.filter(v => v.frets.join(',') !== priorityVoicing.frets.join(','));
-      // Put the priority shape at the top (maintaining relative order if multiple)
-      dictVoicings.push(priorityVoicing);
-    }
-    // Sort dictVoicings by startingFret to ensure the most grave ones are prioritized in pickDefaultVoicing
-    dictVoicings.sort((a, b) => a.startingFret - b.startingFret);
-  }
-
-  if (dictVoicings.length > 0) {
-    return mergeAndGroupByRegion(dictVoicings, baseResults, maxPerRegion);
-  }
-
-  // Fallback: group algorithmic results by region
+  // Fallback: algorithmic results only (for custom chords like C/B)
   return mergeAndGroupByRegion([], baseResults, maxPerRegion);
 }
 
-// ── Public: pick the best default voicing (region 1 priority) ───────────────
+// ── Public: pick the best default voicing (lowest position priority) ────────
 export function pickDefaultVoicing(
   chordName: string,
   opts: SearchVoicingsOptions,
@@ -142,11 +120,13 @@ export function pickDefaultVoicing(
   const all = searchVoicings(chordName, opts);
   if (all.length === 0) return null;
 
-  // 1. Prefer Priority shapes (from our extracted list)
+  // Prefer dictionary voicings (isPriority), pick the one with lowest startingFret
   const priority = all.filter(v => v.isPriority);
-  if (priority.length > 0) return priority[0];
+  if (priority.length > 0) {
+    return priority.reduce((a, b) => a.startingFret <= b.startingFret ? a : b);
+  }
 
-  // 2. Prefer region 1 (frets 1-3)
+  // Fallback: prefer region 1 (frets 1-3)
   const region1 = all.filter(v => getRegion(v.startingFret) === 1);
   if (region1.length > 0) return region1[0];
 
@@ -168,28 +148,26 @@ export function resolveAutoVoicings(
     let best: Voicing;
 
     if (!lastVoicing) {
-      // For the first chord, use the default logic (prefers priority, then region 1)
+      // First chord: pick the lowest position (priority first)
       const priority = all.filter(v => v.isPriority);
       if (priority.length > 0) {
-        best = priority[0];
+        best = priority.reduce((a, b) => a.startingFret <= b.startingFret ? a : b);
       } else {
         const region1 = all.filter(v => getRegion(v.startingFret) === 1);
         best = region1.length > 0 ? region1[0] : all[0];
       }
     } else {
-      // For subsequent chords, pick the CLOSEST priority shape
+      // Subsequent chords: pick closest to last voicing, preferring priority shapes
       const priority = all.filter(v => v.isPriority);
       const targetFret = lastVoicing.startingFret;
 
       if (priority.length > 0) {
-        // Pick priority shape closest to the last one
         best = priority.reduce((prev, curr) => {
           const prevDiff = Math.abs(prev.startingFret - targetFret);
           const currDiff = Math.abs(curr.startingFret - targetFret);
           return currDiff < prevDiff ? curr : prev;
         });
       } else {
-        // Fallback: pick closest algorithmic shape
         best = all.reduce((prev, curr) => {
           const prevDiff = Math.abs(prev.startingFret - targetFret);
           const currDiff = Math.abs(curr.startingFret - targetFret);
