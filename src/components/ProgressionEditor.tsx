@@ -89,9 +89,10 @@ export function ProgressionEditor({
     [selectedCategory]
   );
 
-  // Reset template when category changes
+  // Reset template and key when category changes
   useEffect(() => {
     setSelectedTemplate("");
+    setSelectedKey("");
   }, [selectedCategory]);
 
   // Transpose when template + key are both set
@@ -133,9 +134,12 @@ export function ProgressionEditor({
 
   const selectedTpl = PROGRESSION_TEMPLATES.find(t => t.id === selectedTemplate);
 
-  // Separate keys for grouped display
-  const majorKeys = KEY_OPTIONS.filter(k => !k.isMinor);
-  const minorKeys = KEY_OPTIONS.filter(k => k.isMinor);
+  // Filter keys based on selected category modality
+  const isMinorCategory = selectedCategory.includes('Menor');
+  
+  const availableKeys = KEY_OPTIONS.filter(k => 
+    selectedCategory ? k.isMinor === isMinorCategory : true
+  );
 
   return (
     <Card className="w-full">
@@ -201,15 +205,10 @@ export function ProgressionEditor({
               <Label className="text-xs font-semibold">Tom</Label>
               <Select value={selectedKey} onValueChange={setSelectedKey}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Selecione o tom..." />
+                  <SelectValue placeholder={`Selecione o tom ${isMinorCategory ? 'menor' : 'maior'}...`} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="_sep_maj" disabled>── Maiores ──</SelectItem>
-                  {majorKeys.map(k => (
-                    <SelectItem key={k.value} value={k.value}>{k.label}</SelectItem>
-                  ))}
-                  <SelectItem value="_sep_min" disabled>── Menores ──</SelectItem>
-                  {minorKeys.map(k => (
+                  {availableKeys.map(k => (
                     <SelectItem key={k.value} value={k.value}>{k.label}</SelectItem>
                   ))}
                 </SelectContent>
