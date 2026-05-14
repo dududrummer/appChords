@@ -230,6 +230,9 @@ export function parseChord(input: string): ParsedChord | null {
   const root = rootMatch[1];
   let quality = chordPart.slice(root.length);
 
+  // Handle specific Brazilian notations before stripping parentheses
+  quality = quality.replace(/\(4\)/g, '/4');
+  
   // Clean up quality: remove parentheses
   quality = quality.replace(/[()]/g, '');
   // Parse '-' as 'm' if at the beginning, else as 'b'
