@@ -26,13 +26,14 @@ function LoginPage() {
     e.preventDefault();
     setError("");
     if (!email || !password) { setError("Preencha todos os campos."); return; }
-    try { await login(email, password); navigate({ to: "/app" }); }
-    catch { setError("Email ou senha inválidos."); }
+    const result = await login(email, password);
+    if (result.error) { setError(result.error); return; }
+    navigate({ to: "/app" });
   }
 
   async function handleGoogle() {
-    try { await loginWithGoogle(); navigate({ to: "/app" }); }
-    catch { setError("Erro ao conectar com Google."); }
+    const result = await loginWithGoogle();
+    if (result.error) { setError(result.error); }
   }
 
   return (

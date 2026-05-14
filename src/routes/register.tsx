@@ -56,13 +56,14 @@ function RegisterPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
-    try { await register(form); navigate({ to: "/app" }); }
-    catch { setError("Erro ao criar conta. Tente novamente."); }
+    const result = await register(form);
+    if (result.error) { setError(result.error); return; }
+    navigate({ to: "/app" });
   }
 
   async function handleGoogle() {
-    try { await loginWithGoogle(); navigate({ to: "/app" }); }
-    catch { setError("Erro ao conectar com Google."); }
+    const result = await loginWithGoogle();
+    if (result.error) { setError(result.error); }
   }
 
   return (
