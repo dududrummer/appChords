@@ -1,0 +1,162 @@
+import { useAuth } from "@/lib/auth-context";
+import { Link } from "@tanstack/react-router";
+import { NeubrutalistButton } from "@/components/ui/NeubrutalistButton";
+import {
+  LogOut,
+  User,
+  Settings,
+  BookOpen,
+  Music2,
+  Users,
+  ChevronDown,
+} from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+
+export function UserMenu() {
+  const { user, isAuthenticated, logout } = useAuth();
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  if (!isAuthenticated || !user) {
+    return (
+      <div className="flex items-center gap-3">
+        <Link to="/login">
+          <NeubrutalistButton variant="white" size="sm">
+            Entrar
+          </NeubrutalistButton>
+        </Link>
+        <Link to="/register" className="hidden sm:block">
+          <NeubrutalistButton size="sm">Cadastrar</NeubrutalistButton>
+        </Link>
+      </div>
+    );
+  }
+
+  const initials = user.name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
+  return (
+    <div className="relative" ref={menuRef}>
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-2 px-3 py-2 border-2 border-black bg-white hover:bg-neo-yellow transition-colors cursor-pointer"
+        aria-label="Menu do usuário"
+        id="user-menu-button"
+      >
+        {user.avatarUrl ? (
+          <img
+            src={user.avatarUrl}
+            alt={user.name}
+            className="w-8 h-8 rounded-full border-2 border-black object-cover"
+          />
+        ) : (
+          <div className="w-8 h-8 rounded-full border-2 border-black bg-neo-orange text-white flex items-center justify-center font-display text-xs">
+            {initials}
+          </div>
+        )}
+        <span className="hidden md:block font-heading text-sm tracking-wider uppercase max-w-[120px] truncate">
+          {user.artisticName || user.name}
+        </span>
+        <ChevronDown
+          className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+
+      {open && (
+        <div className="absolute right-0 top-full mt-2 w-64 bg-white border-2 border-black shadow-[4px_4px_0px_black] z-50 animate-fade-in-up">
+          {/* User info header */}
+          <div className="px-4 py-3 border-b-2 border-black bg-neo-bg">
+            <p className="font-display text-sm truncate">{user.name}</p>
+            {user.artisticName && (
+              <p className="font-accent text-xs text-black/50 truncate">
+                "{user.artisticName}"
+              </p>
+            )}
+            <p className="text-xs text-black/40 truncate mt-0.5">
+              {user.email}
+            </p>
+          </div>
+
+          {/* Menu items */}
+          <nav className="py-1">
+            <MenuLink
+              icon={<User className="h-4 w-4" />}
+              label="Meu Perfil"
+              onClick={() => setOpen(false)}
+            />
+            <MenuLink
+              icon={<Music2 className="h-4 w-4" />}
+              label="Minhas Sequências"
+              onClick={() => setOpen(false)}
+            />
+            <MenuLink
+              icon={<BookOpen className="h-4 w-4" />}
+              label="Planos de Estudo"
+              onClick={() => setOpen(false)}
+            />
+            <MenuLink
+              icon={<Users className="h-4 w-4" />}
+              label="Comunidade"
+              onClick={() => setOpen(false)}
+            />
+            <MenuLink
+              icon={<Settings className="h-4 w-4" />}
+              label="Configurações"
+              onClick={() => setOpen(false)}
+            />
+          </nav>
+
+          {/* Logout */}
+          <div className="border-t-2 border-black py-1">
+            <button
+              onClick={() => {
+                logout();
+                setOpen(false);
+              }}
+              className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+            >
+              <LogOut className="h-4 w-4" />
+              Sair
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function MenuLink({
+  icon,
+  label,
+  onClick,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-bold hover:bg-neo-yellow/50 transition-colors cursor-pointer"
+    >
+      {icon}
+      <span className="font-heading text-sm tracking-wider uppercase">
+        {label}
+      </span>
+    </button>
+  );
+}

@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { NeubrutalistButton } from "@/components/ui/NeubrutalistButton";
 import { NeubrutalistCard } from "@/components/ui/NeubrutalistCard";
+import { UserMenu } from "@/components/UserMenu";
 import {
   Guitar,
   Music2,
@@ -76,11 +77,7 @@ function LandingPage() {
               Músicos
             </a>
           </div>
-          <Link href="/app">
-            <NeubrutalistButton size="sm">
-              Entrar no App
-            </NeubrutalistButton>
-          </Link>
+          <UserMenu />
         </div>
       </nav>
 
