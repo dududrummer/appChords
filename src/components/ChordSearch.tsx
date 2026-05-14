@@ -6,12 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { parseChord, INSTRUMENT_PRESETS } from "@/lib/music-theory";
 import { findVoicings, Voicing } from "@/lib/chord-finder";
-import cavaquinhoDictRaw from '@/config/cavaquinho-dictionary.json';
-
-type DictType = Record<string, { chordName: string, frets: number[] }[]>;
-const DICTIONARIES: Record<string, DictType> = {
-  cavaquinho: cavaquinhoDictRaw as DictType,
-};
+import { searchVoicings } from "@/lib/voicing-search";
 
 interface Marker { string: number; fret: number; label?: string; color?: string }
 interface NutIndicator { string: number; type: "none" | "open" | "muted" }
@@ -180,61 +175,9 @@ export function ChordSearch({
 
     setParsedName(`${parsed.displayName} — ${parsed.qualityName}`);
     const tuning = getActiveTuning();
-    const isCavaquinho = INSTRUMENT_PRESETS[instrument]?.strings <= 4;
 
-    const baseResults = findVoicings(parsed.noteIndices, tuning, {
-      allowMuted: !isCavaquinho,
-      maxFret: 12,
-      maxResults: isCavaquinho ? 48 : 24,
-      maxInternalResults: isCavaquinho ? 150 : 200,
-      allowOmissions: isCavaquinho,
-      rootNoteIndex: parsed.noteIndices[0],
-      bassNoteIndex: isCavaquinho
-        ? parsed.bassNoteIndex
-        : (parsed.bassNoteIndex ?? parsed.noteIndices[0]),
-      minBarreStrings: isCavaquinho ? 3 : 4,
-    });
-
-    const activeDict = DICTIONARIES[instrument];
-    const searchName = value.trim();
-    const normalizedName = parsed.displayName;
-
-    let finalResults = baseResults;
-
-    // Try both exact name and parsed displayName for alias support
-    const dictEntries = activeDict?.[searchName] ?? activeDict?.[normalizedName];
-
-    if (dictEntries) {
-      // Dictionary voicings ONLY — no mixing with algorithmic results
-      finalResults = dictEntries.map(c => {
-        const pressed = c.frets.filter(f => f > 0);
-        const startingFret = pressed.length > 0 ? Math.min(...pressed) : 1;
-        return {
-          frets: c.frets,
-          startingFret,
-          barres: [],
-          mutedStrings: c.frets.map((f, i) => f === -1 ? i : -1).filter(i => i !== -1),
-          omitted: [],
-          fingerCount: pressed.length
-        };
-      });
-    } else {
-      // Fallback: algorithmic results grouped by region (for custom chords)
-      const getRegion = (sf: number) => {
-        if (sf <= 3) return 1;
-        if (sf <= 6) return 2;
-        if (sf <= 9) return 3;
-        return 4;
-      };
-      const regionMap: Record<number, Voicing[]> = { 1: [], 2: [], 3: [], 4: [] };
-      baseResults.forEach(v => {
-        const reg = getRegion(v.startingFret);
-        if (regionMap[reg] && regionMap[reg].length < 4) {
-          regionMap[reg].push(v);
-        }
-      });
-      finalResults = [...regionMap[1], ...regionMap[2], ...regionMap[3], ...regionMap[4]];
-    }
+    // Use shared searchVoicings — same logic as Dicionário de Acordes
+    const finalResults = searchVoicings(value.trim(), { instrument, tuning });
 
     if (finalResults.length === 0) {
       setError("Nenhuma posição encontrada. Verifique a afinação das cordas.");
