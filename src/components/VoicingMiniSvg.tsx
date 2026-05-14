@@ -12,11 +12,11 @@ interface Props {
 export function VoicingMiniSvg({
   voicing, stringCount,
   markerColor = '#000', primaryColor = '#000',
-  width = 64, height = 80,
+  width = 64, height = 110,
 }: Props) {
   const ml = 9, mr = 9, mt = 14, mb = 5;
   const iW = width - ml - mr, iH = height - mt - mb;
-  const FRETS = 5, fretH = iH / FRETS;
+  const FRETS = 8, fretH = iH / FRETS;
   const strSp = stringCount > 1 ? iW / (stringCount - 1) : iW;
   const sx = (s: number) => ml + s * strSp;
   const sf = voicing.startingFret;

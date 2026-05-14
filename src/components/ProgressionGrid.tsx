@@ -63,7 +63,7 @@ function VoicingPicker({
             markerColor={markerColor}
             primaryColor={primaryColor}
             width={58}
-            height={72}
+            height={104}
           />
           <div className="text-[7px] text-center opacity-50 pb-0.5">
             {current.frets.map(f => f === -1 ? 'X' : f).join(' ')}
@@ -100,7 +100,7 @@ function VoicingPicker({
                     markerColor={markerColor}
                     primaryColor={primaryColor}
                     width={64}
-                    height={80}
+                    height={110}
                   />
                   <div className="text-[8px] text-center text-muted-foreground pb-1 px-1">
                     {v.frets.map(f => f === -1 ? 'X' : f).join(' ')}
@@ -213,7 +213,7 @@ export function ProgressionGrid({
                             markerColor={markerColor}
                             primaryColor={primaryColor}
                             width={58}
-                            height={72}
+                            height={104}
                           />
                           <div className="text-[7px] text-center opacity-50 pb-0.5">
                             {voicing.frets.map(f => f === -1 ? 'X' : f).join(' ')}
