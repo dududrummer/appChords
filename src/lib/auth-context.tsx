@@ -45,6 +45,8 @@ export interface RegisterData {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
+const NO_SUPABASE_MSG = "Supabase não configurado. Funcionalidade de autenticação indisponível.";
+
 function mapSupabaseUser(user: User, profile?: Record<string, unknown> | null): UserProfile {
   return {
     id: user.id,
@@ -61,15 +63,18 @@ function mapSupabaseUser(user: User, profile?: Record<string, unknown> | null): 
 }
 
 async function fetchProfile(userId: string): Promise<Record<string, unknown> | null> {
+  if (!supabase) return null;
   const { data } = await supabase.from("profiles").select("*").eq("id", userId).single();
   return data;
 }
 
 async function upsertProfile(userId: string, profileData: Record<string, unknown>) {
+  if (!supabase) return;
   await supabase.from("profiles").upsert({ id: userId, ...profileData, updated_at: new Date().toISOString() });
 }
 
 async function uploadAvatar(userId: string, file: File): Promise<string | null> {
+  if (!supabase) return null;
   const ext = file.name.split(".").pop();
   const path = `avatars/${userId}.${ext}`;
   const { error } = await supabase.storage.from("avatars").upload(path, file, { upsert: true });
@@ -81,11 +86,12 @@ async function uploadAvatar(userId: string, file: File): Promise<string | null> 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<AuthState>({
     user: null, supabaseUser: null, session: null,
-    isAuthenticated: false, isLoading: true,
+    isAuthenticated: false, isLoading: !!supabase,
   });
 
-  // Listen for auth state changes
   useEffect(() => {
+    if (!supabase) return;
+
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session?.user) {
         const profile = await fetchProfile(session.user.id);
@@ -121,6 +127,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const login = useCallback(async (email: string, password: string) => {
+    if (!supabase) return { error: NO_SUPABASE_MSG };
     setState((s) => ({ ...s, isLoading: true }));
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
@@ -131,6 +138,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const loginWithGoogle = useCallback(async () => {
+    if (!supabase) return { error: NO_SUPABASE_MSG };
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: { redirectTo: `${window.location.origin}/app` },
@@ -140,14 +148,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const register = useCallback(async (data: RegisterData) => {
+    if (!supabase) return { error: NO_SUPABASE_MSG };
     setState((s) => ({ ...s, isLoading: true }));
 
     const { data: authData, error } = await supabase.auth.signUp({
       email: data.email,
       password: data.password,
-      options: {
-        data: { full_name: data.name },
-      },
+      options: { data: { full_name: data.name } },
     });
 
     if (error) {
@@ -178,11 +185,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const logout = useCallback(async () => {
+    if (!supabase) return;
     await supabase.auth.signOut();
   }, []);
 
   const updateProfile = useCallback(async (data: Partial<UserProfile>) => {
-    if (!state.supabaseUser) return;
+    if (!supabase || !state.supabaseUser) return;
     const profileData: Record<string, unknown> = {};
     if (data.name !== undefined) profileData.name = data.name;
     if (data.artisticName !== undefined) profileData.artistic_name = data.artisticName;
