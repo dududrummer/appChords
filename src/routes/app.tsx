@@ -1,6 +1,6 @@
-import { useState, useMemo, useRef, useCallback } from "react";
+import { useState, useMemo, useRef, useCallback, useEffect } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Moon, Sun, Download, Circle, Square, Triangle, Trash2, Columns, Rows, Guitar, Music2, BookOpen, ChevronRight, Menu, X, Dumbbell, GraduationCap, Users } from "lucide-react";
+import { Moon, Sun, Download, Circle, Square, Triangle, Trash2, Columns, Rows, Guitar, Music2, BookOpen, ChevronRight, Menu, X, Dumbbell, GraduationCap, Users, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,7 @@ import { ChordSearch } from "@/components/ChordSearch";
 import { ProgressionEditor } from "@/components/ProgressionEditor";
 import { ChordDictionaryPage } from "@/components/ChordDictionaryPage";
 import { ExercisesTab } from "@/components/ExercisesTab";
+import { ProfileTab } from "@/components/ProfileTab";
 import { WelcomeTour } from "@/components/WelcomeTour";
 import { UserMenu } from "@/components/UserMenu";
 import { INSTRUMENT_PRESETS } from "@/lib/music-theory";
@@ -39,13 +40,26 @@ interface Barre {
 
 export const Route = createFileRoute("/app")({
   component: ChordGenerator,
+  validateSearch: (search: Record<string, unknown>) => ({
+    tab: (search.tab as string) || "dictionary",
+  }),
 });
 
+type AppTab = 'diagram' | 'progression' | 'dictionary' | 'exercises' | 'plan' | 'community' | 'profile';
+
 function ChordGenerator() {
+  const { tab } = Route.useSearch();
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [activePage, setActivePage] = useState<'diagram' | 'progression' | 'dictionary' | 'exercises' | 'plan' | 'community'>('diagram');
+  const [activePage, setActivePage] = useState<AppTab>((tab as AppTab) || 'dictionary');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [instrument, setInstrument] = useState('cavaquinho');
+
+  // Sync URL tab param with activePage state
+  useEffect(() => {
+    if (tab && tab !== activePage) {
+      setActivePage(tab as AppTab);
+    }
+  }, [tab]);
   const [chordTitle, setChordTitle] = useState("C Major");
   const [startingFret, setStartingFret] = useState(1);
   const [fretCount, setFretCount] = useState(5);
@@ -510,6 +524,7 @@ function ChordGenerator() {
             { page: 'plan' as const,        icon: <GraduationCap className="h-4 w-4" />, label: 'Plano de Estudos',     sub: 'Cronograma e Metas' },
             { page: 'diagram' as const,     icon: <Guitar   className="h-4 w-4" />,      label: 'Criador de Diagramas', sub: 'SVG/PNG' },
             { page: 'community' as const,   icon: <Users className="h-4 w-4" />,         label: 'Comunidade',           sub: 'Troca de Experiências' },
+            { page: 'profile' as const,     icon: <User className="h-4 w-4" />,          label: 'Meu Perfil',           sub: 'Dados e Configurações' },
           ].map(({ page, icon, label, sub }) => (
             <button
               key={page}
@@ -546,13 +561,15 @@ function ChordGenerator() {
             <Menu className="h-5 w-5" />
           </button>
           <h1 className="text-lg font-bold flex-1">
-            {activePage === 'diagram' ? 'Criador de Diagramas' : activePage === 'progression' ? 'Estudo de Sequências' : activePage === 'exercises' ? 'Exercícios' : activePage === 'plan' ? 'Plano de Estudos' : activePage === 'community' ? 'Comunidade' : 'Dicionário de Acordes'}
+            {activePage === 'diagram' ? 'Criador de Diagramas' : activePage === 'progression' ? 'Estudo de Sequências' : activePage === 'exercises' ? 'Exercícios' : activePage === 'plan' ? 'Plano de Estudos' : activePage === 'community' ? 'Comunidade' : activePage === 'profile' ? 'Meu Perfil' : 'Dicionário de Acordes'}
           </h1>
           <UserMenu />
         </header>
 
         <main className="flex-1 overflow-y-auto p-6 space-y-8">
-          {activePage === 'community' ? (
+          {activePage === 'profile' ? (
+            <ProfileTab />
+          ) : activePage === 'community' ? (
             <div className="flex flex-col items-center justify-center h-64 border-2 border-dashed rounded-xl opacity-60">
               <Users className="h-12 w-12 mb-4" />
               <h2 className="text-xl font-bold">Comunidade de Músicos</h2>

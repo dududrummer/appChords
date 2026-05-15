@@ -1,19 +1,26 @@
 import { useAuth } from "@/lib/auth-context";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { NeubrutalistButton } from "@/components/ui/NeubrutalistButton";
 import {
   LogOut,
   User,
-  Settings,
-  BookOpen,
   Music2,
+  BookOpen,
   Users,
   ChevronDown,
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 
+const MENU_ITEMS = [
+  { icon: <User className="h-4 w-4" />, label: "Meu Perfil", tab: "profile" },
+  { icon: <Music2 className="h-4 w-4" />, label: "Minhas Sequências", tab: "progression" },
+  { icon: <BookOpen className="h-4 w-4" />, label: "Planos de Estudo", tab: "plan" },
+  { icon: <Users className="h-4 w-4" />, label: "Comunidade", tab: "community" },
+];
+
 export function UserMenu() {
   const { user, isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -48,6 +55,11 @@ export function UserMenu() {
     .join("")
     .slice(0, 2)
     .toUpperCase();
+
+  function handleNavigate(tab: string) {
+    setOpen(false);
+    navigate({ to: "/app", search: { tab } });
+  }
 
   return (
     <div className="relative" ref={menuRef}>
@@ -93,31 +105,18 @@ export function UserMenu() {
 
           {/* Menu items */}
           <nav className="py-1">
-            <MenuLink
-              icon={<User className="h-4 w-4" />}
-              label="Meu Perfil"
-              onClick={() => setOpen(false)}
-            />
-            <MenuLink
-              icon={<Music2 className="h-4 w-4" />}
-              label="Minhas Sequências"
-              onClick={() => setOpen(false)}
-            />
-            <MenuLink
-              icon={<BookOpen className="h-4 w-4" />}
-              label="Planos de Estudo"
-              onClick={() => setOpen(false)}
-            />
-            <MenuLink
-              icon={<Users className="h-4 w-4" />}
-              label="Comunidade"
-              onClick={() => setOpen(false)}
-            />
-            <MenuLink
-              icon={<Settings className="h-4 w-4" />}
-              label="Configurações"
-              onClick={() => setOpen(false)}
-            />
+            {MENU_ITEMS.map((item) => (
+              <button
+                key={item.tab}
+                onClick={() => handleNavigate(item.tab)}
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-bold hover:bg-neo-yellow/50 transition-colors cursor-pointer"
+              >
+                {item.icon}
+                <span className="font-heading text-sm tracking-wider uppercase">
+                  {item.label}
+                </span>
+              </button>
+            ))}
           </nav>
 
           {/* Logout */}
@@ -136,27 +135,5 @@ export function UserMenu() {
         </div>
       )}
     </div>
-  );
-}
-
-function MenuLink({
-  icon,
-  label,
-  onClick,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-bold hover:bg-neo-yellow/50 transition-colors cursor-pointer"
-    >
-      {icon}
-      <span className="font-heading text-sm tracking-wider uppercase">
-        {label}
-      </span>
-    </button>
   );
 }
