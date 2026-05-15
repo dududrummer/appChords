@@ -13,6 +13,8 @@ import { ChordSearch } from "@/components/ChordSearch";
 import { ProgressionEditor } from "@/components/ProgressionEditor";
 import { ChordDictionaryPage } from "@/components/ChordDictionaryPage";
 import { ExercisesTab } from "@/components/ExercisesTab";
+import { WelcomeTour } from "@/components/WelcomeTour";
+import { UserMenu } from "@/components/UserMenu";
 import { INSTRUMENT_PRESETS } from "@/lib/music-theory";
 
 interface Marker {
@@ -467,6 +469,8 @@ function ChordGenerator() {
 
   return (
     <div className={`min-h-screen flex ${isDarkMode ? "dark bg-background text-foreground" : "bg-slate-50"}`}>
+      {/* Welcome Tour — first-time users */}
+      <WelcomeTour onNavigate={(tab) => setActivePage(tab as typeof activePage)} />
 
       {/* ── Mobile overlay backdrop ─────────────────────────────────────── */}
       {sidebarOpen && (
@@ -544,6 +548,7 @@ function ChordGenerator() {
           <h1 className="text-lg font-bold flex-1">
             {activePage === 'diagram' ? 'Criador de Diagramas' : activePage === 'progression' ? 'Estudo de Sequências' : activePage === 'exercises' ? 'Exercícios' : activePage === 'plan' ? 'Plano de Estudos' : activePage === 'community' ? 'Comunidade' : 'Dicionário de Acordes'}
           </h1>
+          <UserMenu />
         </header>
 
         <main className="flex-1 overflow-y-auto p-6 space-y-8">
