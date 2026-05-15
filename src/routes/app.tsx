@@ -506,9 +506,9 @@ function ChordGenerator() {
           <Link to="/">
             <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
               <Guitar className="h-5 w-5 text-primary" />
-              <span className="font-bold text-base">AppChords</span>
+              <span className="font-bold text-base"><span className="text-orange-500">Samba</span>Tune</span>
             </div>
-            <p className="text-[10px] text-muted-foreground mt-0.5">Gerador de Acordes</p>
+            <p className="text-[10px] text-muted-foreground mt-0.5">Acordes & Progressões</p>
           </Link>
           {/* Close button — mobile only */}
           <button onClick={() => setSidebarOpen(false)} className="md:hidden p-1 rounded hover:bg-muted">

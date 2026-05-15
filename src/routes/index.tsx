@@ -56,8 +56,8 @@ function LandingPage() {
             <div className="bg-black p-2 border-2 border-black shadow-[3px_3px_0px_theme(colors.neo-orange)]">
               <Guitar className="h-6 w-6 text-neo-orange" />
             </div>
-            <span className="font-display text-3xl tracking-tight text-black">
-              appChords
+            <span className="font-display text-3xl tracking-tight">
+              <span className="text-neo-orange">Samba</span><span className="text-black">Tune</span>
             </span>
           </div>
           <div className="hidden md:flex gap-8 font-heading text-lg tracking-wide uppercase">
@@ -98,7 +98,7 @@ function LandingPage() {
               rotate="-3deg"
               className="bg-neo-yellow mb-6"
             >
-              🎸 Cavaquinho · Violão · Ukulele
+              🎸 Cavaquinho · Banjo
             </StickerBadge>
 
             <h1 className="font-display text-6xl md:text-7xl lg:text-8xl leading-[0.95] mb-6 tracking-tight">
@@ -158,7 +158,7 @@ function LandingPage() {
               <NeubrutalistCard className="relative p-0 overflow-hidden">
                 <div className="bg-black text-white px-4 py-2 flex justify-between items-center">
                   <span className="font-heading text-sm tracking-wider uppercase">
-                    appChords_hero.png
+                    SambaTune_hero.png
                   </span>
                   <div className="flex gap-1.5">
                     <div className="w-2.5 h-2.5 rounded-full bg-red-500 border border-white/30" />
@@ -205,8 +205,8 @@ function LandingPage() {
                 { icon: "📖", label: "3.000+ acordes", sub: "no dicionário" },
                 {
                   icon: "🎸",
-                  label: "3 instrumentos",
-                  sub: "cavaquinho · violão · ukulele",
+                  label: "2 instrumentos",
+                  sub: "cavaquinho · banjo",
                 },
                 {
                   icon: "🎨",
@@ -267,7 +267,7 @@ function LandingPage() {
                 Dicionário Inteligente
               </h3>
               <p className="font-medium leading-relaxed text-black/70">
-                Milhares de posições para Cavaquinho, Violão e Ukulele.
+                Milhares de posições para Cavaquinho e Banjo.
                 Encontre o shape perfeito para qualquer música.
               </p>
               <div className="mt-6 flex items-center gap-2 font-heading text-sm tracking-wider uppercase text-neo-orange">
@@ -336,7 +336,7 @@ function LandingPage() {
                 step: "01",
                 icon: <Guitar className="h-8 w-8" />,
                 title: "Escolha o instrumento",
-                desc: "Selecione entre Cavaquinho, Violão ou Ukulele. Cada um com afinação e posições específicas.",
+                desc: "Selecione entre Cavaquinho ou Banjo. Cada um com afinação e posições específicas.",
               },
               {
                 step: "02",
@@ -393,7 +393,7 @@ function LandingPage() {
                 className="relative transform -rotate-1"
               >
                 <p className="font-accent text-2xl mb-6 leading-snug">
-                  "O appChords mudou a forma como eu preparo meus materiais
+                  "O SambaTune mudou a forma como eu preparo meus materiais
                   de aula. A precisão dos diagramas é imbatível."
                 </p>
                 <div className="flex items-center gap-4">
@@ -447,7 +447,7 @@ function LandingPage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {[
               {
                 name: "Cavaquinho",
@@ -457,18 +457,11 @@ function LandingPage() {
                 desc: "A alma do samba e do pagode. Todas as posições tradicionais e variações modernas.",
               },
               {
-                name: "Violão",
-                emoji: "🎶",
-                tuning: "Mi · Lá · Ré · Sol · Si · Mi",
-                chords: "2.000+",
-                desc: "Do MPB ao sertanejo. Shapes para todos os estilos e níveis.",
-              },
-              {
-                name: "Ukulele",
-                emoji: "🌺",
-                tuning: "Sol · Dó · Mi · Lá",
-                chords: "800+",
-                desc: "Leve e versátil. Perfeito para quem está começando ou busca sonoridades diferentes.",
+                name: "Banjo",
+                emoji: "🪕",
+                tuning: "Sol · Ré · Sol · Si · Ré",
+                chords: "1.200+",
+                desc: "O som raiz do sertanejo e do forró. Posições completas para 5 cordas.",
               },
             ].map((inst, i) => (
               <NeubrutalistCard
@@ -502,7 +495,7 @@ function LandingPage() {
         {/* Background watermark */}
         <div className="absolute inset-0 flex items-center justify-center opacity-[0.04] pointer-events-none select-none">
           <span className="font-display text-[18rem] md:text-[24rem] text-black transform -rotate-12">
-            CHORDS
+            SAMBA
           </span>
         </div>
 
@@ -547,12 +540,12 @@ function LandingPage() {
               <Guitar className="h-5 w-5 text-white" />
             </div>
             <span className="font-display text-2xl tracking-tight">
-              appChords
+              <span className="text-neo-orange">Samba</span>Tune
             </span>
           </div>
 
           <p className="font-heading text-sm tracking-wider uppercase text-white/40">
-            © 2026 appChords · Todos os direitos reservados
+            © 2026 SambaTune · Todos os direitos reservados
           </p>
 
           <div className="flex gap-8 font-heading text-xs tracking-widest uppercase">

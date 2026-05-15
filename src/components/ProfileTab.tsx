@@ -16,11 +16,7 @@ import {
 
 const INSTRUMENTS = [
   "Cavaquinho",
-  "Violão",
-  "Ukulele",
-  "Guitarra",
-  "Baixo",
-  "Bandolim",
+  "Banjo",
   "Outro",
 ];
 

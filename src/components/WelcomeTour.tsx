@@ -19,7 +19,7 @@ const TOUR_STEPS = [
     icon: <BookOpen className="h-8 w-8" />,
     title: "Dicionário de Acordes",
     description:
-      "Busque qualquer acorde por nome e veja todas as posições no braço. Cavaquinho, Violão e Ukulele.",
+      "Busque qualquer acorde por nome e veja todas as posições no braço. Cavaquinho e Banjo.",
     color: "#FF6B35",
     tab: "dictionary" as const,
   },
@@ -65,7 +65,7 @@ const TOUR_STEPS = [
   },
 ];
 
-const WELCOME_KEY = "appchords_welcome_seen";
+const WELCOME_KEY = "sambatune_welcome_seen";
 
 interface WelcomeTourProps {
   onNavigate: (tab: string) => void;

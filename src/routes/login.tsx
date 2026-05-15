@@ -48,7 +48,7 @@ function LoginPage() {
           <div className="bg-black p-2 border-2 border-black shadow-[3px_3px_0px_theme(colors.neo-orange)]">
             <Guitar className="h-6 w-6 text-neo-orange" />
           </div>
-          <span className="font-display text-3xl tracking-tight">appChords</span>
+          <span className="font-display text-3xl tracking-tight"><span className="text-neo-orange">Samba</span><span className="text-black">Tune</span></span>
         </div>
 
         <NeubrutalistCard className="p-8">

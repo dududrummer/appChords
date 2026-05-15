@@ -9,7 +9,7 @@ if (supabaseUrl && supabaseAnonKey) {
   supabase = createClient(supabaseUrl, supabaseAnonKey);
 } else {
   console.warn(
-    "[appChords] Supabase env vars not found. Auth features will be disabled.",
+    "[SambaTune] Supabase env vars not found. Auth features will be disabled.",
   );
 }
 
