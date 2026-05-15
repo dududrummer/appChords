@@ -2,8 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { NeubrutalistButton } from "@/components/ui/NeubrutalistButton";
 import { NeubrutalistCard } from "@/components/ui/NeubrutalistCard";
 import { UserMenu } from "@/components/UserMenu";
+import { CavaquinhoIcon } from "@/components/icons/CavaquinhoIcon";
 import {
-  Guitar,
   Music2,
   BookOpen,
   ChevronRight,
@@ -12,10 +12,10 @@ import {
   Star,
   Users,
   Download,
-  Headphones,
   ArrowRight,
   Sparkles,
-  Heart,
+  Dumbbell,
+  Gauge,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")(  {
@@ -54,7 +54,7 @@ function LandingPage() {
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-3">
             <div className="bg-black p-2 border-2 border-black shadow-[3px_3px_0px_theme(colors.neo-orange)]">
-              <Guitar className="h-6 w-6 text-neo-orange" />
+              <CavaquinhoIcon className="h-6 w-6" color="#FF6B35" />
             </div>
             <span className="font-display text-3xl tracking-tight">
               <span className="text-neo-orange">Samba</span><span className="text-black">Tune</span>
@@ -242,8 +242,9 @@ function LandingPage() {
       </section>
 
       {/* ━━━━━━━━━━ FEATURES GRID ━━━━━━━━━━ */}
-      <section id="features" className="py-24 px-6 bg-white border-b-3 border-black">
-        <div className="max-w-7xl mx-auto">
+      <section id="features" className="py-24 px-6 bg-white border-b-3 border-black relative">
+        <div className="absolute inset-0 dot-grid pointer-events-none z-0" />
+        <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-16">
             <StickerBadge rotate="2deg" className="bg-neo-yellow mb-4">
               ✨ Tudo em um só app
@@ -253,7 +254,7 @@ function LandingPage() {
               <span className="text-neo-orange">Profissionais</span>
             </h2>
             <p className="font-accent text-xl text-black/60">
-              Tudo o que você precisa para levar seu som ao próximo nível.
+              Muito mais que um dicionário de acordes.
             </p>
           </div>
 
@@ -264,11 +265,11 @@ function LandingPage() {
                 <BookOpen className="text-neo-orange h-8 w-8" />
               </div>
               <h3 className="font-display text-2xl mb-3 tracking-tight">
-                Dicionário Inteligente
+                Dicionário Infinito
               </h3>
               <p className="font-medium leading-relaxed text-black/70">
-                Milhares de posições para Cavaquinho e Banjo.
-                Encontre o shape perfeito para qualquer música.
+                Milhares de shapes e voicings para cada acorde.
+                Escalas aplicadas por acorde, posições abertas e fechadas.
               </p>
               <div className="mt-6 flex items-center gap-2 font-heading text-sm tracking-wider uppercase text-neo-orange">
                 Explorar <ArrowRight className="h-4 w-4" />
@@ -287,11 +288,11 @@ function LandingPage() {
                 <Music2 className="text-neo-orange h-8 w-8" />
               </div>
               <h3 className="font-display text-2xl mb-3 tracking-tight">
-                Editor de Progressões
+                Sequências Harmônicas
               </h3>
               <p className="font-medium leading-relaxed text-white/85">
-                Crie sequências harmônicas complexas em segundos.
-                Visualize o braço do instrumento enquanto compõe.
+                Monte progressões, escolha o melhor encadeamento
+                de voicings e toque junto com batucadas em vários andamentos.
               </p>
               <div className="mt-6 flex items-center gap-2 font-heading text-sm tracking-wider uppercase text-white/80">
                 Experimentar <ArrowRight className="h-4 w-4" />
@@ -301,17 +302,17 @@ function LandingPage() {
             {/* Feature 3 */}
             <NeubrutalistCard className="hover:bg-neo-yellow transition-all duration-300 group cursor-pointer">
               <div className="bg-black w-16 h-16 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:-rotate-3 transition-transform">
-                <Download className="text-neo-orange h-8 w-8" />
+                <Dumbbell className="text-neo-orange h-8 w-8" />
               </div>
               <h3 className="font-display text-2xl mb-3 tracking-tight">
-                Exportação em Alta
+                Treino Completo
               </h3>
               <p className="font-medium leading-relaxed text-black/70">
-                Gere diagramas em SVG ou PNG de alta qualidade para seus
-                métodos, livros ou redes sociais.
+                Exercícios técnicos, metrônomo integrado, shapes de escalas
+                e prática direcionada para evoluir de verdade.
               </p>
               <div className="mt-6 flex items-center gap-2 font-heading text-sm tracking-wider uppercase text-neo-orange">
-                Ver exemplos <ArrowRight className="h-4 w-4" />
+                Treinar agora <ArrowRight className="h-4 w-4" />
               </div>
             </NeubrutalistCard>
           </div>
@@ -319,8 +320,9 @@ function LandingPage() {
       </section>
 
       {/* ━━━━━━━━━━ HOW IT WORKS ━━━━━━━━━━ */}
-      <section id="demo" className="py-24 px-6">
-        <div className="max-w-7xl mx-auto">
+      <section id="demo" className="py-24 px-6 relative">
+        <div className="absolute inset-0 dot-grid pointer-events-none z-0" />
+        <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-16">
             <h2 className="font-display text-5xl md:text-7xl tracking-tight mb-4">
               Como <span className="text-neo-orange">funciona?</span>
@@ -334,21 +336,21 @@ function LandingPage() {
             {[
               {
                 step: "01",
-                icon: <Guitar className="h-8 w-8" />,
+                icon: <CavaquinhoIcon className="h-8 w-8" color="white" />,
                 title: "Escolha o instrumento",
-                desc: "Selecione entre Cavaquinho ou Banjo. Cada um com afinação e posições específicas.",
+                desc: "Cavaquinho ou Banjo — mesma afinação DGBD. Shapes, escalas e voicings dedicados.",
               },
               {
                 step: "02",
                 icon: <Sparkles className="h-8 w-8" />,
-                title: "Busque o acorde",
-                desc: "Digite o nome do acorde e veja todas as posições disponíveis com diagramas interativos.",
+                title: "Explore o dicionário",
+                desc: "Busque qualquer acorde e veja todos os shapes possíveis. Aplique escalas por acorde.",
               },
               {
                 step: "03",
-                icon: <Zap className="h-8 w-8" />,
-                title: "Monte sua progressão",
-                desc: "Arraste os acordes para criar sequências harmônicas. Exporte em SVG ou PNG.",
+                icon: <Gauge className="h-8 w-8" />,
+                title: "Treine com ritmo",
+                desc: "Monte sequências harmônicas, toque junto com batucadas e metrônomo em vários andamentos.",
               },
             ].map((item, i) => (
               <div key={i} className="relative">
@@ -452,16 +454,16 @@ function LandingPage() {
               {
                 name: "Cavaquinho",
                 emoji: "🎸",
-                tuning: "Ré · Si · Sol · Ré",
+                tuning: "Ré · Sol · Si · Ré (DGBD)",
                 chords: "1.500+",
-                desc: "A alma do samba e do pagode. Todas as posições tradicionais e variações modernas.",
+                desc: "A alma do samba e do pagode. Shapes, escalas e voicings tradicionais e modernos.",
               },
               {
                 name: "Banjo",
                 emoji: "🪕",
-                tuning: "Sol · Ré · Sol · Si · Ré",
+                tuning: "Ré · Sol · Si · Ré (DGBD)",
                 chords: "1.200+",
-                desc: "O som raiz do sertanejo e do forró. Posições completas para 5 cordas.",
+                desc: "O som raiz do sertanejo e do forró. Mesma afinação do cavaquinho, shapes dedicados.",
               },
             ].map((inst, i) => (
               <NeubrutalistCard
@@ -537,7 +539,7 @@ function LandingPage() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex items-center gap-3">
             <div className="bg-neo-orange p-1.5">
-              <Guitar className="h-5 w-5 text-white" />
+              <CavaquinhoIcon className="h-5 w-5" color="white" />
             </div>
             <span className="font-display text-2xl tracking-tight">
               <span className="text-neo-orange">Samba</span>Tune

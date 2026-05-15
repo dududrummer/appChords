@@ -5,7 +5,6 @@ import {
   Dumbbell,
   Music2,
   GraduationCap,
-  Guitar,
   Users,
   ChevronRight,
   ChevronLeft,
@@ -13,6 +12,7 @@ import {
   Sparkles,
   PartyPopper,
 } from "lucide-react";
+import { CavaquinhoIcon } from "@/components/icons/CavaquinhoIcon";
 
 const TOUR_STEPS = [
   {
@@ -48,7 +48,7 @@ const TOUR_STEPS = [
     tab: "plan" as const,
   },
   {
-    icon: <Guitar className="h-8 w-8" />,
+    icon: <CavaquinhoIcon className="h-8 w-8" />,
     title: "Criador de Diagramas",
     description:
       "Crie diagramas de acordes personalizados e exporte em SVG ou PNG de alta qualidade.",

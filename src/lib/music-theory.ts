@@ -283,4 +283,5 @@ export function parseChord(input: string): ParsedChord | null {
 
 export const INSTRUMENT_PRESETS: Record<string, { label: string; tuning: string[]; strings: number }> = {
   cavaquinho: { label: 'Cavaquinho (4)', tuning: ['D', 'G', 'B', 'D'], strings: 4 },
+  banjo:      { label: 'Banjo (4)',      tuning: ['D', 'G', 'B', 'D'], strings: 4 },
 };

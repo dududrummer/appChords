@@ -2,7 +2,8 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { NeubrutalistButton } from "@/components/ui/NeubrutalistButton";
 import { NeubrutalistCard } from "@/components/ui/NeubrutalistCard";
 import { useAuth } from "@/lib/auth-context";
-import { Guitar, Mail, Lock, Eye, EyeOff, ArrowLeft, Loader2 } from "lucide-react";
+import { CavaquinhoIcon } from "@/components/icons/CavaquinhoIcon";
+import { Mail, Lock, Eye, EyeOff, ArrowLeft, Loader2 } from "lucide-react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/login")({
@@ -46,7 +47,7 @@ function LoginPage() {
       <div className="relative z-10 w-full max-w-md">
         <div className="flex items-center justify-center gap-3 mb-8">
           <div className="bg-black p-2 border-2 border-black shadow-[3px_3px_0px_theme(colors.neo-orange)]">
-            <Guitar className="h-6 w-6 text-neo-orange" />
+            <CavaquinhoIcon className="h-6 w-6" color="#FF6B35" />
           </div>
           <span className="font-display text-3xl tracking-tight"><span className="text-neo-orange">Samba</span><span className="text-black">Tune</span></span>
         </div>

@@ -1,6 +1,7 @@
 import { useState, useMemo, useRef, useCallback, useEffect } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Moon, Sun, Download, Circle, Square, Triangle, Trash2, Columns, Rows, Guitar, Music2, BookOpen, ChevronRight, Menu, X, Dumbbell, GraduationCap, Users, User } from "lucide-react";
+import { Moon, Sun, Download, Circle, Square, Triangle, Trash2, Columns, Rows, Music2, BookOpen, ChevronRight, Menu, X, Dumbbell, GraduationCap, Users, User } from "lucide-react";
+import { CavaquinhoIcon } from "@/components/icons/CavaquinhoIcon";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -505,7 +506,7 @@ function ChordGenerator() {
         <div className="px-5 py-4 border-b flex items-center justify-between">
           <Link to="/">
             <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
-              <Guitar className="h-5 w-5 text-primary" />
+              <CavaquinhoIcon className="h-5 w-5" color="currentColor" />
               <span className="font-bold text-base"><span className="text-orange-500">Samba</span>Tune</span>
             </div>
             <p className="text-[10px] text-muted-foreground mt-0.5">Acordes & Progressões</p>
@@ -522,7 +523,7 @@ function ChordGenerator() {
             { page: 'exercises' as const,   icon: <Dumbbell className="h-4 w-4" />,      label: 'Exercícios Técnicos',  sub: 'Treino Prático' },
             { page: 'progression' as const, icon: <Music2   className="h-4 w-4" />,      label: 'Estudo de Sequências', sub: 'Sequências e Acordes' },
             { page: 'plan' as const,        icon: <GraduationCap className="h-4 w-4" />, label: 'Plano de Estudos',     sub: 'Cronograma e Metas' },
-            { page: 'diagram' as const,     icon: <Guitar   className="h-4 w-4" />,      label: 'Criador de Diagramas', sub: 'SVG/PNG' },
+            { page: 'diagram' as const,     icon: <CavaquinhoIcon className="h-4 w-4" />,  label: 'Criador de Diagramas', sub: 'SVG/PNG' },
             { page: 'community' as const,   icon: <Users className="h-4 w-4" />,         label: 'Comunidade',           sub: 'Troca de Experiências' },
             { page: 'profile' as const,     icon: <User className="h-4 w-4" />,          label: 'Meu Perfil',           sub: 'Dados e Configurações' },
           ].map(({ page, icon, label, sub }) => (

@@ -1,0 +1,470 @@
+[
+    {
+        "chordName": "Cb°",
+        "frets": [
+            6,
+            7,
+            6,
+            6
+        ]
+    },
+    {
+        "chordName": "Cb°",
+        "frets": [
+            9,
+            10,
+            9,
+            9
+        ]
+    },
+    {
+        "chordName": "Cb°",
+        "frets": [
+            12,
+            13,
+            12,
+            12
+        ]
+    },
+    {
+        "chordName": "Cb°",
+        "frets": [
+            15,
+            16,
+            15,
+            15
+        ]
+    },
+    {
+        "chordName": "C#b°",
+        "frets": [
+            7,
+            8,
+            7,
+            7
+        ]
+    },
+    {
+        "chordName": "C#b°",
+        "frets": [
+            10,
+            11,
+            10,
+            10
+        ]
+    },
+    {
+        "chordName": "C#b°",
+        "frets": [
+            13,
+            14,
+            13,
+            13
+        ]
+    },
+    {
+        "chordName": "C#b°",
+        "frets": [
+            16,
+            17,
+            16,
+            16
+        ]
+    },
+    {
+        "chordName": "Db°",
+        "frets": [
+            8,
+            9,
+            8,
+            8
+        ]
+    },
+    {
+        "chordName": "Db°",
+        "frets": [
+            11,
+            12,
+            11,
+            11
+        ]
+    },
+    {
+        "chordName": "Db°",
+        "frets": [
+            14,
+            15,
+            14,
+            14
+        ]
+    },
+    {
+        "chordName": "Db°",
+        "frets": [
+            17,
+            18,
+            17,
+            17
+        ]
+    },
+    {
+        "chordName": "D#b°",
+        "frets": [
+            9,
+            10,
+            9,
+            9
+        ]
+    },
+    {
+        "chordName": "D#b°",
+        "frets": [
+            12,
+            13,
+            12,
+            12
+        ]
+    },
+    {
+        "chordName": "D#b°",
+        "frets": [
+            15,
+            16,
+            15,
+            15
+        ]
+    },
+    {
+        "chordName": "Eb°",
+        "frets": [
+            4,
+            5,
+            4,
+            4
+        ]
+    },
+    {
+        "chordName": "Eb°",
+        "frets": [
+            7,
+            8,
+            7,
+            7
+        ]
+    },
+    {
+        "chordName": "Eb°",
+        "frets": [
+            10,
+            11,
+            10,
+            10
+        ]
+    },
+    {
+        "chordName": "Eb°",
+        "frets": [
+            13,
+            14,
+            13,
+            13
+        ]
+    },
+    {
+        "chordName": "Eb°",
+        "frets": [
+            16,
+            17,
+            16,
+            16
+        ]
+    },
+    {
+        "chordName": "Fb°",
+        "frets": [
+            5,
+            6,
+            5,
+            5
+        ]
+    },
+    {
+        "chordName": "Fb°",
+        "frets": [
+            8,
+            9,
+            8,
+            8
+        ]
+    },
+    {
+        "chordName": "Fb°",
+        "frets": [
+            11,
+            12,
+            11,
+            11
+        ]
+    },
+    {
+        "chordName": "Fb°",
+        "frets": [
+            14,
+            15,
+            14,
+            14
+        ]
+    },
+    {
+        "chordName": "Fb°",
+        "frets": [
+            17,
+            18,
+            17,
+            17
+        ]
+    },
+    {
+        "chordName": "F#b°",
+        "frets": [
+            6,
+            7,
+            6,
+            6
+        ]
+    },
+    {
+        "chordName": "F#b°",
+        "frets": [
+            9,
+            10,
+            9,
+            9
+        ]
+    },
+    {
+        "chordName": "F#b°",
+        "frets": [
+            12,
+            13,
+            12,
+            12
+        ]
+    },
+    {
+        "chordName": "F#b°",
+        "frets": [
+            15,
+            16,
+            15,
+            15
+        ]
+    },
+    {
+        "chordName": "Gb°",
+        "frets": [
+            7,
+            8,
+            7,
+            7
+        ]
+    },
+    {
+        "chordName": "Gb°",
+        "frets": [
+            10,
+            11,
+            10,
+            10
+        ]
+    },
+    {
+        "chordName": "Gb°",
+        "frets": [
+            13,
+            14,
+            13,
+            13
+        ]
+    },
+    {
+        "chordName": "Gb°",
+        "frets": [
+            16,
+            17,
+            16,
+            16
+        ]
+    },
+    {
+        "chordName": "G#b°",
+        "frets": [
+            8,
+            9,
+            8,
+            8
+        ]
+    },
+    {
+        "chordName": "G#b°",
+        "frets": [
+            11,
+            12,
+            11,
+            11
+        ]
+    },
+    {
+        "chordName": "G#b°",
+        "frets": [
+            14,
+            15,
+            14,
+            14
+        ]
+    },
+    {
+        "chordName": "G#b°",
+        "frets": [
+            17,
+            18,
+            17,
+            17
+        ]
+    },
+    {
+        "chordName": "Ab°",
+        "frets": [
+            3,
+            4,
+            3,
+            3
+        ]
+    },
+    {
+        "chordName": "Ab°",
+        "frets": [
+            6,
+            7,
+            6,
+            6
+        ]
+    },
+    {
+        "chordName": "Ab°",
+        "frets": [
+            9,
+            10,
+            9,
+            9
+        ]
+    },
+    {
+        "chordName": "Ab°",
+        "frets": [
+            12,
+            13,
+            12,
+            12
+        ]
+    },
+    {
+        "chordName": "Ab°",
+        "frets": [
+            15,
+            16,
+            15,
+            15
+        ]
+    },
+    {
+        "chordName": "A#b°",
+        "frets": [
+            4,
+            5,
+            4,
+            4
+        ]
+    },
+    {
+        "chordName": "A#b°",
+        "frets": [
+            7,
+            8,
+            7,
+            7
+        ]
+    },
+    {
+        "chordName": "A#b°",
+        "frets": [
+            10,
+            11,
+            10,
+            10
+        ]
+    },
+    {
+        "chordName": "A#b°",
+        "frets": [
+            13,
+            14,
+            13,
+            13
+        ]
+    },
+    {
+        "chordName": "A#b°",
+        "frets": [
+            16,
+            17,
+            16,
+            16
+        ]
+    },
+    {
+        "chordName": "Bb°",
+        "frets": [
+            5,
+            6,
+            5,
+            5
+        ]
+    },
+    {
+        "chordName": "Bb°",
+        "frets": [
+            8,
+            9,
+            8,
+            8
+        ]
+    },
+    {
+        "chordName": "Bb°",
+        "frets": [
+            11,
+            12,
+            11,
+            11
+        ]
+    },
+    {
+        "chordName": "Bb°",
+        "frets": [
+            14,
+            15,
+            14,
+            14
+        ]
+    },
+    {
+        "chordName": "Bb°",
+        "frets": [
+            17,
+            18,
+            17,
+            17
+        ]
+    }
+]
