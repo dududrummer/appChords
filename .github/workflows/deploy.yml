@@ -1,4 +1,4 @@
-name: Build e Deploy para Hostinger
+name: Deploy SambaTune para Hostinger
 
 on:
   push:
