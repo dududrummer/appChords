@@ -61,6 +61,12 @@ export function UserMenu() {
     navigate({ to: "/app", search: { tab } });
   }
 
+  async function handleLogout() {
+    setOpen(false);
+    await logout();
+    navigate({ to: "/" });
+  }
+
   return (
     <div className="relative" ref={menuRef}>
       <button
@@ -122,10 +128,7 @@ export function UserMenu() {
           {/* Logout */}
           <div className="border-t-2 border-black py-1">
             <button
-              onClick={() => {
-                logout();
-                setOpen(false);
-              }}
+              onClick={handleLogout}
               className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
             >
               <LogOut className="h-4 w-4" />

@@ -247,8 +247,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const logout = useCallback(async () => {
-    if (!supabase) return;
-    await supabase.auth.signOut();
+    if (supabase) {
+      await supabase.auth.signOut();
+    }
+    setState({
+      user: null,
+      supabaseUser: null,
+      session: null,
+      isAuthenticated: false,
+      isLoading: false,
+    });
   }, []);
 
   const updateProfile = useCallback(async (data: Partial<UserProfile>) => {
