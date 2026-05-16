@@ -483,7 +483,7 @@ function ChordGenerator() {
   const downloadFilename = (chordTitle || "chord").toLowerCase().replace(/[^a-z0-9]/g, "-");
 
   return (
-    <div className={`min-h-screen flex ${isDarkMode ? "dark bg-background text-foreground" : "bg-slate-50"}`}>
+    <div className={`min-h-screen flex ${isDarkMode ? "dark bg-background text-foreground" : "bg-neo-bg text-black"}`}>
       {/* Welcome Tour — first-time users */}
       <WelcomeTour onNavigate={(tab) => setActivePage(tab as typeof activePage)} />
 
@@ -498,18 +498,18 @@ function ChordGenerator() {
       {/* ── Sidebar ──────────────────────────────────────────────────────── */}
       <aside className={`
         fixed md:sticky top-0 left-0 h-screen z-40
-        w-56 shrink-0 border-r bg-card flex flex-col overflow-hidden
+        w-60 shrink-0 border-r-3 border-black bg-white flex flex-col overflow-hidden
         transition-transform duration-300 ease-in-out
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
         md:translate-x-0
       `}>
-        <div className="px-5 py-4 border-b flex items-center justify-between">
+        <div className="px-5 py-4 border-b-3 border-black bg-neo-bg flex items-center justify-between">
           <Link to="/">
             <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
               <CavaquinhoIcon className="h-5 w-5" color="currentColor" />
-              <span className="font-bold text-base"><span className="text-orange-500">Samba</span>Tune</span>
+              <span className="font-display text-xl tracking-tight"><span className="text-neo-orange">Samba</span>Tune</span>
             </div>
-            <p className="text-[10px] text-muted-foreground mt-0.5">Acordes & Progressões</p>
+            <p className="text-[10px] font-heading tracking-wider uppercase text-black/50 mt-0.5">Acordes · Sequências · Ritmo</p>
           </Link>
           {/* Close button — mobile only */}
           <button onClick={() => setSidebarOpen(false)} className="md:hidden p-1 rounded hover:bg-muted">
@@ -519,21 +519,21 @@ function ChordGenerator() {
 
         <nav className="flex-1 p-2 space-y-1">
           {[
-            { page: 'dictionary' as const,  icon: <BookOpen className="h-4 w-4" />,      label: 'Dicionário',           sub: 'Buscar Acordes' },
-            { page: 'exercises' as const,   icon: <Dumbbell className="h-4 w-4" />,      label: 'Exercícios Técnicos',  sub: 'Treino Prático' },
-            { page: 'progression' as const, icon: <Music2   className="h-4 w-4" />,      label: 'Estudo de Sequências', sub: 'Sequências e Acordes' },
-            { page: 'plan' as const,        icon: <GraduationCap className="h-4 w-4" />, label: 'Plano de Estudos',     sub: 'Cronograma e Metas' },
-            { page: 'diagram' as const,     icon: <CavaquinhoIcon className="h-4 w-4" />,  label: 'Criador de Diagramas', sub: 'SVG/PNG' },
-            { page: 'community' as const,   icon: <Users className="h-4 w-4" />,         label: 'Comunidade',           sub: 'Troca de Experiências' },
+            { page: 'dictionary' as const,  icon: <BookOpen className="h-4 w-4" />,      label: 'Dicionário Gigante',   sub: 'Shapes mais usados' },
+            { page: 'progression' as const, icon: <Music2   className="h-4 w-4" />,      label: 'Sequências',           sub: 'Samba e autorais' },
+            { page: 'diagram' as const,     icon: <CavaquinhoIcon className="h-4 w-4" />,  label: 'Diagramas',           sub: 'Acordes próprios' },
+            { page: 'exercises' as const,   icon: <Dumbbell className="h-4 w-4" />,      label: 'Escalas e Arpejos',    sub: 'Treino por região' },
+            { page: 'plan' as const,        icon: <GraduationCap className="h-4 w-4" />, label: 'Plano de Estudos',     sub: 'Rotina e metas' },
+            { page: 'community' as const,   icon: <Users className="h-4 w-4" />,         label: 'Comunidade',           sub: 'Dicas e músicas' },
             { page: 'profile' as const,     icon: <User className="h-4 w-4" />,          label: 'Meu Perfil',           sub: 'Dados e Configurações' },
           ].map(({ page, icon, label, sub }) => (
             <button
               key={page}
               onClick={() => { setActivePage(page); setSidebarOpen(false); }}
-              className={`w-full text-left rounded-lg px-3 py-2.5 flex items-center gap-3 transition-all group ${
+              className={`w-full text-left border-2 border-transparent px-3 py-2.5 flex items-center gap-3 transition-all group ${
                 activePage === page
-                  ? 'bg-primary text-primary-foreground shadow-sm'
-                  : 'hover:bg-muted text-muted-foreground hover:text-foreground'
+                  ? 'bg-neo-orange text-white border-black shadow-[3px_3px_0px_black]'
+                  : 'bg-white hover:bg-neo-yellow text-black/65 hover:text-black hover:border-black'
               }`}
             >
               {icon}
@@ -546,7 +546,7 @@ function ChordGenerator() {
           ))}
         </nav>
 
-        <div className="p-3 border-t">
+        <div className="p-3 border-t-3 border-black bg-neo-bg">
           <Button variant="outline" size="sm" onClick={toggleDarkMode} className="w-full gap-2">
             {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             {isDarkMode ? 'Modo Claro' : 'Modo Escuro'}
@@ -556,13 +556,13 @@ function ChordGenerator() {
 
       {/* ── Main content ─────────────────────────────────────────────────── */}
       <div className="flex-1 flex flex-col min-w-0 md:ml-0">
-        <header className="border-b bg-card px-4 py-3 flex items-center gap-3 shadow-sm sticky top-0 z-10">
+        <header className="border-b-3 border-black bg-white px-4 py-3 flex items-center gap-3 shadow-[0_3px_0px_rgba(0,0,0,0.08)] sticky top-0 z-10">
           {/* Hamburger — mobile only */}
           <button onClick={() => setSidebarOpen(true)} className="md:hidden p-1.5 rounded hover:bg-muted">
             <Menu className="h-5 w-5" />
           </button>
-          <h1 className="text-lg font-bold flex-1">
-            {activePage === 'diagram' ? 'Criador de Diagramas' : activePage === 'progression' ? 'Estudo de Sequências' : activePage === 'exercises' ? 'Exercícios' : activePage === 'plan' ? 'Plano de Estudos' : activePage === 'community' ? 'Comunidade' : activePage === 'profile' ? 'Meu Perfil' : 'Dicionário de Acordes'}
+          <h1 className="font-display text-2xl tracking-tight flex-1">
+            {activePage === 'diagram' ? 'Criador de Diagramas' : activePage === 'progression' ? 'Sequências Harmônicas' : activePage === 'exercises' ? 'Escalas e Arpejos' : activePage === 'plan' ? 'Plano de Estudos' : activePage === 'community' ? 'Comunidade' : activePage === 'profile' ? 'Meu Perfil' : 'Dicionário Gigante'}
           </h1>
           <UserMenu />
         </header>
@@ -571,16 +571,55 @@ function ChordGenerator() {
           {activePage === 'profile' ? (
             <ProfileTab />
           ) : activePage === 'community' ? (
-            <div className="flex flex-col items-center justify-center h-64 border-2 border-dashed rounded-xl opacity-60">
-              <Users className="h-12 w-12 mb-4" />
-              <h2 className="text-xl font-bold">Comunidade de Músicos</h2>
-              <p>Em breve: compartilhe suas progressões e aprenda com outros usuários.</p>
+            <div className="relative overflow-hidden border-3 border-black bg-white p-8 shadow-[6px_6px_0px_black]">
+              <div className="absolute inset-0 dot-grid pointer-events-none opacity-40" />
+              <div className="relative z-10 max-w-4xl">
+                <div className="inline-flex bg-neo-orange text-white border-2 border-black px-4 py-1.5 font-heading text-xs tracking-wider uppercase mb-5">
+                  Comunidade SambaTune
+                </div>
+                <h2 className="font-display text-4xl md:text-5xl tracking-tight mb-4">
+                  Compartilhe sequências, dicas, exercícios e músicas.
+                </h2>
+                <p className="text-lg font-medium text-black/70 max-w-2xl mb-8">
+                  A área de comunidade será o ponto de troca entre membros:
+                  progressões para samba e pagode, caminhos de estudo, músicas
+                  para aplicar sequências e ideias para praticar com ritmo.
+                </p>
+                <div className="grid md:grid-cols-3 gap-4">
+                  {[
+                    "Sequências harmônicas",
+                    "Dicas e exercícios",
+                    "Músicas para aplicar",
+                  ].map((item) => (
+                    <div key={item} className="border-2 border-black bg-neo-bg p-4 font-bold shadow-[3px_3px_0px_black]">
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           ) : activePage === 'plan' ? (
-            <div className="flex flex-col items-center justify-center h-64 border-2 border-dashed rounded-xl opacity-60">
-              <GraduationCap className="h-12 w-12 mb-4" />
-              <h2 className="text-xl font-bold">Plano de Estudos Personalizado</h2>
-              <p>Em breve: organize sua rotina de estudos e metas musicais aqui.</p>
+            <div className="relative overflow-hidden border-3 border-black bg-white p-8 shadow-[6px_6px_0px_black]">
+              <div className="absolute inset-0 dot-grid pointer-events-none opacity-40" />
+              <div className="relative z-10 max-w-4xl">
+                <div className="inline-flex bg-neo-yellow border-2 border-black px-4 py-1.5 font-heading text-xs tracking-wider uppercase mb-5">
+                  Plano de Estudos
+                </div>
+                <h2 className="font-display text-4xl md:text-5xl tracking-tight mb-4">
+                  Organize acordes, arpejos, escalas e repertório.
+                </h2>
+                <p className="text-lg font-medium text-black/70 max-w-2xl mb-8">
+                  Em breve, você poderá montar uma rotina com sequências,
+                  exercícios técnicos, músicas de aplicação e metas de prática.
+                </p>
+                <div className="grid md:grid-cols-3 gap-4">
+                  {["Rotina semanal", "Metas por região", "Repertório aplicado"].map((item) => (
+                    <div key={item} className="border-2 border-black bg-neo-bg p-4 font-bold shadow-[3px_3px_0px_black]">
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           ) : activePage === 'progression' ? (
             <ProgressionEditor

@@ -74,7 +74,7 @@ function LandingPage() {
               href="#testimonials"
               className="hover:text-neo-orange transition-colors"
             >
-              Músicos
+              Comunidade
             </a>
           </div>
           <UserMenu />
@@ -110,13 +110,13 @@ function LandingPage() {
             </h1>
 
             <p className="font-accent text-2xl md:text-3xl text-black/70 mb-4 leading-snug max-w-xl">
-              "Você fala o acorde. A gente mostra o diagrama."
+              Sequências de samba, dicionário gigante e prática guiada no mesmo lugar.
             </p>
 
             <p className="text-lg font-medium max-w-xl mb-10 leading-relaxed text-black/80">
-              Dicionário inteligente com milhares de posições, gerador de
-              diagramas SVG e editor de progressões harmônicas. Tudo que você
-              precisa para estudar, ensinar ou compor — em um só lugar.
+              Monte sequências harmônicas clássicas do samba, crie progressões
+              personalizadas, encontre os shapes mais usados de cada acorde e
+              aplique arpejos e escalas por região para estudar com direção.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-5 items-start">
@@ -125,7 +125,7 @@ function LandingPage() {
                   size="xl"
                   className="animate-pulse-glow w-full sm:w-auto"
                 >
-                  Começar Agora
+                  Experimente Grátis
                   <ChevronRight className="ml-2 h-7 w-7" />
                 </NeubrutalistButton>
               </Link>
@@ -184,7 +184,7 @@ function LandingPage() {
               rotate="6deg"
               className="absolute -top-4 -right-4 bg-neo-orange text-white z-20"
             >
-              100% Grátis
+              Experimente Grátis
             </StickerBadge>
             <StickerBadge
               rotate="-4deg"
@@ -202,7 +202,7 @@ function LandingPage() {
           {[...Array(2)].map((_, setIdx) => (
             <div key={setIdx} className="flex items-center gap-12 px-6">
               {[
-                { icon: "📖", label: "3.000+ acordes", sub: "no dicionário" },
+                { icon: "📖", label: "Dicionário gigante", sub: "shapes mais usados" },
                 {
                   icon: "🎸",
                   label: "2 instrumentos",
@@ -210,18 +210,18 @@ function LandingPage() {
                 },
                 {
                   icon: "🎨",
-                  label: "Diagramas SVG",
-                  sub: "alta qualidade",
+                  label: "Diagramas próprios",
+                  sub: "SVG + PNG",
                 },
                 {
                   icon: "🎵",
-                  label: "Progressões",
-                  sub: "editor completo",
+                  label: "Sequências de samba",
+                  sub: "clássicas e autorais",
                 },
                 {
                   icon: "⚡",
-                  label: "100% grátis",
-                  sub: "sem limites",
+                  label: "Experimente grátis",
+                  sub: "comece agora",
                 },
               ].map((stat, i) => (
                 <div key={i} className="flex items-center gap-3 mr-12">
@@ -250,11 +250,11 @@ function LandingPage() {
               ✨ Tudo em um só app
             </StickerBadge>
             <h2 className="font-display text-5xl md:text-7xl tracking-tight mb-4">
-              Recursos{" "}
-              <span className="text-neo-orange">Profissionais</span>
+              Estudo{" "}
+              <span className="text-neo-orange">completo</span>
             </h2>
             <p className="font-accent text-xl text-black/60">
-              Muito mais que um dicionário de acordes.
+              Do repertório ao braço do instrumento, com ferramentas feitas para praticar de verdade.
             </p>
           </div>
 
@@ -265,11 +265,11 @@ function LandingPage() {
                 <BookOpen className="text-neo-orange h-8 w-8" />
               </div>
               <h3 className="font-display text-2xl mb-3 tracking-tight">
-                Dicionário Infinito
+                Dicionário Gigante
               </h3>
               <p className="font-medium leading-relaxed text-black/70">
-                Milhares de shapes e voicings para cada acorde.
-                Escalas aplicadas por acorde, posições abertas e fechadas.
+                Acesse as posições mais usadas de cada acorde, compare shapes
+                por região e leve o melhor voicing para sua sequência.
               </p>
               <div className="mt-6 flex items-center gap-2 font-heading text-sm tracking-wider uppercase text-neo-orange">
                 Explorar <ArrowRight className="h-4 w-4" />
@@ -291,8 +291,9 @@ function LandingPage() {
                 Sequências Harmônicas
               </h3>
               <p className="font-medium leading-relaxed text-white/85">
-                Monte progressões, escolha o melhor encadeamento
-                de voicings e toque junto com batucadas em vários andamentos.
+                Use sequências tradicionais do samba ou crie caminhos
+                personalizados, com encadeamento inteligente entre os melhores
+                shapes.
               </p>
               <div className="mt-6 flex items-center gap-2 font-heading text-sm tracking-wider uppercase text-white/80">
                 Experimentar <ArrowRight className="h-4 w-4" />
@@ -305,14 +306,65 @@ function LandingPage() {
                 <Dumbbell className="text-neo-orange h-8 w-8" />
               </div>
               <h3 className="font-display text-2xl mb-3 tracking-tight">
-                Treino Completo
+                Ritmo, Escalas e Arpejos
               </h3>
               <p className="font-medium leading-relaxed text-black/70">
-                Exercícios técnicos, metrônomo integrado, shapes de escalas
-                e prática direcionada para evoluir de verdade.
+                Toque junto com batucadas em vários andamentos, incluindo
+                samba-enredo, use metrônomo e aplique escalas e arpejos por
+                região do acorde.
               </p>
               <div className="mt-6 flex items-center gap-2 font-heading text-sm tracking-wider uppercase text-neo-orange">
-                Treinar agora <ArrowRight className="h-4 w-4" />
+                Praticar <ArrowRight className="h-4 w-4" />
+              </div>
+            </NeubrutalistCard>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 mt-8">
+            <NeubrutalistCard className="hover:bg-neo-yellow transition-all duration-300 group cursor-pointer">
+              <div className="bg-black w-16 h-16 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform">
+                <Download className="text-neo-orange h-8 w-8" />
+              </div>
+              <h3 className="font-display text-2xl mb-3 tracking-tight">
+                Diagramas Personalizados
+              </h3>
+              <p className="font-medium leading-relaxed text-black/70">
+                Monte seus próprios acordes, edite marcações, cores e cordas,
+                depois exporte diagramas limpos para estudo, aula ou material.
+              </p>
+              <div className="mt-6 flex items-center gap-2 font-heading text-sm tracking-wider uppercase text-neo-orange">
+                Criar diagramas <ArrowRight className="h-4 w-4" />
+              </div>
+            </NeubrutalistCard>
+
+            <NeubrutalistCard className="hover:bg-neo-yellow transition-all duration-300 group cursor-pointer">
+              <div className="bg-black w-16 h-16 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:-rotate-3 transition-transform">
+                <Users className="text-neo-orange h-8 w-8" />
+              </div>
+              <h3 className="font-display text-2xl mb-3 tracking-tight">
+                Comunidade Musical
+              </h3>
+              <p className="font-medium leading-relaxed text-black/70">
+                Compartilhe sequências, dicas, exercícios e músicas para aplicar
+                progressões reais com outros músicos.
+              </p>
+              <div className="mt-6 flex items-center gap-2 font-heading text-sm tracking-wider uppercase text-neo-orange">
+                Participar <ArrowRight className="h-4 w-4" />
+              </div>
+            </NeubrutalistCard>
+
+            <NeubrutalistCard className="bg-black text-white hover:translate-y-[-4px] transition-transform duration-300">
+              <div className="bg-neo-orange w-16 h-16 flex items-center justify-center mb-6">
+                <Zap className="text-white h-8 w-8" />
+              </div>
+              <h3 className="font-display text-2xl mb-3 tracking-tight">
+                Do Shape ao Som
+              </h3>
+              <p className="font-medium leading-relaxed text-white/80">
+                Escolha uma sequência, encontre os acordes, encadeie as posições
+                e toque com ritmo para transformar teoria em música.
+              </p>
+              <div className="mt-6 flex items-center gap-2 font-heading text-sm tracking-wider uppercase text-neo-yellow">
+                Experimentar <ArrowRight className="h-4 w-4" />
               </div>
             </NeubrutalistCard>
           </div>
@@ -328,7 +380,7 @@ function LandingPage() {
               Como <span className="text-neo-orange">funciona?</span>
             </h2>
             <p className="font-accent text-xl text-black/60">
-              Simples assim. Sem complicação.
+              Um fluxo pensado para estudar samba, pagode e repertório real.
             </p>
           </div>
 
@@ -337,20 +389,20 @@ function LandingPage() {
               {
                 step: "01",
                 icon: <CavaquinhoIcon className="h-8 w-8" color="white" />,
-                title: "Escolha o instrumento",
-                desc: "Cavaquinho ou Banjo — mesma afinação DGBD. Shapes, escalas e voicings dedicados.",
+                title: "Escolha uma sequência",
+                desc: "Comece pelas sequências mais usadas no samba ou monte uma progressão personalizada para sua música.",
               },
               {
                 step: "02",
                 icon: <Sparkles className="h-8 w-8" />,
-                title: "Explore o dicionário",
-                desc: "Busque qualquer acorde e veja todos os shapes possíveis. Aplique escalas por acorde.",
+                title: "Encadeie os melhores shapes",
+                desc: "Consulte o dicionário gigante, escolha posições próximas e aplique arpejos e escalas na região do acorde.",
               },
               {
                 step: "03",
                 icon: <Gauge className="h-8 w-8" />,
-                title: "Treine com ritmo",
-                desc: "Monte sequências harmônicas, toque junto com batucadas e metrônomo em vários andamentos.",
+                title: "Toque com batucada",
+                desc: "Pratique com batucadas, samba-enredo e metrônomo em vários andamentos até a sequência virar som.",
               },
             ].map((item, i) => (
               <div key={i} className="relative">
@@ -380,14 +432,14 @@ function LandingPage() {
             {/* Left column */}
             <div className="flex-1 animate-slide-left">
               <StickerBadge rotate="-2deg" className="bg-neo-orange text-white mb-6">
-                💬 Depoimentos reais
+                Comunidade ativa
               </StickerBadge>
               <h2 className="font-display text-4xl md:text-6xl tracking-tight mb-8 leading-[0.95]">
-                O que os{" "}
+                Aprenda com{" "}
                 <span className="bg-black text-white px-3 inline-block transform -rotate-1">
-                  mestres
+                  músicos reais
                 </span>{" "}
-                estão dizendo
+                e repertório vivo
               </h2>
 
               <NeubrutalistCard
@@ -395,8 +447,9 @@ function LandingPage() {
                 className="relative transform -rotate-1"
               >
                 <p className="font-accent text-2xl mb-6 leading-snug">
-                  "O SambaTune mudou a forma como eu preparo meus materiais
-                  de aula. A precisão dos diagramas é imbatível."
+                  Compartilhe sequências, exercícios, dicas e músicas para
+                  aplicar os caminhos harmônicos que aparecem no samba de
+                  verdade.
                 </p>
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center text-neo-orange font-display text-lg">
@@ -404,10 +457,10 @@ function LandingPage() {
                   </div>
                   <div>
                     <p className="font-display text-sm tracking-wide">
-                      Ricardo Silva
+                      Comunidade SambaTune
                     </p>
                     <p className="font-heading text-xs tracking-wider uppercase text-black/50">
-                      Professor de Cavaquinho
+                      Sequências · dicas · exercícios
                     </p>
                   </div>
                 </div>
@@ -418,10 +471,10 @@ function LandingPage() {
             {/* Right column — grid of highlights */}
             <div className="flex-1 grid grid-cols-2 gap-5 animate-slide-right">
               {[
-                { label: "Intuitivo & Rápido", icon: <Zap className="h-6 w-6 text-neo-orange" />, bg: "" },
-                { label: "Design Premium", icon: <Star className="h-6 w-6" />, bg: "bg-neo-orange text-white" },
-                { label: "Focado em Resultados", icon: <Check className="h-6 w-6" />, bg: "bg-black text-white" },
-                { label: "Comunidade Ativa", icon: <Users className="h-6 w-6 text-neo-orange" />, bg: "" },
+                { label: "Sequências Compartilhadas", icon: <Zap className="h-6 w-6 text-neo-orange" />, bg: "" },
+                { label: "Dicas de Estudo", icon: <Star className="h-6 w-6" />, bg: "bg-neo-orange text-white" },
+                { label: "Exercícios Aplicados", icon: <Check className="h-6 w-6" />, bg: "bg-black text-white" },
+                { label: "Músicas para Praticar", icon: <Users className="h-6 w-6 text-neo-orange" />, bg: "" },
               ].map((item, i) => (
                 <NeubrutalistCard
                   key={i}
@@ -445,7 +498,7 @@ function LandingPage() {
               <span className="text-neo-orange">seu instrumento</span>
             </h2>
             <p className="font-accent text-xl text-black/60">
-              Suporte completo para os instrumentos mais populares do Brasil.
+              Cavaquinho e banjo com foco em samba, pagode, levadas e encadeamentos reais.
             </p>
           </div>
 
@@ -456,14 +509,14 @@ function LandingPage() {
                 emoji: "🎸",
                 tuning: "Ré · Sol · Si · Ré (DGBD)",
                 chords: "1.500+",
-                desc: "A alma do samba e do pagode. Shapes, escalas e voicings tradicionais e modernos.",
+                desc: "A alma do samba e do pagode. Shapes essenciais, escalas por região, arpejos aplicados e sequências prontas para tocar.",
               },
               {
                 name: "Banjo",
                 emoji: "🪕",
                 tuning: "Ré · Sol · Si · Ré (DGBD)",
                 chords: "1.200+",
-                desc: "O som raiz do sertanejo e do forró. Mesma afinação do cavaquinho, shapes dedicados.",
+                desc: "Mesma afinação DGBD, com posições dedicadas para estudar acordes, encadeamentos e condução harmônica.",
               },
             ].map((inst, i) => (
               <NeubrutalistCard
@@ -503,7 +556,7 @@ function LandingPage() {
 
         <div className="relative z-10 max-w-3xl mx-auto">
           <StickerBadge rotate="3deg" className="bg-black text-white mb-6">
-            🚀 Grátis para sempre
+            Experimente grátis
           </StickerBadge>
           <h2 className="font-display text-5xl md:text-8xl tracking-tight mb-6 leading-[0.9]">
             Pronto para{" "}
@@ -512,17 +565,17 @@ function LandingPage() {
             </span>
           </h2>
           <p className="font-accent text-2xl mb-10 text-black/70">
-            Junte-se a centenas de músicos e simplifique seus estudos hoje
-            mesmo.
+            Monte sequências, escolha os melhores shapes, pratique com batucada
+            e transforme seus estudos em repertório.
           </p>
           <Link href="/app">
             <NeubrutalistButton size="xl" className="px-16 animate-pulse-glow">
-              Acessar Agora <ArrowRight className="ml-3 h-7 w-7" />
+              Experimentar Grátis <ArrowRight className="ml-3 h-7 w-7" />
             </NeubrutalistButton>
           </Link>
 
           <div className="mt-10 flex flex-wrap items-center justify-center gap-6 font-heading text-sm tracking-wider uppercase text-black/50">
-            {["Sem cadastro obrigatório", "100% gratuito", "Sem anúncios"].map(
+            {["Sequências de samba", "Dicionário gigante", "Diagramas personalizados"].map(
               (item, i) => (
                 <div key={i} className="flex items-center gap-2">
                   <Check className="h-4 w-4 text-neo-orange" />

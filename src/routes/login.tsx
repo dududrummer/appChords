@@ -114,7 +114,7 @@ function LoginPage() {
 
           <p className="text-center mt-6 text-sm font-bold text-black/60">
             Não tem conta?{" "}
-            <Link to="/register" className="text-neo-orange hover:underline font-black">Cadastre-se grátis</Link>
+            <Link to="/register" className="text-neo-orange hover:underline font-black">Experimente grátis</Link>
           </p>
         </NeubrutalistCard>
       </div>
