@@ -36,7 +36,6 @@ function LoginPage() {
       setError(result.error);
       return;
     }
-    navigate({ to: "/app" });
   }
 
   async function handleGoogle() {

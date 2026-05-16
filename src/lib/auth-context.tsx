@@ -170,10 +170,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
     if (data.session) {
       await setAuthenticatedSession(data.session);
-    } else {
-      setState((s) => ({ ...s, isLoading: false }));
+      return {};
     }
-    return {};
+
+    const { data: sessionData } = await supabase.auth.getSession();
+    if (sessionData.session) {
+      await setAuthenticatedSession(sessionData.session);
+      return {};
+    }
+
+    setState((s) => ({ ...s, isLoading: false }));
+    return { error: "Login recebido, mas a sessão não foi criada. Confirme seu e-mail e tente novamente." };
   }, [setAuthenticatedSession]);
 
   const loginWithGoogle = useCallback(async () => {
