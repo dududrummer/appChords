@@ -168,7 +168,7 @@ function LandingPage() {
                 </div>
                 <div className="bg-gradient-to-b from-neo-bg to-neo-yellow/30 flex justify-center border-t-2 border-black p-6">
                   <img
-                    src="/hero-cavaquinho.png"
+                    src="/hero-cavaquinho.png?v=20260515"
                     alt="Jovem tocando cavaquinho alegremente — ilustração cartoon"
                     className="w-full h-auto max-w-sm object-contain drop-shadow-[4px_4px_0px_rgba(0,0,0,0.3)] hover:scale-105 transition-transform duration-500"
                   />
