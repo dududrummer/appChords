@@ -104,9 +104,9 @@ function LandingPage() {
             <h1 className="font-display text-6xl md:text-7xl lg:text-8xl leading-[0.95] mb-6 tracking-tight">
               Domine{" "}
               <span className="text-neo-orange outline-text-comic">
-                cada acorde
+                acordes, arpejos, escalas
               </span>{" "}
-              do seu instrumento.
+              e muito mais.
             </h1>
 
             <p className="font-accent text-2xl md:text-3xl text-black/70 mb-4 leading-snug max-w-xl">
