@@ -47,6 +47,22 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 const NO_SUPABASE_MSG = "Supabase não configurado. Funcionalidade de autenticação indisponível.";
 
+function normalizeEmail(email: string) {
+  return email.trim().toLowerCase();
+}
+
+function getAuthErrorMessage(message: string) {
+  if (message === "Invalid login credentials") {
+    return "E-mail ou senha inválidos. Se você acabou de criar a conta, confirme o e-mail antes de entrar.";
+  }
+
+  if (message === "Email not confirmed") {
+    return "Confirme seu e-mail antes de entrar.";
+  }
+
+  return message;
+}
+
 function mapSupabaseUser(user: User, profile?: Record<string, unknown> | null): UserProfile {
   return {
     id: user.id,
@@ -144,10 +160,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = useCallback(async (email: string, password: string) => {
     if (!supabase) return { error: NO_SUPABASE_MSG };
     setState((s) => ({ ...s, isLoading: true }));
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: normalizeEmail(email),
+      password,
+    });
     if (error) {
       setState((s) => ({ ...s, isLoading: false }));
-      return { error: error.message };
+      return { error: getAuthErrorMessage(error.message) };
     }
     if (data.session) {
       await setAuthenticatedSession(data.session);
@@ -175,10 +194,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (!supabase) return { error: NO_SUPABASE_MSG };
     setState((s) => ({ ...s, isLoading: true }));
 
+    const email = normalizeEmail(data.email);
+
     const { data: authData, error } = await supabase.auth.signUp({
-      email: data.email,
+      email,
       password: data.password,
-      options: { data: { full_name: data.name } },
+      options: {
+        data: { full_name: data.name.trim() },
+        emailRedirectTo: `${window.location.origin}/login`,
+      },
     });
 
     if (error) {
@@ -206,7 +230,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         gender: data.gender || null,
         instrument: data.instrument || null,
         avatar_url: avatarUrl || null,
-        email: data.email,
+        email,
       });
 
       if (profileError) {
