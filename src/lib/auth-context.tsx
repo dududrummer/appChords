@@ -240,13 +240,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     if (authData.session) {
-      await setAuthenticatedSession(authData.session);
-      return {};
+      await supabase.auth.signOut();
     }
-
     setState((s) => ({ ...s, isLoading: false }));
     return { requiresEmailConfirmation: true };
-  }, [setAuthenticatedSession]);
+  }, []);
 
   const logout = useCallback(async () => {
     if (!supabase) return;

@@ -73,7 +73,7 @@ function RegisterPage() {
     }
     if (result.requiresEmailConfirmation) {
       setAuthAction(null);
-      setSuccess("Conta criada. Confirme seu e-mail antes de entrar.");
+      setSuccess("Conta criada. Enviamos um link de confirmação para seu e-mail. Confirme antes de entrar.");
       return;
     }
     navigate({ to: "/app" });
