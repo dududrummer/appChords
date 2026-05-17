@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ExternalLink, Globe2, Lock, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,6 +36,8 @@ export function CreationSavePanel({
   );
   const [message, setMessage] = useState("");
   const [publishing, setPublishing] = useState(false);
+  const publishInFlightRef = useRef(false);
+  const lastPublishedSignatureRef = useRef("");
 
   function refreshSaved() {
     if (!user) return;
@@ -55,15 +57,34 @@ export function CreationSavePanel({
   }
 
   async function handlePublish() {
-    if (!user || disabled || !title.trim()) return;
+    if (!user || disabled || !title.trim() || publishInFlightRef.current) return;
+    const normalizedTitle = title.trim();
+    const normalizedDescription = description.trim() || undefined;
+    const signature = JSON.stringify({
+      type,
+      title: normalizedTitle,
+      description: normalizedDescription || "",
+      payload,
+    });
+
+    if (lastPublishedSignatureRef.current === signature) {
+      setMessage("Esta criaÃ§Ã£o jÃ¡ foi publicada na comunidade.");
+      return;
+    }
+
+    publishInFlightRef.current = true;
     setPublishing(true);
     const result = await publishCreation(user, {
       type,
-      title: title.trim(),
-      description: description.trim() || undefined,
+      title: normalizedTitle,
+      description: normalizedDescription,
       payload,
     });
+    publishInFlightRef.current = false;
     setPublishing(false);
+    if (!result.error) {
+      lastPublishedSignatureRef.current = signature;
+    }
     setMessage(
       result.error
         ? `Não foi possível publicar: ${result.error}`

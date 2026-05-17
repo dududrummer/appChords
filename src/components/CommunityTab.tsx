@@ -90,8 +90,10 @@ export function CommunityTab({ onOpenCreation }: Props) {
     .filter((item) => Date.now() - new Date(item.createdAt).getTime() <= 72 * 60 * 60 * 1000)
     .sort((a, b) => b.likesCount + b.commentsCount * 2 - (a.likesCount + a.commentsCount * 2))
     .slice(0, 3);
+  const hotItemIds = new Set(hotItems.map((item) => item.id));
+  const sectionItems = recentItems.filter((item) => !hotItemIds.has(item.id));
 
-  const itemsByType = recentItems.reduce<Record<SavedCreation["type"], CommunityCreation[]>>(
+  const itemsByType = sectionItems.reduce<Record<SavedCreation["type"], CommunityCreation[]>>(
     (acc, item) => {
       acc[item.type].push(item);
       return acc;
