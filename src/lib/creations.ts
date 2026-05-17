@@ -116,6 +116,11 @@ export async function loadPublicCreations() {
     supabase.auth.getUser(),
   ]);
 
+  const relatedError = likesResult.error || commentsResult.error;
+  if (relatedError) {
+    return { creations: [] as CommunityCreation[], error: relatedError.message };
+  }
+
   const currentUserId = userResult.data.user?.id;
   const viewerLikesResult =
     currentUserId && ids.length
@@ -217,23 +222,27 @@ export async function addCommunityComment(user: UserProfile, creationId: string,
   if (!supabase) return { error: "Supabase nÃ£o configurado." };
 
   const authorName = getAuthorName(user);
-  const { error } = await supabase.from("community_creation_comments").insert({
-    creation_id: creationId,
-    author_id: user.id,
-    author_name: authorName,
-    body,
-  });
+  const { data, error } = await supabase
+    .from("community_creation_comments")
+    .insert({
+      creation_id: creationId,
+      author_id: user.id,
+      author_name: authorName,
+      body,
+    })
+    .select("*")
+    .single();
 
   return {
     comment: error
       ? null
       : ({
-          id: crypto.randomUUID(),
-          creationId,
-          authorId: user.id,
-          authorName,
-          body,
-          createdAt: new Date().toISOString(),
+          id: data.id,
+          creationId: data.creation_id,
+          authorId: data.author_id,
+          authorName: data.author_name,
+          body: data.body,
+          createdAt: data.created_at,
         } satisfies CreationComment),
     error: error?.message,
   };

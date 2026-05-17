@@ -82,6 +82,10 @@ function ChordGenerator() {
     navigate({ to: "/app", search: { tab: nextPage } });
   }, [navigate]);
 
+  const updateOpenedCommunityCreation = useCallback((creation: CommunityCreation) => {
+    setOpenedCreation((current) => (current?.id === creation.id ? creation : current));
+  }, []);
+
   useEffect(() => {
     function handleOpenCreation(event: Event) {
       const creation = (event as CustomEvent<SavedCreation>).detail;
@@ -662,7 +666,7 @@ function ChordGenerator() {
                 openedCreation={openedCreation}
               />
               {openedCreation?.visibility === "public" && openedCreation.type === "progression" && "likesCount" in openedCreation && (
-                <CreationSocialPanel creation={openedCreation} showComposer />
+                <CreationSocialPanel creation={openedCreation} showComposer onStatsChange={updateOpenedCommunityCreation} />
               )}
             </>
           ) : activePage === 'dictionary' ? (
@@ -677,14 +681,14 @@ function ChordGenerator() {
                 openedCreation={openedCreation}
               />
               {openedCreation?.visibility === "public" && openedCreation.type === "dictionary" && "likesCount" in openedCreation && (
-                <CreationSocialPanel creation={openedCreation} showComposer />
+                <CreationSocialPanel creation={openedCreation} showComposer onStatsChange={updateOpenedCommunityCreation} />
               )}
             </>
           ) : activePage === 'exercises' ? (
             <>
               <ExercisesTab openedCreation={openedCreation} />
               {openedCreation?.visibility === "public" && openedCreation.type === "exercise" && "likesCount" in openedCreation && (
-                <CreationSocialPanel creation={openedCreation} showComposer />
+                <CreationSocialPanel creation={openedCreation} showComposer onStatsChange={updateOpenedCommunityCreation} />
               )}
             </>
           ) : (<>
