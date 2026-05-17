@@ -1,21 +1,26 @@
 import { useAuth } from "@/lib/auth-context";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { NeubrutalistButton } from "@/components/ui/NeubrutalistButton";
-import {
   LogOut,
   User,
   Music2,
   BookOpen,
   Users,
+  Dumbbell,
+  GraduationCap,
   ChevronDown,
 } from "lucide-react";
+import { CavaquinhoIcon } from "@/components/icons/CavaquinhoIcon";
 import { useState, useRef, useEffect } from "react";
 
 const MENU_ITEMS = [
-  { icon: <User className="h-4 w-4" />, label: "Meu Perfil", tab: "profile" },
-  { icon: <Music2 className="h-4 w-4" />, label: "Minhas Sequências", tab: "progression" },
-  { icon: <BookOpen className="h-4 w-4" />, label: "Planos de Estudo", tab: "plan" },
+  { icon: <BookOpen className="h-4 w-4" />, label: "Dicionário Interativo", tab: "dictionary" },
+  { icon: <Music2 className="h-4 w-4" />, label: "Sequências", tab: "progression" },
+  { icon: <CavaquinhoIcon className="h-4 w-4" />, label: "Diagramas", tab: "diagram" },
+  { icon: <Dumbbell className="h-4 w-4" />, label: "Escalas e Arpejos", tab: "exercises" },
+  { icon: <GraduationCap className="h-4 w-4" />, label: "Plano de Estudos", tab: "plan" },
   { icon: <Users className="h-4 w-4" />, label: "Comunidade", tab: "community" },
+  { icon: <User className="h-4 w-4" />, label: "Meu Perfil", tab: "profile" },
 ];
 
 export function UserMenu() {
