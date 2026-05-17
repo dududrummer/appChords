@@ -86,6 +86,7 @@ export const CreationSocialPanel = forwardRef<HTMLDivElement, Props>(function Cr
     const next = { ...localCreation, commentsCount: nextComments.length };
     setLocalCreation(next);
     onStatsChange?.(next);
+    window.dispatchEvent(new CustomEvent("sambatune:community-updated"));
 
     window.setTimeout(async () => {
       const refreshed = await loadCommunityComments(localCreation.id);
@@ -95,6 +96,7 @@ export const CreationSocialPanel = forwardRef<HTMLDivElement, Props>(function Cr
       const refreshedCreation = { ...next, commentsCount: merged.length };
       setLocalCreation(refreshedCreation);
       onStatsChange?.(refreshedCreation);
+      window.dispatchEvent(new CustomEvent("sambatune:community-updated"));
     }, 700);
   }
 

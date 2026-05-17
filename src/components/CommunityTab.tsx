@@ -54,15 +54,26 @@ export function CommunityTab({ onOpenCreation }: Props) {
 
   useEffect(() => {
     let mounted = true;
-    loadPublicCreations().then((result) => {
+    async function refresh() {
+      const result = await loadPublicCreations();
       if (!mounted) return;
       setItems(result.creations);
       setSelected(result.creations[0] ?? null);
       setError(result.error || "");
       setLoading(false);
-    });
+    }
+
+    refresh();
+
+    function handleCommunityUpdated() {
+      setLoading(true);
+      void refresh();
+    }
+
+    window.addEventListener("sambatune:community-updated", handleCommunityUpdated);
     return () => {
       mounted = false;
+      window.removeEventListener("sambatune:community-updated", handleCommunityUpdated);
     };
   }, []);
 
@@ -88,6 +99,7 @@ export function CommunityTab({ onOpenCreation }: Props) {
       viewerHasLiked: !item.viewerHasLiked,
       likesCount: item.viewerHasLiked ? Math.max(0, item.likesCount - 1) : item.likesCount + 1,
     });
+    window.dispatchEvent(new CustomEvent("sambatune:community-updated"));
   }
 
   async function handleDelete(item: CommunityCreation) {
@@ -103,6 +115,7 @@ export function CommunityTab({ onOpenCreation }: Props) {
 
     setItems((current) => current.filter((currentItem) => currentItem.id !== item.id));
     setSelected((current) => (current?.id === item.id ? null : current));
+    window.dispatchEvent(new CustomEvent("sambatune:community-updated"));
   }
 
   const recentItems = [...items].sort(
