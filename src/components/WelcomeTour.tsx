@@ -33,7 +33,7 @@ const TOUR_STEPS = [
   },
   {
     icon: <Music2 className="h-8 w-8" />,
-    title: "Estudo de Sequências",
+    title: "Sequências Harmônicas",
     description:
       "Monte progressões harmônicas, escolha tonalidades e descubra encadeamentos que funcionam.",
     color: "#3b82f6",

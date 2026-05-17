@@ -20,7 +20,7 @@ function RegisterPage() {
   const [form, setForm] = useState<RegisterData>({
     email: "", password: "", name: "", artisticName: "",
     phoneWhatsapp: "", age: undefined, gender: undefined,
-    instrument: "", avatarFile: null,
+    instrument: "", instagram: "", howDidYouFindUs: "", avatarFile: null,
   });
   const [confirmPassword, setConfirmPassword] = useState("");
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
@@ -172,7 +172,10 @@ function RegisterPage() {
 
               <FormField label="Nome Artístico" value={form.artisticName || ""} onChange={(v) => updateForm("artisticName", v)} placeholder="Como quer ser chamado?" id="register-artistic-name" />
 
-              <FormField label="WhatsApp" value={form.phoneWhatsapp || ""} onChange={(v) => updateForm("phoneWhatsapp", v)} placeholder="(11) 99999-9999" id="register-phone" />
+              <div className="grid grid-cols-2 gap-4">
+                <FormField label="WhatsApp" value={form.phoneWhatsapp || ""} onChange={(v) => updateForm("phoneWhatsapp", v)} placeholder="(11) 99999-9999" id="register-phone" />
+                <FormField label="Instagram" value={form.instagram || ""} onChange={(v) => updateForm("instagram", v)} placeholder="@seu_perfil" id="register-instagram" />
+              </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -200,6 +203,19 @@ function RegisterPage() {
                     </button>
                   ))}
                 </div>
+              </div>
+
+              <div>
+                <label className="font-heading text-xs tracking-wider uppercase text-black/60 block mb-1.5">Como conheceu o Sambatune?</label>
+                <select value={form.howDidYouFindUs || ""} onChange={(e) => updateForm("howDidYouFindUs", e.target.value)} className="w-full px-4 py-3 border-2 border-black bg-white font-medium text-sm text-black/70 focus:outline-none focus:ring-2 focus:ring-neo-orange cursor-pointer" id="register-source">
+                  <option value="">Selecione uma opção</option>
+                  <option value="instagram">Instagram</option>
+                  <option value="youtube">YouTube</option>
+                  <option value="tiktok">TikTok</option>
+                  <option value="google">Google</option>
+                  <option value="amigo">Indicação de amigo</option>
+                  <option value="outro">Outro</option>
+                </select>
               </div>
 
               <div className="flex gap-3 mt-6">

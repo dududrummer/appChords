@@ -11,6 +11,8 @@ export interface UserProfile {
   age?: number;
   gender?: "male" | "female" | "other" | "prefer_not_to_say";
   instrument?: string;
+  instagram?: string;
+  howDidYouFindUs?: string;
   avatarUrl?: string;
   createdAt: string;
 }
@@ -40,6 +42,8 @@ export interface RegisterData {
   age?: number;
   gender?: UserProfile["gender"];
   instrument?: string;
+  instagram?: string;
+  howDidYouFindUs?: string;
   avatarFile?: File | null;
 }
 
@@ -74,6 +78,8 @@ function mapSupabaseUser(user: User, profile?: Record<string, unknown> | null): 
     age: (profile?.age as number) || undefined,
     gender: (profile?.gender as UserProfile["gender"]) || undefined,
     instrument: (profile?.instrument as string) || undefined,
+    instagram: (profile?.instagram as string) || undefined,
+    howDidYouFindUs: (profile?.how_did_you_find_us as string) || undefined,
     avatarUrl: (profile?.avatar_url as string) || user.user_metadata?.avatar_url || undefined,
     createdAt: user.created_at,
   };
@@ -262,6 +268,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         age: data.age || null,
         gender: data.gender || null,
         instrument: data.instrument || null,
+        instagram: data.instagram || null,
+        how_did_you_find_us: data.howDidYouFindUs || null,
         avatar_url: avatarUrl || null,
         email,
       });
@@ -301,6 +309,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (data.age !== undefined) profileData.age = data.age;
     if (data.gender !== undefined) profileData.gender = data.gender;
     if (data.instrument !== undefined) profileData.instrument = data.instrument;
+    if (data.instagram !== undefined) profileData.instagram = data.instagram;
+    if (data.howDidYouFindUs !== undefined) profileData.how_did_you_find_us = data.howDidYouFindUs;
     if (data.avatarUrl !== undefined) profileData.avatar_url = data.avatarUrl;
 
     await upsertProfile(state.supabaseUser.id, profileData);

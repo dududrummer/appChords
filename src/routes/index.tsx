@@ -117,7 +117,7 @@ function LandingPage() {
             </h1>
 
             <p className="font-accent text-2xl md:text-3xl text-black/70 mb-4 leading-snug max-w-xl">
-              Sequências de samba, dicionário interativo e prática guiada no mesmo lugar.
+              Sequências Harmônicas, dicionário interativo e prática guiada no mesmo lugar.
             </p>
 
             <p className="text-lg font-medium max-w-xl mb-10 leading-relaxed text-black/80">
@@ -222,7 +222,7 @@ function LandingPage() {
                 },
                 {
                   icon: "🎵",
-                  label: "Sequências de samba",
+                  label: "Sequências Harmônicas",
                   sub: "clássicas e autorais",
                 },
                 {
@@ -467,7 +467,7 @@ function LandingPage() {
                       Comunidade SambaTune
                     </p>
                     <p className="font-heading text-xs tracking-wider uppercase text-black/50">
-                      Sequências · dicas · exercícios
+                      Sequências Harmônicas · dicas · exercícios
                     </p>
                   </div>
                 </div>
@@ -478,7 +478,7 @@ function LandingPage() {
             {/* Right column — grid of highlights */}
             <div className="flex-1 grid grid-cols-2 gap-5 animate-slide-right">
               {[
-                { label: "Sequências Compartilhadas", icon: <Zap className="h-6 w-6 text-neo-orange" />, bg: "" },
+                { label: "Sequências Harmônicas", icon: <Zap className="h-6 w-6 text-neo-orange" />, bg: "" },
                 { label: "Dicas de Estudo", icon: <Star className="h-6 w-6" />, bg: "bg-neo-orange text-white" },
                 { label: "Exercícios Aplicados", icon: <Check className="h-6 w-6" />, bg: "bg-black text-white" },
                 { label: "Músicas para Praticar", icon: <Users className="h-6 w-6 text-neo-orange" />, bg: "" },
@@ -582,7 +582,7 @@ function LandingPage() {
           </Link>
 
           <div className="mt-10 flex flex-wrap items-center justify-center gap-6 font-heading text-sm tracking-wider uppercase text-black/50">
-            {["Sequências de samba", "Dicionário interativo", "Diagramas personalizados"].map(
+            {["Sequências Harmônicas", "Dicionário interativo", "Diagramas personalizados"].map(
               (item, i) => (
                 <div key={i} className="flex items-center gap-2">
                   <Check className="h-4 w-4 text-neo-orange" />

@@ -163,7 +163,7 @@ export function ProgressionEditor({
     <Card className="w-full">
       <CardHeader>
         <CardTitle className="text-lg flex items-center gap-2">
-          <Music2 className="h-5 w-5" /> Estudo de Sequências
+          <Music2 className="h-5 w-5" /> Sequências Harmônicas
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -189,7 +189,7 @@ export function ProgressionEditor({
 
         {/* 1️⃣ Categoria — botões */}
         <div className="space-y-1.5">
-          <Label className="text-xs font-semibold">Sequências</Label>
+          <Label className="text-xs font-semibold">Sequências Harmônicas</Label>
           <div className="flex flex-wrap gap-2">
             {CATEGORIES.map(cat => (
               <button

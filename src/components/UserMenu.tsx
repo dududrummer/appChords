@@ -15,8 +15,8 @@ import { useState, useRef, useEffect } from "react";
 
 const MENU_ITEMS = [
   { icon: <BookOpen className="h-4 w-4" />, label: "Dicionário Interativo", tab: "dictionary" },
-  { icon: <Music2 className="h-4 w-4" />, label: "Sequências", tab: "progression" },
-  { icon: <CavaquinhoIcon className="h-4 w-4" />, label: "Diagramas", tab: "diagram" },
+  { icon: <Music2 className="h-4 w-4" />, label: "Sequências Harmônicas", tab: "progression" },
+  { icon: <CavaquinhoIcon className="h-4 w-4" />, label: "Criador de Diagramas", tab: "diagram" },
   { icon: <Dumbbell className="h-4 w-4" />, label: "Escalas e Arpejos", tab: "exercises" },
   { icon: <GraduationCap className="h-4 w-4" />, label: "Plano de Estudos", tab: "plan" },
   { icon: <Users className="h-4 w-4" />, label: "Comunidade", tab: "community" },

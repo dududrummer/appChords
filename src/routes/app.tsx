@@ -582,11 +582,11 @@ function ChordGenerator() {
         <nav className="flex-1 p-2 space-y-1">
           {[
             { page: 'dictionary' as const,  icon: <BookOpen className="h-4 w-4" />,      label: 'Dicionário Interativo', sub: 'Shapes mais usados' },
-            { page: 'progression' as const, icon: <Music2   className="h-4 w-4" />,      label: 'Sequências',           sub: 'Samba e autorais' },
-            { page: 'diagram' as const,     icon: <CavaquinhoIcon className="h-4 w-4" />,  label: 'Diagramas',           sub: 'Acordes próprios' },
+            { page: 'progression' as const, icon: <Music2   className="h-4 w-4" />,      label: 'Sequências Harmônicas', sub: 'Sequências populares' },
+            { page: 'diagram' as const,     icon: <CavaquinhoIcon className="h-4 w-4" />,  label: 'Criador de Diagramas', sub: 'Diagrama personalizado' },
             { page: 'exercises' as const,   icon: <Dumbbell className="h-4 w-4" />,      label: 'Escalas e Arpejos',    sub: 'Treino por região' },
             { page: 'plan' as const,        icon: <GraduationCap className="h-4 w-4" />, label: 'Plano de Estudos',     sub: 'Rotina e metas' },
-            { page: 'community' as const,   icon: <Users className="h-4 w-4" />,         label: 'Comunidade',           sub: 'Dicas e músicas' },
+            { page: 'community' as const,   icon: <Users className="h-4 w-4" />,         label: 'Comunidade',           sub: 'Compartilhe conhecimento' },
             { page: 'profile' as const,     icon: <User className="h-4 w-4" />,          label: 'Meu Perfil',           sub: 'Dados e Configurações' },
           ].map(({ page, icon, label, sub }) => (
             <button
