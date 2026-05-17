@@ -42,6 +42,14 @@ export const CreationSocialPanel = forwardRef<HTMLDivElement, Props>(function Cr
     });
   }, [creation.id]);
 
+  useEffect(() => {
+    if (loading || creation.commentsCount <= comments.length) return;
+    loadCommunityComments(creation.id).then((result) => {
+      if (result.error) return;
+      setComments((current) => mergeComments(current, result.comments));
+    });
+  }, [comments.length, creation.commentsCount, creation.id, loading]);
+
   async function handleLike() {
     if (!user) return;
     const result = await toggleCommunityLike(user, localCreation);

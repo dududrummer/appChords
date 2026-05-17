@@ -662,7 +662,7 @@ function ChordGenerator() {
                 openedCreation={openedCreation}
               />
               {openedCreation?.visibility === "public" && openedCreation.type === "progression" && "likesCount" in openedCreation && (
-                <CreationSocialPanel creation={openedCreation} />
+                <CreationSocialPanel creation={openedCreation} showComposer />
               )}
             </>
           ) : activePage === 'dictionary' ? (
@@ -677,14 +677,14 @@ function ChordGenerator() {
                 openedCreation={openedCreation}
               />
               {openedCreation?.visibility === "public" && openedCreation.type === "dictionary" && "likesCount" in openedCreation && (
-                <CreationSocialPanel creation={openedCreation} />
+                <CreationSocialPanel creation={openedCreation} showComposer />
               )}
             </>
           ) : activePage === 'exercises' ? (
             <>
               <ExercisesTab openedCreation={openedCreation} />
               {openedCreation?.visibility === "public" && openedCreation.type === "exercise" && "likesCount" in openedCreation && (
-                <CreationSocialPanel creation={openedCreation} />
+                <CreationSocialPanel creation={openedCreation} showComposer />
               )}
             </>
           ) : (<>
