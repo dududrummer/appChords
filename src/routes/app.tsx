@@ -505,6 +505,14 @@ function ChordGenerator() {
     return null;
   }
 
+  const appBorder = isDarkMode ? "border-border" : "border-black";
+  const appPanel = isDarkMode ? "bg-card text-card-foreground" : "bg-white text-black";
+  const appHeader = isDarkMode ? "bg-card text-card-foreground" : "bg-white text-black";
+  const appBrand = isDarkMode ? "bg-card text-card-foreground" : "bg-neo-bg text-black";
+  const appNavIdle = isDarkMode
+    ? "bg-card text-muted-foreground hover:bg-muted hover:text-foreground hover:border-border"
+    : "bg-white hover:bg-neo-yellow text-black/65 hover:text-black hover:border-black";
+
   return (
     <div className={`min-h-screen flex ${isDarkMode ? "dark bg-background text-foreground" : "bg-neo-bg text-black"}`}>
       {/* Welcome Tour — first-time users */}
@@ -521,18 +529,18 @@ function ChordGenerator() {
       {/* ── Sidebar ──────────────────────────────────────────────────────── */}
       <aside className={`
         fixed md:sticky top-0 left-0 h-screen z-40
-        w-60 shrink-0 border-r-3 border-black bg-white flex flex-col overflow-hidden
+        w-60 shrink-0 border-r-3 ${appBorder} ${appPanel} flex flex-col overflow-hidden
         transition-transform duration-300 ease-in-out
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
         md:translate-x-0
       `}>
-        <div className="px-5 py-4 border-b-3 border-black bg-neo-bg flex items-center justify-between">
+        <div className={`h-[72px] px-5 border-b-3 ${appBorder} ${appBrand} flex items-center justify-between`}>
           <Link to="/">
             <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
               <CavaquinhoIcon className="h-5 w-5" color="currentColor" />
               <span className="font-display text-xl tracking-tight"><span className="text-neo-orange">Samba</span>Tune</span>
             </div>
-            <p className="text-[10px] font-heading tracking-wider uppercase text-black/50 mt-0.5">Acordes · Sequências · Ritmo</p>
+            <p className={`text-[10px] font-heading tracking-wider uppercase mt-0.5 ${isDarkMode ? "text-muted-foreground" : "text-black/50"}`}>Acordes · Sequências · Ritmo</p>
           </Link>
           {/* Close button — mobile only */}
           <button onClick={() => setSidebarOpen(false)} className="md:hidden p-1 rounded hover:bg-muted">
@@ -555,8 +563,8 @@ function ChordGenerator() {
               onClick={() => { setActivePage(page); setSidebarOpen(false); }}
               className={`w-full text-left border-2 border-transparent px-3 py-2.5 flex items-center gap-3 transition-all group ${
                 activePage === page
-                  ? 'bg-neo-orange text-white border-black shadow-[3px_3px_0px_black]'
-                  : 'bg-white hover:bg-neo-yellow text-black/65 hover:text-black hover:border-black'
+                  ? `bg-neo-orange text-white ${isDarkMode ? "border-border shadow-[3px_3px_0px_rgba(255,255,255,0.18)]" : "border-black shadow-[3px_3px_0px_black]"}`
+                  : appNavIdle
               }`}
             >
               {icon}
@@ -569,7 +577,7 @@ function ChordGenerator() {
           ))}
         </nav>
 
-        <div className="p-3 border-t-3 border-black bg-neo-bg">
+        <div className={`p-3 border-t-3 ${appBorder} ${appBrand}`}>
           <Button variant="outline" size="sm" onClick={toggleDarkMode} className="w-full gap-2">
             {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             {isDarkMode ? 'Modo Claro' : 'Modo Escuro'}
@@ -579,7 +587,7 @@ function ChordGenerator() {
 
       {/* ── Main content ─────────────────────────────────────────────────── */}
       <div className="flex-1 flex flex-col min-w-0 md:ml-0">
-        <header className="border-b-3 border-black bg-white px-4 py-3 flex items-center gap-3 shadow-[0_3px_0px_rgba(0,0,0,0.08)] sticky top-0 z-10">
+        <header className={`h-[72px] border-b-3 ${appBorder} ${appHeader} px-4 flex items-center gap-3 shadow-[0_3px_0px_rgba(0,0,0,0.08)] sticky top-0 z-10`}>
           {/* Hamburger — mobile only */}
           <button onClick={() => setSidebarOpen(true)} className="md:hidden p-1.5 rounded hover:bg-muted">
             <Menu className="h-5 w-5" />
