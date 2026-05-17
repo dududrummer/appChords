@@ -117,7 +117,7 @@ function LandingPage() {
             </h1>
 
             <p className="font-accent text-2xl md:text-3xl text-black/70 mb-4 leading-snug max-w-xl">
-              Sequências de samba, dicionário gigante e prática guiada no mesmo lugar.
+              Sequências de samba, dicionário interativo e prática guiada no mesmo lugar.
             </p>
 
             <p className="text-lg font-medium max-w-xl mb-10 leading-relaxed text-black/80">
@@ -209,7 +209,7 @@ function LandingPage() {
           {[...Array(2)].map((_, setIdx) => (
             <div key={setIdx} className="flex items-center gap-12 px-6">
               {[
-                { icon: "📖", label: "Dicionário gigante", sub: "shapes mais usados" },
+                { icon: "📖", label: "Dicionário interativo", sub: "shapes mais usados" },
                 {
                   icon: "🎸",
                   label: "2 instrumentos",
@@ -272,7 +272,7 @@ function LandingPage() {
                 <BookOpen className="text-neo-orange h-8 w-8" />
               </div>
               <h3 className="font-display text-2xl mb-3 tracking-tight">
-                Dicionário Gigante
+                Dicionário Interativo
               </h3>
               <p className="font-medium leading-relaxed text-black/70">
                 Acesse as posições mais usadas de cada acorde, compare shapes
@@ -403,7 +403,7 @@ function LandingPage() {
                 step: "02",
                 icon: <Sparkles className="h-8 w-8" />,
                 title: "Encadeie os melhores shapes",
-                desc: "Consulte o dicionário gigante, escolha posições próximas e aplique arpejos e escalas na região do acorde.",
+                desc: "Consulte o dicionário interativo, escolha posições próximas e aplique arpejos e escalas na região do acorde.",
               },
               {
                 step: "03",
@@ -582,7 +582,7 @@ function LandingPage() {
           </Link>
 
           <div className="mt-10 flex flex-wrap items-center justify-center gap-6 font-heading text-sm tracking-wider uppercase text-black/50">
-            {["Sequências de samba", "Dicionário gigante", "Diagramas personalizados"].map(
+            {["Sequências de samba", "Dicionário interativo", "Diagramas personalizados"].map(
               (item, i) => (
                 <div key={i} className="flex items-center gap-2">
                   <Check className="h-4 w-4 text-neo-orange" />

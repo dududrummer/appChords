@@ -74,7 +74,7 @@ export function ProfileTab() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="w-full space-y-6">
       {/* Profile Header */}
       <div className="bg-card border rounded-xl p-6 flex flex-col sm:flex-row items-center gap-6">
         <div className="relative group">

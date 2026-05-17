@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef, useCallback, useEffect } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Moon, Sun, Download, Circle, Square, Triangle, Trash2, Columns, Rows, Music2, BookOpen, ChevronRight, Menu, X, Dumbbell, GraduationCap, Users, User } from "lucide-react";
 import { CavaquinhoIcon } from "@/components/icons/CavaquinhoIcon";
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,7 @@ import { ProfileTab } from "@/components/ProfileTab";
 import { WelcomeTour } from "@/components/WelcomeTour";
 import { UserMenu } from "@/components/UserMenu";
 import { INSTRUMENT_PRESETS } from "@/lib/music-theory";
+import { useAuth } from "@/lib/auth-context";
 
 interface Marker {
   string: number;
@@ -50,6 +51,8 @@ type AppTab = 'diagram' | 'progression' | 'dictionary' | 'exercises' | 'plan' | 
 
 function ChordGenerator() {
   const { tab } = Route.useSearch();
+  const navigate = useNavigate();
+  const { isAuthenticated, isLoading } = useAuth();
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [activePage, setActivePage] = useState<AppTab>((tab as AppTab) || 'dictionary');
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -482,6 +485,26 @@ function ChordGenerator() {
 
   const downloadFilename = (chordTitle || "chord").toLowerCase().replace(/[^a-z0-9]/g, "-");
 
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      navigate({ to: "/" });
+    }
+  }, [isAuthenticated, isLoading, navigate]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-neo-bg flex items-center justify-center px-4">
+        <div className="border-3 border-black bg-white px-6 py-4 font-display text-2xl shadow-[5px_5px_0px_black]">
+          Carregando...
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return null;
+  }
+
   return (
     <div className={`min-h-screen flex ${isDarkMode ? "dark bg-background text-foreground" : "bg-neo-bg text-black"}`}>
       {/* Welcome Tour — first-time users */}
@@ -519,7 +542,7 @@ function ChordGenerator() {
 
         <nav className="flex-1 p-2 space-y-1">
           {[
-            { page: 'dictionary' as const,  icon: <BookOpen className="h-4 w-4" />,      label: 'Dicionário Gigante',   sub: 'Shapes mais usados' },
+            { page: 'dictionary' as const,  icon: <BookOpen className="h-4 w-4" />,      label: 'Dicionário Interativo', sub: 'Shapes mais usados' },
             { page: 'progression' as const, icon: <Music2   className="h-4 w-4" />,      label: 'Sequências',           sub: 'Samba e autorais' },
             { page: 'diagram' as const,     icon: <CavaquinhoIcon className="h-4 w-4" />,  label: 'Diagramas',           sub: 'Acordes próprios' },
             { page: 'exercises' as const,   icon: <Dumbbell className="h-4 w-4" />,      label: 'Escalas e Arpejos',    sub: 'Treino por região' },
@@ -562,7 +585,7 @@ function ChordGenerator() {
             <Menu className="h-5 w-5" />
           </button>
           <h1 className="font-display text-2xl tracking-tight flex-1">
-            {activePage === 'diagram' ? 'Criador de Diagramas' : activePage === 'progression' ? 'Sequências Harmônicas' : activePage === 'exercises' ? 'Escalas e Arpejos' : activePage === 'plan' ? 'Plano de Estudos' : activePage === 'community' ? 'Comunidade' : activePage === 'profile' ? 'Meu Perfil' : 'Dicionário Gigante'}
+            {activePage === 'diagram' ? 'Criador de Diagramas' : activePage === 'progression' ? 'Sequências Harmônicas' : activePage === 'exercises' ? 'Escalas e Arpejos' : activePage === 'plan' ? 'Plano de Estudos' : activePage === 'community' ? 'Comunidade' : activePage === 'profile' ? 'Meu Perfil' : 'Dicionário Interativo'}
           </h1>
           <UserMenu />
         </header>
@@ -571,56 +594,45 @@ function ChordGenerator() {
           {activePage === 'profile' ? (
             <ProfileTab />
           ) : activePage === 'community' ? (
-            <div className="relative overflow-hidden border-3 border-black bg-white p-8 shadow-[6px_6px_0px_black]">
-              <div className="absolute inset-0 dot-grid pointer-events-none opacity-40" />
-              <div className="relative z-10 max-w-4xl">
-                <div className="inline-flex bg-neo-orange text-white border-2 border-black px-4 py-1.5 font-heading text-xs tracking-wider uppercase mb-5">
-                  Comunidade SambaTune
-                </div>
-                <h2 className="font-display text-4xl md:text-5xl tracking-tight mb-4">
-                  Compartilhe sequências, dicas, exercícios e músicas.
-                </h2>
-                <p className="text-lg font-medium text-black/70 max-w-2xl mb-8">
-                  A área de comunidade será o ponto de troca entre membros:
-                  progressões para samba e pagode, caminhos de estudo, músicas
-                  para aplicar sequências e ideias para praticar com ritmo.
+            <Card className="w-full">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Users className="h-5 w-5" /> Comunidade
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Compartilhe sequências, dicas, exercícios e músicas para aplicar progressões no repertório.
                 </p>
                 <div className="grid md:grid-cols-3 gap-4">
-                  {[
-                    "Sequências harmônicas",
-                    "Dicas e exercícios",
-                    "Músicas para aplicar",
-                  ].map((item) => (
-                    <div key={item} className="border-2 border-black bg-neo-bg p-4 font-bold shadow-[3px_3px_0px_black]">
+                  {["Sequências harmônicas", "Dicas e exercícios", "Músicas para aplicar"].map((item) => (
+                    <div key={item} className="rounded-lg border bg-card p-4 text-sm font-semibold">
                       {item}
                     </div>
                   ))}
                 </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           ) : activePage === 'plan' ? (
-            <div className="relative overflow-hidden border-3 border-black bg-white p-8 shadow-[6px_6px_0px_black]">
-              <div className="absolute inset-0 dot-grid pointer-events-none opacity-40" />
-              <div className="relative z-10 max-w-4xl">
-                <div className="inline-flex bg-neo-yellow border-2 border-black px-4 py-1.5 font-heading text-xs tracking-wider uppercase mb-5">
-                  Plano de Estudos
-                </div>
-                <h2 className="font-display text-4xl md:text-5xl tracking-tight mb-4">
-                  Organize acordes, arpejos, escalas e repertório.
-                </h2>
-                <p className="text-lg font-medium text-black/70 max-w-2xl mb-8">
-                  Em breve, você poderá montar uma rotina com sequências,
-                  exercícios técnicos, músicas de aplicação e metas de prática.
+            <Card className="w-full">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <GraduationCap className="h-5 w-5" /> Plano de Estudos
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Organize acordes, arpejos, escalas, sequências e repertório em uma rotina prática.
                 </p>
                 <div className="grid md:grid-cols-3 gap-4">
                   {["Rotina semanal", "Metas por região", "Repertório aplicado"].map((item) => (
-                    <div key={item} className="border-2 border-black bg-neo-bg p-4 font-bold shadow-[3px_3px_0px_black]">
+                    <div key={item} className="rounded-lg border bg-card p-4 text-sm font-semibold">
                       {item}
                     </div>
                   ))}
                 </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           ) : activePage === 'progression' ? (
             <ProgressionEditor
               instrument={instrument}

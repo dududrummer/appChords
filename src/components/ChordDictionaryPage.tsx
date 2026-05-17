@@ -67,7 +67,7 @@ export function ChordDictionaryPage({
     <Card className="w-full">
       <CardHeader>
         <CardTitle className="text-lg flex items-center gap-2">
-          <BookOpen className="h-5 w-5" /> Dicionário de Acordes
+          <BookOpen className="h-5 w-5" /> Dicionário Interativo
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">

@@ -17,7 +17,7 @@ import { CavaquinhoIcon } from "@/components/icons/CavaquinhoIcon";
 const TOUR_STEPS = [
   {
     icon: <BookOpen className="h-8 w-8" />,
-    title: "Dicionário de Acordes",
+    title: "Dicionário Interativo",
     description:
       "Busque qualquer acorde por nome e veja todas as posições no braço. Cavaquinho e Banjo.",
     color: "#FF6B35",
