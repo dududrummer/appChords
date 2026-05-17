@@ -83,6 +83,13 @@ function LandingPage() {
 
       {/* ━━━━━━━━━━ HERO SECTION ━━━━━━━━━━ */}
       <section className="relative pt-16 pb-28 px-6 overflow-hidden">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+          <div className="absolute -top-28 -left-24 h-72 w-72 rounded-full border-[26px] border-black/[0.04]" />
+          <div className="absolute top-24 left-[42%] h-44 w-44 rounded-full border-[18px] border-neo-orange/[0.08]" />
+          <div className="absolute -bottom-24 right-12 h-80 w-80 rounded-full border-[30px] border-black/[0.035]" />
+          <div className="absolute bottom-20 left-1/4 h-28 w-28 rounded-full bg-neo-yellow/[0.16]" />
+          <div className="absolute top-10 right-1/4 h-20 w-20 rounded-full bg-neo-orange/[0.08]" />
+        </div>
         {/* Background decorative elements */}
         <div className="absolute top-10 left-10 text-8xl font-display text-black/[0.03] select-none pointer-events-none">
           ♪ ♫ ♬
@@ -104,7 +111,7 @@ function LandingPage() {
             <h1 className="font-display text-6xl md:text-7xl lg:text-8xl leading-[0.95] mb-6 tracking-tight">
               Domine{" "}
               <span className="text-neo-orange outline-text-comic">
-                acordes, arpejos, escalas
+                acordes, arpejos, escalas, sequências
               </span>{" "}
               e muito mais.
             </h1>
