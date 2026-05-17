@@ -13,19 +13,12 @@ export const NeubrutalistCard = ({
 }: NeubrutalistCardProps) => {
   const variants = {
     white: "bg-white",
-    yellow: "bg-neo-yellow",
+    yellow: "bg-neo-yellow/70",
     orange: "bg-neo-orange text-white",
   };
 
   return (
-    <div
-      className={cn(
-        "neo-brutalism-card p-6 rounded-none",
-        variants[variant],
-        className
-      )}
-      {...props}
-    >
+    <div className={cn("neo-brutalism-card p-6", variants[variant], className)} {...props}>
       {children}
     </div>
   );
