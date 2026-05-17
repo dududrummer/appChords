@@ -584,7 +584,7 @@ function ChordGenerator() {
             { page: 'dictionary' as const,  icon: <BookOpen className="h-4 w-4" />,      label: 'Dicionário Interativo', sub: 'Shapes mais usados' },
             { page: 'progression' as const, icon: <Music2   className="h-4 w-4" />,      label: 'Sequências Harmônicas', sub: 'Sequências populares' },
             { page: 'diagram' as const,     icon: <CavaquinhoIcon className="h-4 w-4" />,  label: 'Criador de Diagramas', sub: 'Diagrama personalizado' },
-            { page: 'exercises' as const,   icon: <Dumbbell className="h-4 w-4" />,      label: 'Escalas e Arpejos',    sub: 'Treino por região' },
+            { page: 'exercises' as const,   icon: <Dumbbell className="h-4 w-4" />,      label: 'Exercícios',    sub: 'Treino por região' },
             { page: 'plan' as const,        icon: <GraduationCap className="h-4 w-4" />, label: 'Plano de Estudos',     sub: 'Rotina e metas' },
             { page: 'community' as const,   icon: <Users className="h-4 w-4" />,         label: 'Comunidade',           sub: 'Compartilhe conhecimento' },
             { page: 'profile' as const,     icon: <User className="h-4 w-4" />,          label: 'Meu Perfil',           sub: 'Dados e Configurações' },
@@ -624,7 +624,7 @@ function ChordGenerator() {
             <Menu className="h-5 w-5" />
           </button>
           <h1 className="font-display text-2xl tracking-tight flex-1">
-            {activePage === 'diagram' ? 'Criador de Diagramas' : activePage === 'progression' ? 'Sequências Harmônicas' : activePage === 'exercises' ? 'Escalas e Arpejos' : activePage === 'plan' ? 'Plano de Estudos' : activePage === 'community' ? 'Comunidade' : activePage === 'profile' ? 'Meu Perfil' : 'Dicionário Interativo'}
+            {activePage === 'diagram' ? 'Criador de Diagramas' : activePage === 'progression' ? 'Sequências Harmônicas' : activePage === 'exercises' ? 'Exercícios' : activePage === 'plan' ? 'Plano de Estudos' : activePage === 'community' ? 'Comunidade' : activePage === 'profile' ? 'Meu Perfil' : 'Dicionário Interativo'}
           </h1>
           <UserMenu />
         </header>
