@@ -1,584 +1,354 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { NeubrutalistButton } from "@/components/ui/NeubrutalistButton";
-import { NeubrutalistCard } from "@/components/ui/NeubrutalistCard";
-import { UserMenu } from "@/components/UserMenu";
-import { CavaquinhoIcon } from "@/components/icons/CavaquinhoIcon";
+import type { CSSProperties, ReactNode } from "react";
 import {
-  Music2,
-  BookOpen,
-  ChevronRight,
-  Check,
-  Zap,
-  Star,
-  Users,
-  Download,
   ArrowRight,
-  Sparkles,
-  Dumbbell,
+  BookOpen,
+  Check,
+  ChevronRight,
+  Download,
   Gauge,
+  Music2,
+  Play,
+  Sparkles,
+  Users,
+  Zap,
 } from "lucide-react";
+import { CavaquinhoIcon } from "@/components/icons/CavaquinhoIcon";
 
 export const Route = createFileRoute("/")({
   component: LandingPage,
 });
 
-/* ── tiny reusable sticker badge ── */
-function StickerBadge({
-  children,
-  rotate = "-2deg",
-  className = "",
-}: {
-  children: React.ReactNode;
-  rotate?: string;
-  className?: string;
-}) {
+const landingVars = {
+  "--paper": "#FBF5E5",
+  "--cream": "#FFF8E7",
+  "--cream-dark": "#FFE8B0",
+  "--ink": "#1A1A1A",
+  "--ink-soft": "#2D2D2D",
+  "--orange": "#FF5722",
+  "--orange-dark": "#D84315",
+  "--yellow": "#FFC107",
+  "--blue": "#2196F3",
+  "--green": "#4CAF50",
+  "--pink": "#EC407A",
+  "--display": "'Bowlby One', sans-serif",
+  "--display-light": "'Anton', sans-serif",
+  "--body": "'DM Sans', sans-serif",
+  "--shadow": "6px 6px 0 #1A1A1A",
+  "--shadow-lift": "10px 10px 0 #1A1A1A",
+} as CSSProperties;
+
+function Pill({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
     <span
-      className={`sticker inline-block px-4 py-1.5 text-xs font-black uppercase tracking-wide ${className}`}
-      style={{ "--rotate": rotate } as React.CSSProperties}
+      className={`inline-flex items-center gap-2 rounded-md border-[3px] border-[var(--ink)] px-4 py-2 text-xs font-black uppercase tracking-wide shadow-[var(--shadow)] ${className}`}
     >
       {children}
     </span>
   );
 }
 
-/* ── main page ── */
-function LandingPage() {
+function ComicCard({
+  children,
+  className = "",
+  rotate = "0deg",
+}: {
+  children: ReactNode;
+  className?: string;
+  rotate?: string;
+}) {
   return (
-    <div className="min-h-screen bg-background text-foreground font-body selection:bg-neo-orange selection:text-white overflow-x-hidden">
-      {/* Dot Grid Overlay */}
-      <div className="fixed inset-0 dot-grid pointer-events-none z-0" />
+    <div
+      className={`rounded-xl border-[3px] border-[var(--ink)] bg-white p-6 shadow-[var(--shadow)] transition-transform hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[var(--shadow-lift)] ${className}`}
+      style={{ transform: `rotate(${rotate})` }}
+    >
+      {children}
+    </div>
+  );
+}
 
-      {/* ━━━━━━━━━━ NAVIGATION ━━━━━━━━━━ */}
-      <nav className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur px-6 py-4">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <div className="rounded-lg bg-primary p-2 shadow-sm">
-              <CavaquinhoIcon className="h-6 w-6" color="#FF6B35" />
-            </div>
-            <span className="text-2xl font-bold tracking-tight">
-              <span className="text-neo-orange">Samba</span>
-              <span className="text-black">Tune</span>
-            </span>
-          </div>
-          <div className="hidden md:flex gap-8 text-sm font-semibold text-muted-foreground">
-            <a href="#features" className="hover:text-neo-orange transition-colors">
-              Recursos
-            </a>
-            <a href="#demo" className="hover:text-neo-orange transition-colors">
-              Como Funciona
-            </a>
-            <a href="#testimonials" className="hover:text-neo-orange transition-colors">
-              Comunidade
-            </a>
-          </div>
-          <UserMenu />
-        </div>
+function SectionTitle({ eyebrow, children }: { eyebrow: string; children: ReactNode }) {
+  return (
+    <div className="mx-auto mb-12 max-w-3xl text-center">
+      <Pill className="mb-5 bg-[var(--yellow)] text-[var(--ink)]">{eyebrow}</Pill>
+      <h2 className="text-balance text-4xl leading-[1.05] text-[var(--ink)] md:text-6xl [font-family:var(--display-light)]">
+        {children}
+      </h2>
+    </div>
+  );
+}
+
+function LandingPage() {
+  const features = [
+    {
+      icon: <BookOpen className="h-7 w-7" />,
+      title: "Dicionário Interativo",
+      text: "Encontre shapes por região, compare voicings e leve o acorde certo para a sequência.",
+      color: "bg-[var(--yellow)]",
+    },
+    {
+      icon: <Music2 className="h-7 w-7" />,
+      title: "Sequências Harmônicas",
+      text: "Monte caminhos clássicos do samba ou crie progressões próprias com encadeamento inteligente.",
+      color: "bg-[var(--orange)] text-white",
+    },
+    {
+      icon: <Gauge className="h-7 w-7" />,
+      title: "Prática com Ritmo",
+      text: "Toque com batucadas, metrônomo e exercícios para transformar teoria em som real.",
+      color: "bg-[var(--blue)] text-white",
+    },
+  ];
+
+  const steps = [
+    "Escolha cavaquinho ou banjo e procure o acorde.",
+    "Compare posições próximas no braço do instrumento.",
+    "Monte uma sequência e pratique com ritmo.",
+    "Salve, compartilhe ou exporte seus diagramas.",
+  ];
+
+  const tools = [
+    { icon: <Sparkles className="h-5 w-5" />, label: "Arpejos por região" },
+    { icon: <Download className="h-5 w-5" />, label: "Exportação SVG/PNG" },
+    { icon: <Users className="h-5 w-5" />, label: "Comunidade musical" },
+    { icon: <Zap className="h-5 w-5" />, label: "Shapes essenciais" },
+  ];
+
+  return (
+    <div
+      className="min-h-screen overflow-x-hidden bg-[var(--paper)] text-[var(--ink)] selection:bg-[var(--orange)] selection:text-white [font-family:var(--body)]"
+      style={landingVars}
+    >
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Anton&family=Bowlby+One&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,600&display=swap');
+      `}</style>
+
+      <div className="pointer-events-none fixed inset-0 z-0 hidden bg-[radial-gradient(circle,rgba(26,26,26,0.045)_1.5px,transparent_1.5px)] [background-size:14px_14px] md:block" />
+      <div className="fixed left-0 top-0 z-[60] h-1 w-full bg-[var(--orange)]" />
+
+      <nav className="fixed left-1/2 top-4 z-50 flex max-w-[calc(100%-24px)] -translate-x-1/2 items-center gap-3 rounded-full border-[3px] border-[var(--ink)] bg-white px-4 py-3 shadow-[var(--shadow)] md:gap-5 md:px-6">
+        <Link to="/" className="flex items-center gap-2 whitespace-nowrap">
+          <CavaquinhoIcon className="h-5 w-5 text-[var(--orange)]" color="currentColor" />
+          <span className="text-xs tracking-wide md:text-sm [font-family:var(--display)]">
+            <span className="hidden sm:inline">Samba</span>
+            <span className="text-[var(--orange)]">Tune</span>
+          </span>
+        </Link>
+        <div className="hidden h-7 w-px bg-black/15 sm:block" />
+        <a href="#recursos" className="hidden text-xs font-black uppercase tracking-wide md:block">
+          Recursos
+        </a>
+        <a
+          href="#como-funciona"
+          className="hidden text-xs font-black uppercase tracking-wide lg:block"
+        >
+          Como funciona
+        </a>
+        <Link
+          to="/app"
+          className="rounded-full border-[3px] border-[var(--ink)] bg-[var(--orange)] px-4 py-2 text-xs font-black uppercase tracking-wide text-white transition-transform hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0_var(--ink)] md:px-6"
+        >
+          Abrir App
+        </Link>
       </nav>
 
-      {/* ━━━━━━━━━━ HERO SECTION ━━━━━━━━━━ */}
-      <section className="relative pt-16 pb-24 px-6 overflow-hidden">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
-        >
-          <div className="absolute inset-x-0 top-0 h-px bg-border" />
-          <div className="absolute inset-x-0 bottom-0 h-px bg-border" />
-        </div>
-        {/* Background decorative elements */}
-        <div className="hidden">♪ ♫ ♬</div>
-        <div className="hidden">🎵</div>
-
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left — Text content */}
-          <div className="z-10 animate-fade-in-up">
-            <StickerBadge rotate="-3deg" className="bg-white mb-6 text-muted-foreground">
-              Cavaquinho · Banjo · Samba
-            </StickerBadge>
-
-            <h1 className="max-w-2xl text-5xl font-bold leading-[1.02] tracking-tight md:text-6xl lg:text-7xl mb-6">
-              Estude samba com acordes, sequências e prática guiada.
-            </h1>
-
-            <p className="text-xl md:text-2xl font-semibold text-muted-foreground mb-4 leading-snug max-w-xl">
-              Dicionário interativo, progressões harmônicas e treino com ritmo em uma ferramenta
-              objetiva.
-            </p>
-
-            <p className="text-base md:text-lg max-w-xl mb-10 leading-relaxed text-muted-foreground">
-              Monte sequências harmônicas clássicas do samba, crie progressões personalizadas,
-              encontre os shapes mais usados de cada acorde e aplique arpejos e escalas por região
-              para estudar com direção.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-5 items-start">
-              <Link href="/app">
-                <NeubrutalistButton size="xl" className="animate-pulse-glow w-full sm:w-auto">
-                  Experimente Grátis
-                  <ChevronRight className="ml-2 h-7 w-7" />
-                </NeubrutalistButton>
-              </Link>
-
-              <div className="flex items-center gap-4 px-2">
-                <div className="flex -space-x-3">
-                  {["🎸", "🎵", "🎶", "🎤"].map((emoji, i) => (
-                    <div
-                      key={i}
-                      className="w-11 h-11 rounded-full border-2 border-black bg-neo-yellow flex items-center justify-center text-lg"
-                    >
-                      {emoji}
-                    </div>
-                  ))}
-                </div>
-                <p className="text-sm font-semibold leading-tight text-muted-foreground">
-                  <span className="text-neo-orange text-lg font-bold">+1.000</span>
-                  <br />
-                  músicos já usam
-                </p>
+      <main className="relative z-10">
+        <section className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_82%_30%,rgba(255,87,34,0.14),transparent_48%),radial-gradient(circle_at_10%_78%,rgba(255,193,7,0.18),transparent_42%)] px-6 pb-20 pt-32 md:pt-40">
+          <div className="mx-auto grid max-w-6xl items-center gap-10 md:grid-cols-[1.08fr_0.92fr]">
+            <div>
+              <div className="mb-7 flex flex-col leading-none">
+                <span className="mb-3 text-[11px] font-black uppercase tracking-[0.55em] text-black/70">
+                  Cavaquinho · Banjo
+                </span>
+                <span className="inline-block origin-left -rotate-2 text-5xl leading-[0.9] text-[var(--orange)] [font-family:var(--display)] [text-shadow:4px_4px_0_var(--ink)] sm:text-6xl lg:text-7xl">
+                  SambaTune
+                </span>
               </div>
-            </div>
-          </div>
 
-          {/* Right — Hero Image */}
-          <div className="relative animate-fade-in-up animation-delay-200">
-            <div className="animate-float relative z-10">
-              <NeubrutalistCard className="relative p-0 overflow-hidden">
-                <div className="bg-white flex justify-center p-6">
-                  <img
-                    src="/hero-cavaquinho.png?v=20260515"
-                    alt="Jovem tocando cavaquinho alegremente — ilustração cartoon"
-                    className="w-full h-auto max-w-sm object-contain drop-shadow-[4px_4px_0px_rgba(0,0,0,0.3)] hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-              </NeubrutalistCard>
-            </div>
+              <Pill className="mb-6 -rotate-1 bg-[var(--ink)] text-[var(--yellow)]">
+                <Zap className="h-4 w-4" /> estudo musical sem enrolação
+              </Pill>
 
-            {/* Decorative yellow block behind */}
-            <div className="absolute -bottom-5 -right-5 w-full h-full rounded-xl bg-neo-yellow/30 -z-10" />
-
-            {/* Floating stickers */}
-            <StickerBadge
-              rotate="6deg"
-              className="absolute -top-4 -right-4 bg-neo-orange text-white z-20"
-            >
-              Experimente Grátis
-            </StickerBadge>
-            <StickerBadge rotate="-4deg" className="absolute -bottom-4 -left-4 bg-white z-20">
-              ⚡ SVG + PNG
-            </StickerBadge>
-          </div>
-        </div>
-      </section>
-
-      {/* ━━━━━━━━━━ STATS MARQUEE ━━━━━━━━━━ */}
-      <section className="border-y border-border bg-primary text-primary-foreground py-5 overflow-hidden">
-        <div className="flex animate-marquee whitespace-nowrap">
-          {[...Array(2)].map((_, setIdx) => (
-            <div key={setIdx} className="flex items-center gap-12 px-6">
-              {[
-                { icon: "📖", label: "Dicionário interativo", sub: "shapes mais usados" },
-                {
-                  icon: "🎸",
-                  label: "2 instrumentos",
-                  sub: "cavaquinho · banjo",
-                },
-                {
-                  icon: "🎨",
-                  label: "Diagramas próprios",
-                  sub: "SVG + PNG",
-                },
-                {
-                  icon: "🎵",
-                  label: "Sequências Harmônicas",
-                  sub: "clássicas e autorais",
-                },
-                {
-                  icon: "⚡",
-                  label: "Experimente grátis",
-                  sub: "comece agora",
-                },
-              ].map((stat, i) => (
-                <div key={i} className="flex items-center gap-3 mr-12">
-                  <span className="text-3xl">{stat.icon}</span>
-                  <div>
-                    <p className="font-display text-lg tracking-tight">{stat.label}</p>
-                    <p className="font-heading text-xs tracking-wider uppercase text-white/60">
-                      {stat.sub}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ━━━━━━━━━━ FEATURES GRID ━━━━━━━━━━ */}
-      <section id="features" className="py-24 px-6 bg-white border-b border-border relative">
-        <div className="absolute inset-0 dot-grid pointer-events-none z-0" />
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="text-center mb-16">
-            <StickerBadge rotate="2deg" className="bg-neo-yellow mb-4">
-              ✨ Tudo em um só app
-            </StickerBadge>
-            <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">
-              Estudo <span className="text-neo-orange">completo</span>
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Do repertório ao braço do instrumento, com ferramentas feitas para praticar de
-              verdade.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Feature 1 */}
-            <NeubrutalistCard className="hover:bg-neo-yellow transition-all duration-300 group cursor-pointer">
-              <div className="bg-black w-16 h-16 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform">
-                <BookOpen className="text-neo-orange h-8 w-8" />
-              </div>
-              <h3 className="font-display text-2xl mb-3 tracking-tight">Dicionário Interativo</h3>
-              <p className="font-medium leading-relaxed text-black/70">
-                Acesse as posições mais usadas de cada acorde, compare shapes por região e leve o
-                melhor voicing para sua sequência.
-              </p>
-              <div className="mt-6 flex items-center gap-2 font-heading text-sm tracking-wider uppercase text-neo-orange">
-                Explorar <ArrowRight className="h-4 w-4" />
-              </div>
-            </NeubrutalistCard>
-
-            {/* Feature 2 — highlighted */}
-            <NeubrutalistCard className="bg-neo-orange text-white relative overflow-visible">
-              <StickerBadge
-                rotate="-4deg"
-                className="absolute -top-3 -right-3 bg-neo-yellow text-black z-10"
-              >
-                ⭐ Popular
-              </StickerBadge>
-              <div className="bg-white w-16 h-16 flex items-center justify-center mb-6">
-                <Music2 className="text-neo-orange h-8 w-8" />
-              </div>
-              <h3 className="font-display text-2xl mb-3 tracking-tight">Sequências Harmônicas</h3>
-              <p className="font-medium leading-relaxed text-white/85">
-                Use sequências tradicionais do samba ou crie caminhos personalizados, com
-                encadeamento inteligente entre os melhores shapes.
-              </p>
-              <div className="mt-6 flex items-center gap-2 font-heading text-sm tracking-wider uppercase text-white/80">
-                Experimentar <ArrowRight className="h-4 w-4" />
-              </div>
-            </NeubrutalistCard>
-
-            {/* Feature 3 */}
-            <NeubrutalistCard className="hover:bg-neo-yellow transition-all duration-300 group cursor-pointer">
-              <div className="bg-black w-16 h-16 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:-rotate-3 transition-transform">
-                <Dumbbell className="text-neo-orange h-8 w-8" />
-              </div>
-              <h3 className="font-display text-2xl mb-3 tracking-tight">
-                Ritmo, Escalas e Arpejos
-              </h3>
-              <p className="font-medium leading-relaxed text-black/70">
-                Toque junto com batucadas em vários andamentos, incluindo samba-enredo, use
-                metrônomo e aplique escalas e arpejos por região do acorde.
-              </p>
-              <div className="mt-6 flex items-center gap-2 font-heading text-sm tracking-wider uppercase text-neo-orange">
-                Praticar <ArrowRight className="h-4 w-4" />
-              </div>
-            </NeubrutalistCard>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 mt-8">
-            <NeubrutalistCard className="hover:bg-neo-yellow transition-all duration-300 group cursor-pointer">
-              <div className="bg-black w-16 h-16 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform">
-                <Download className="text-neo-orange h-8 w-8" />
-              </div>
-              <h3 className="font-display text-2xl mb-3 tracking-tight">
-                Diagramas Personalizados
-              </h3>
-              <p className="font-medium leading-relaxed text-black/70">
-                Monte seus próprios acordes, edite marcações, cores e cordas, depois exporte
-                diagramas limpos para estudo, aula ou material.
-              </p>
-              <div className="mt-6 flex items-center gap-2 font-heading text-sm tracking-wider uppercase text-neo-orange">
-                Criar diagramas <ArrowRight className="h-4 w-4" />
-              </div>
-            </NeubrutalistCard>
-
-            <NeubrutalistCard className="hover:bg-neo-yellow transition-all duration-300 group cursor-pointer">
-              <div className="bg-black w-16 h-16 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:-rotate-3 transition-transform">
-                <Users className="text-neo-orange h-8 w-8" />
-              </div>
-              <h3 className="font-display text-2xl mb-3 tracking-tight">Comunidade Musical</h3>
-              <p className="font-medium leading-relaxed text-black/70">
-                Compartilhe sequências, dicas, exercícios e músicas para aplicar progressões reais
-                com outros músicos.
-              </p>
-              <div className="mt-6 flex items-center gap-2 font-heading text-sm tracking-wider uppercase text-neo-orange">
-                Participar <ArrowRight className="h-4 w-4" />
-              </div>
-            </NeubrutalistCard>
-
-            <NeubrutalistCard className="bg-black text-white hover:translate-y-[-4px] transition-transform duration-300">
-              <div className="bg-neo-orange w-16 h-16 flex items-center justify-center mb-6">
-                <Zap className="text-white h-8 w-8" />
-              </div>
-              <h3 className="font-display text-2xl mb-3 tracking-tight">Do Shape ao Som</h3>
-              <p className="font-medium leading-relaxed text-white/80">
-                Escolha uma sequência, encontre os acordes, encadeie as posições e toque com ritmo
-                para transformar teoria em música.
-              </p>
-              <div className="mt-6 flex items-center gap-2 font-heading text-sm tracking-wider uppercase text-neo-yellow">
-                Experimentar <ArrowRight className="h-4 w-4" />
-              </div>
-            </NeubrutalistCard>
-          </div>
-        </div>
-      </section>
-
-      {/* ━━━━━━━━━━ HOW IT WORKS ━━━━━━━━━━ */}
-      <section id="demo" className="py-24 px-6 relative">
-        <div className="absolute inset-0 dot-grid pointer-events-none z-0" />
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="text-center mb-16">
-            <h2 className="font-display text-5xl md:text-7xl tracking-tight mb-4">
-              Como <span className="text-neo-orange">funciona?</span>
-            </h2>
-            <p className="font-accent text-xl text-black/60">
-              Um fluxo pensado para estudar samba, pagode e repertório real.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                step: "01",
-                icon: <CavaquinhoIcon className="h-8 w-8" color="white" />,
-                title: "Escolha uma sequência",
-                desc: "Comece pelas sequências mais usadas no samba ou monte uma progressão personalizada para sua música.",
-              },
-              {
-                step: "02",
-                icon: <Sparkles className="h-8 w-8" />,
-                title: "Encadeie os melhores shapes",
-                desc: "Consulte o dicionário interativo, escolha posições próximas e aplique arpejos e escalas na região do acorde.",
-              },
-              {
-                step: "03",
-                icon: <Gauge className="h-8 w-8" />,
-                title: "Toque com batucada",
-                desc: "Pratique com batucadas, samba-enredo e metrônomo em vários andamentos até a sequência virar som.",
-              },
-            ].map((item, i) => (
-              <div key={i} className="relative">
-                <div className="font-display text-8xl text-neo-orange/15 absolute -top-6 -left-2 select-none">
-                  {item.step}
-                </div>
-                <NeubrutalistCard className="relative bg-neo-bg hover:translate-y-[-4px] transition-transform duration-300">
-                  <div className="bg-neo-orange w-14 h-14 flex items-center justify-center mb-5 text-white">
-                    {item.icon}
-                  </div>
-                  <h3 className="font-display text-xl mb-3">{item.title}</h3>
-                  <p className="text-black/70 leading-relaxed">{item.desc}</p>
-                </NeubrutalistCard>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ━━━━━━━━━━ SOCIAL PROOF ━━━━━━━━━━ */}
-      <section
-        id="testimonials"
-        className="py-24 px-6 bg-white border-y-3 border-black overflow-hidden"
-      >
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col lg:flex-row gap-16 items-center">
-            {/* Left column */}
-            <div className="flex-1 animate-slide-left">
-              <StickerBadge rotate="-2deg" className="bg-neo-orange text-white mb-6">
-                Comunidade ativa
-              </StickerBadge>
-              <h2 className="font-display text-4xl md:text-6xl tracking-tight mb-8 leading-[0.95]">
-                Aprenda com{" "}
-                <span className="bg-black text-white px-3 inline-block transform -rotate-1">
-                  músicos reais
+              <h1 className="max-w-2xl text-balance text-4xl uppercase leading-[1.08] text-[var(--ink)] sm:text-5xl lg:text-6xl [font-family:var(--display-light)]">
+                Acordes,{" "}
+                <span className="inline-block -rotate-1 bg-[var(--orange)] px-3 text-white">
+                  sequências
                 </span>{" "}
-                e repertório vivo
-              </h2>
+                e ritmo para tocar melhor.
+              </h1>
 
-              <NeubrutalistCard variant="yellow" className="relative transform -rotate-1">
-                <p className="font-accent text-2xl mb-6 leading-snug">
-                  Compartilhe sequências, exercícios, dicas e músicas para aplicar os caminhos
-                  harmônicos que aparecem no samba de verdade.
-                </p>
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center text-neo-orange font-display text-lg">
-                    RS
-                  </div>
-                  <div>
-                    <p className="font-display text-sm tracking-wide">Comunidade SambaTune</p>
-                    <p className="font-heading text-xs tracking-wider uppercase text-black/50">
-                      Sequências Harmônicas · dicas · exercícios
-                    </p>
-                  </div>
-                </div>
-                <Star className="absolute -top-5 -right-5 h-10 w-10 text-black fill-neo-orange" />
-              </NeubrutalistCard>
-            </div>
+              <p className="mt-6 max-w-xl text-lg font-semibold leading-8 text-black/70">
+                Um app prático para estudar samba, pagode e repertório real: dicionário de acordes,
+                progressões harmônicas, diagramas e treino guiado no mesmo lugar.
+              </p>
 
-            {/* Right column — grid of highlights */}
-            <div className="flex-1 grid grid-cols-2 gap-5 animate-slide-right">
-              {[
-                {
-                  label: "Sequências Harmônicas",
-                  icon: <Zap className="h-6 w-6 text-neo-orange" />,
-                  bg: "",
-                },
-                {
-                  label: "Dicas de Estudo",
-                  icon: <Star className="h-6 w-6" />,
-                  bg: "bg-neo-orange text-white",
-                },
-                {
-                  label: "Exercícios Aplicados",
-                  icon: <Check className="h-6 w-6" />,
-                  bg: "bg-black text-white",
-                },
-                {
-                  label: "Músicas para Praticar",
-                  icon: <Users className="h-6 w-6 text-neo-orange" />,
-                  bg: "",
-                },
-              ].map((item, i) => (
-                <NeubrutalistCard
-                  key={i}
-                  className={`h-44 flex flex-col items-center justify-center text-center p-4 gap-3 hover:translate-y-[-4px] transition-transform duration-300 ${i % 2 === 0 ? "mt-8" : ""} ${item.bg}`}
-                >
-                  {item.icon}
-                  <p className="font-display text-sm">{item.label}</p>
-                </NeubrutalistCard>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ━━━━━━━━━━ INSTRUMENTS SECTION ━━━━━━━━━━ */}
-      <section className="py-24 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="font-display text-5xl md:text-7xl tracking-tight mb-4">
-              Feito para <span className="text-neo-orange">seu instrumento</span>
-            </h2>
-            <p className="font-accent text-xl text-black/60">
-              Cavaquinho e banjo com foco em samba, pagode, levadas e encadeamentos reais.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {[
-              {
-                name: "Cavaquinho",
-                emoji: "🎸",
-                tuning: "Ré · Sol · Si · Ré (DGBD)",
-                chords: "1.500+",
-                desc: "A alma do samba e do pagode. Shapes essenciais, escalas por região, arpejos aplicados e sequências prontas para tocar.",
-              },
-              {
-                name: "Banjo",
-                emoji: "🪕",
-                tuning: "Ré · Sol · Si · Ré (DGBD)",
-                chords: "1.200+",
-                desc: "Mesma afinação DGBD, com posições dedicadas para estudar acordes, encadeamentos e condução harmônica.",
-              },
-            ].map((inst, i) => (
-              <NeubrutalistCard
-                key={i}
-                className="group hover:bg-neo-yellow transition-all duration-300 cursor-pointer"
-              >
-                <div className="text-5xl mb-4">{inst.emoji}</div>
-                <h3 className="font-display text-3xl mb-2">{inst.name}</h3>
-                <p className="font-heading text-sm tracking-wider uppercase text-black/50 mb-4">
-                  {inst.tuning}
-                </p>
-                <p className="text-black/70 leading-relaxed mb-6">{inst.desc}</p>
-                <div className="flex items-center gap-2">
-                  <span className="font-display text-2xl text-neo-orange">{inst.chords}</span>
-                  <span className="font-heading text-xs tracking-wider uppercase text-black/50">
-                    posições
+              <div className="mt-8 flex flex-wrap gap-3">
+                {["DGBD", "Shapes", "Batucadas", "SVG + PNG"].map((tag, index) => (
+                  <span
+                    key={tag}
+                    className={`rounded-md border-2 border-[var(--ink)] bg-white px-4 py-2 text-xs font-black uppercase shadow-[3px_3px_0_var(--ink)] ${
+                      index % 2 ? "rotate-1" : "-rotate-1"
+                    }`}
+                  >
+                    {tag}
                   </span>
+                ))}
+              </div>
+
+              <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
+                <Link
+                  to="/app"
+                  className="inline-flex items-center justify-center rounded-xl border-[3px] border-[var(--ink)] bg-[var(--orange)] px-8 py-4 text-base font-black uppercase tracking-wide text-white shadow-[var(--shadow)] transition-transform hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[var(--shadow-lift)]"
+                >
+                  Começar agora <ChevronRight className="ml-2 h-5 w-5" />
+                </Link>
+                <a
+                  href="#como-funciona"
+                  className="inline-flex items-center justify-center rounded-xl border-[3px] border-[var(--ink)] bg-white px-7 py-4 text-base font-black uppercase tracking-wide shadow-[var(--shadow)] transition-transform hover:-translate-x-1 hover:-translate-y-1"
+                >
+                  Ver fluxo <Play className="ml-2 h-4 w-4 fill-current" />
+                </a>
+              </div>
+            </div>
+
+            <div className="relative mx-auto w-full max-w-md">
+              <div className="absolute -right-5 -top-5 rotate-6 rounded-lg border-[3px] border-[var(--ink)] bg-[var(--yellow)] px-4 py-3 text-sm font-black uppercase shadow-[var(--shadow)]">
+                prático
+              </div>
+              <div className="absolute -bottom-4 -left-4 z-20 -rotate-3 rounded-lg border-[3px] border-[var(--ink)] bg-white px-4 py-3 text-sm font-black uppercase shadow-[var(--shadow)]">
+                samba real
+              </div>
+              <div className="rounded-3xl border-[4px] border-[var(--ink)] bg-[var(--cream)] p-5 shadow-[var(--shadow-lift)]">
+                <div className="mb-4 flex items-center justify-between rounded-full border-[3px] border-[var(--ink)] bg-white px-4 py-2">
+                  <span className="text-xs font-black uppercase tracking-wide">modo estudo</span>
+                  <span className="h-3 w-3 rounded-full bg-[var(--green)]" />
                 </div>
-              </NeubrutalistCard>
+                <img
+                  src="/hero-cavaquinho.png?v=20260515"
+                  alt="Ilustração de jovem tocando cavaquinho"
+                  className="mx-auto max-h-[430px] object-contain drop-shadow-[6px_6px_0_rgba(26,26,26,0.22)]"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="recursos" className="px-6 py-20">
+          <SectionTitle eyebrow="recursos principais">
+            Tudo que você precisa para sair do shape solto e chegar no som.
+          </SectionTitle>
+
+          <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-3">
+            {features.map((feature, index) => (
+              <ComicCard key={feature.title} className={index === 1 ? "md:-mt-5" : ""}>
+                <div
+                  className={`mb-5 inline-flex rounded-xl border-[3px] border-[var(--ink)] p-4 shadow-[4px_4px_0_var(--ink)] ${feature.color}`}
+                >
+                  {feature.icon}
+                </div>
+                <h3 className="mb-3 text-2xl uppercase leading-tight [font-family:var(--display-light)]">
+                  {feature.title}
+                </h3>
+                <p className="font-semibold leading-7 text-black/70">{feature.text}</p>
+              </ComicCard>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ━━━━━━━━━━ FINAL CTA ━━━━━━━━━━ */}
-      <section className="py-32 px-6 bg-neo-yellow border-t-3 border-black text-center relative overflow-hidden">
-        {/* Background watermark */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-[0.04] pointer-events-none select-none">
-          <span className="font-display text-[18rem] md:text-[24rem] text-black transform -rotate-12">
-            SAMBA
-          </span>
-        </div>
+        <section className="bg-[var(--ink)] px-6 py-12 text-white">
+          <div className="mx-auto grid max-w-6xl gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {tools.map((tool) => (
+              <div
+                key={tool.label}
+                className="flex items-center gap-3 rounded-xl border-[3px] border-white bg-white/10 p-4 shadow-[5px_5px_0_var(--orange)]"
+              >
+                <span className="rounded-lg bg-[var(--orange)] p-2 text-white">{tool.icon}</span>
+                <span className="text-sm font-black uppercase tracking-wide">{tool.label}</span>
+              </div>
+            ))}
+          </div>
+        </section>
 
-        <div className="relative z-10 max-w-3xl mx-auto">
-          <StickerBadge rotate="3deg" className="bg-black text-white mb-6">
-            Experimente grátis
-          </StickerBadge>
-          <h2 className="font-display text-5xl md:text-8xl tracking-tight mb-6 leading-[0.9]">
-            Pronto para <span className="text-neo-orange outline-text-comic">começar?</span>
-          </h2>
-          <p className="font-accent text-2xl mb-10 text-black/70">
-            Monte sequências, escolha os melhores shapes, pratique com batucada e transforme seus
-            estudos em repertório.
-          </p>
-          <Link href="/app">
-            <NeubrutalistButton size="xl" className="px-16 animate-pulse-glow">
-              Experimentar Grátis <ArrowRight className="ml-3 h-7 w-7" />
-            </NeubrutalistButton>
-          </Link>
+        <section id="como-funciona" className="px-6 py-20">
+          <SectionTitle eyebrow="fluxo de estudo">
+            Quatro passos para transformar acorde em repertório.
+          </SectionTitle>
 
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-6 font-heading text-sm tracking-wider uppercase text-black/50">
-            {["Sequências Harmônicas", "Dicionário interativo", "Diagramas personalizados"].map(
-              (item, i) => (
-                <div key={i} className="flex items-center gap-2">
-                  <Check className="h-4 w-4 text-neo-orange" />
-                  {item}
+          <div className="mx-auto max-w-4xl">
+            {steps.map((step, index) => (
+              <div key={step} className="relative pl-12">
+                {index < steps.length - 1 && (
+                  <div className="absolute left-[19px] top-12 h-full w-1 bg-[var(--ink)]" />
+                )}
+                <div className="mb-6 rounded-xl border-[3px] border-[var(--ink)] bg-white p-5 shadow-[var(--shadow)]">
+                  <div className="absolute left-0 top-4 flex h-10 w-10 items-center justify-center rounded-full border-[3px] border-[var(--ink)] bg-[var(--orange)] text-sm font-black text-white shadow-[3px_3px_0_var(--ink)]">
+                    {String(index + 1).padStart(2, "0")}
+                  </div>
+                  <p className="text-lg font-black">{step}</p>
                 </div>
-              ),
-            )}
+              </div>
+            ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ━━━━━━━━━━ FOOTER ━━━━━━━━━━ */}
-      <footer className="bg-black text-white py-14 px-6">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="flex items-center gap-3">
-            <div className="bg-neo-orange p-1.5">
-              <CavaquinhoIcon className="h-5 w-5" color="white" />
+        <section className="px-6 py-20">
+          <div className="mx-auto grid max-w-6xl items-center gap-8 rounded-3xl border-[4px] border-[var(--ink)] bg-[var(--orange)] p-8 text-white shadow-[var(--shadow-lift)] md:grid-cols-[0.9fr_1.1fr] md:p-12">
+            <div className="rounded-2xl border-[3px] border-[var(--ink)] bg-[var(--cream)] p-5 shadow-[var(--shadow)]">
+              <div className="grid grid-cols-2 gap-3">
+                {["C7M", "Am7", "Dm7", "G7"].map((chord) => (
+                  <div
+                    key={chord}
+                    className="rounded-xl border-[3px] border-[var(--ink)] bg-white p-4 text-center text-2xl text-[var(--ink)] shadow-[3px_3px_0_var(--ink)] [font-family:var(--display-light)]"
+                  >
+                    {chord}
+                  </div>
+                ))}
+              </div>
             </div>
-            <span className="font-display text-2xl tracking-tight">
-              <span className="text-neo-orange">Samba</span>Tune
-            </span>
+            <div>
+              <Pill className="mb-5 bg-[var(--yellow)] text-[var(--ink)]">comece grátis</Pill>
+              <h2 className="text-balance text-4xl uppercase leading-[1.05] md:text-6xl [font-family:var(--display-light)]">
+                Abra o app e monte sua primeira sequência.
+              </h2>
+              <p className="mt-5 max-w-xl text-lg font-semibold leading-8 text-white/85">
+                Teste o dicionário, escolha os shapes e pratique com ritmo sem depender de material
+                espalhado.
+              </p>
+              <Link
+                to="/app"
+                className="mt-8 inline-flex items-center rounded-xl border-[3px] border-[var(--ink)] bg-white px-8 py-4 text-base font-black uppercase tracking-wide text-[var(--ink)] shadow-[var(--shadow)] transition-transform hover:-translate-x-1 hover:-translate-y-1"
+              >
+                Experimentar SambaTune <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </div>
           </div>
+        </section>
 
-          <p className="font-heading text-sm tracking-wider uppercase text-white/40">
-            © 2026 SambaTune · Todos os direitos reservados
-          </p>
+        <section className="px-6 py-20">
+          <SectionTitle eyebrow="por que funciona">
+            Menos teoria solta, mais prática organizada.
+          </SectionTitle>
 
-          <div className="flex gap-8 font-heading text-xs tracking-widest uppercase">
-            <a href="#" className="hover:text-neo-orange transition-colors text-white/60">
-              Privacidade
-            </a>
-            <a href="#" className="hover:text-neo-orange transition-colors text-white/60">
-              Termos
-            </a>
-            <a href="#" className="hover:text-neo-orange transition-colors text-white/60">
-              Contato
-            </a>
+          <div className="mx-auto grid max-w-5xl gap-5 md:grid-cols-3">
+            {[
+              "Visualize acordes de forma clara.",
+              "Treine progressões que aparecem em músicas reais.",
+              "Crie material limpo para estudo, aula ou repertório.",
+            ].map((item) => (
+              <div
+                key={item}
+                className="flex gap-3 rounded-xl border-[3px] border-[var(--ink)] bg-white p-5 font-bold shadow-[var(--shadow)]"
+              >
+                <Check className="mt-0.5 h-5 w-5 shrink-0 text-[var(--orange)]" />
+                <span>{item}</span>
+              </div>
+            ))}
           </div>
-        </div>
+        </section>
+      </main>
+
+      <footer className="relative z-10 border-t-[3px] border-[var(--ink)] bg-[var(--ink)] px-6 py-10 text-center text-sm font-bold text-white/70">
+        © 2026 SambaTune · Acordes, sequências e ritmo
       </footer>
     </div>
   );
