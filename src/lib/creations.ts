@@ -31,6 +31,26 @@ export interface CreationComment {
   createdAt: string;
 }
 
+interface CommunityCreationRow {
+  id: string;
+  type: CreationType;
+  title: string;
+  description: string | null;
+  payload: Record<string, unknown> | null;
+  author_id: string;
+  author_name: string;
+  created_at: string;
+}
+
+interface CommunityCommentRow {
+  id: string;
+  creation_id: string;
+  author_id: string;
+  author_name: string;
+  body: string;
+  created_at: string;
+}
+
 const STORAGE_PREFIX = "sambatune_creations";
 
 function storageKey(userId: string) {
@@ -50,6 +70,14 @@ export function loadLocalCreations(userId: string): SavedCreation[] {
   } catch {
     return [];
   }
+}
+
+export function deleteLocalCreation(userId: string, creationId: string) {
+  const current = loadLocalCreations(userId);
+  localStorage.setItem(
+    storageKey(userId),
+    JSON.stringify(current.filter((creation) => creation.id !== creationId)),
+  );
 }
 
 export function saveLocalCreation(
@@ -104,8 +132,8 @@ export async function loadPublicCreations() {
     return { creations: [] as SavedCreation[], error: error.message };
   }
 
-  const rows = data || [];
-  const ids = rows.map((row: Record<string, any>) => row.id).filter(Boolean);
+  const rows = (data || []) as CommunityCreationRow[];
+  const ids = rows.map((row) => row.id).filter(Boolean);
   const [likesResult, commentsResult, userResult] = await Promise.all([
     ids.length
       ? supabase.from("community_creation_likes").select("creation_id").in("creation_id", ids)
@@ -144,20 +172,22 @@ export async function loadPublicCreations() {
   const viewerLikes = new Set((viewerLikesResult.data || []).map((like) => like.creation_id));
 
   return {
-    creations: rows.map((row: Record<string, any>): CommunityCreation => ({
-      id: row.id,
-      type: row.type,
-      title: row.title,
-      description: row.description || undefined,
-      payload: row.payload || {},
-      visibility: "public" as const,
-      authorId: row.author_id,
-      authorName: row.author_name,
-      createdAt: row.created_at,
-      likesCount: likesCount.get(row.id) || 0,
-      commentsCount: commentsCount.get(row.id) || 0,
-      viewerHasLiked: viewerLikes.has(row.id),
-    })),
+    creations: rows.map(
+      (row): CommunityCreation => ({
+        id: row.id,
+        type: row.type,
+        title: row.title,
+        description: row.description || undefined,
+        payload: row.payload || {},
+        visibility: "public" as const,
+        authorId: row.author_id,
+        authorName: row.author_name,
+        createdAt: row.created_at,
+        likesCount: likesCount.get(row.id) || 0,
+        commentsCount: commentsCount.get(row.id) || 0,
+        viewerHasLiked: viewerLikes.has(row.id),
+      }),
+    ),
   };
 }
 
@@ -207,7 +237,7 @@ export async function loadCommunityComments(creationId: string) {
   if (error) return { comments: [] as CreationComment[], error: error.message };
 
   return {
-    comments: (data || []).map((row: Record<string, any>) => ({
+    comments: ((data || []) as CommunityCommentRow[]).map((row) => ({
       id: row.id,
       creationId: row.creation_id,
       authorId: row.author_id,
@@ -222,26 +252,31 @@ export async function addCommunityComment(user: UserProfile, creationId: string,
   if (!supabase) return { error: "Supabase não configurado." };
 
   const authorName = getAuthorName(user);
-  const { data, error } = await supabase.from("community_creation_comments").insert({
-    creation_id: creationId,
-    author_id: user.id,
-    author_name: authorName,
-    body,
-  }).select("*").single();
+  const { data, error } = await supabase
+    .from("community_creation_comments")
+    .insert({
+      creation_id: creationId,
+      author_id: user.id,
+      author_name: authorName,
+      body,
+    })
+    .select("*")
+    .single();
 
   console.log("[DEBUG] addCommunityComment result:", { data, error });
 
   return {
-    comment: error || !data
-      ? null
-      : ({
-          id: data.id,
-          creationId: data.creation_id,
-          authorId: data.author_id,
-          authorName: data.author_name,
-          body: data.body,
-          createdAt: data.created_at,
-        } satisfies CreationComment),
+    comment:
+      error || !data
+        ? null
+        : ({
+            id: data.id,
+            creationId: data.creation_id,
+            authorId: data.author_id,
+            authorName: data.author_name,
+            body: data.body,
+            createdAt: data.created_at,
+          } satisfies CreationComment),
     error: error?.message,
   };
 }

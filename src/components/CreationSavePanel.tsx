@@ -1,11 +1,12 @@
 import { useRef, useState } from "react";
-import { ExternalLink, Globe2, Lock, Save } from "lucide-react";
+import { ExternalLink, Globe2, Lock, Save, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/lib/auth-context";
 import {
+  deleteLocalCreation,
   loadLocalCreations,
   publishCreation,
   saveLocalCreation,
@@ -96,6 +97,15 @@ export function CreationSavePanel({
     window.dispatchEvent(new CustomEvent("sambatune:open-creation", { detail: item }));
   }
 
+  function handleDelete(item: SavedCreation) {
+    if (!user) return;
+    const confirmed = window.confirm(`Excluir "${item.title}" dos salvos no seu perfil?`);
+    if (!confirmed) return;
+    deleteLocalCreation(user.id, item.id);
+    refreshSaved();
+    setMessage("Item removido dos salvos no seu perfil.");
+  }
+
   return (
     <div className="rounded-lg border bg-card p-4 space-y-4">
       <div className="flex items-center justify-between gap-3">
@@ -166,6 +176,16 @@ export function CreationSavePanel({
                   >
                     <ExternalLink className="h-3.5 w-3.5" />
                     <span className="sr-only">Abrir</span>
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="ghost"
+                    className="h-7 px-2 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                    onClick={() => handleDelete(item)}
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                    <span className="sr-only">Excluir</span>
                   </Button>
                 </div>
               </div>
