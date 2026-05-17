@@ -1,6 +1,7 @@
 import { useAuth } from "@/lib/auth-context";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { NeubrutalistButton } from "@/components/ui/NeubrutalistButton";
+import {
   LogOut,
   User,
   Music2,
