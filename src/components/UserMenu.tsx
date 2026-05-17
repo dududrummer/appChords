@@ -71,7 +71,7 @@ export function UserMenu() {
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 px-3 py-2 border-2 border-black bg-white hover:bg-neo-yellow transition-colors cursor-pointer"
+        className="flex items-center gap-2 px-3 py-2 border-2 border-black bg-white text-black hover:bg-neo-yellow transition-colors cursor-pointer dark:border-border dark:bg-card dark:text-card-foreground dark:hover:bg-muted"
         aria-label="Menu do usuário"
         id="user-menu-button"
       >
@@ -79,10 +79,10 @@ export function UserMenu() {
           <img
             src={user.avatarUrl}
             alt={user.name}
-            className="w-8 h-8 rounded-full border-2 border-black object-cover"
+            className="w-8 h-8 rounded-full border-2 border-black object-cover dark:border-border"
           />
         ) : (
-          <div className="w-8 h-8 rounded-full border-2 border-black bg-neo-orange text-white flex items-center justify-center font-display text-xs">
+          <div className="w-8 h-8 rounded-full border-2 border-black bg-neo-orange text-white flex items-center justify-center font-display text-xs dark:border-border">
             {initials}
           </div>
         )}
@@ -95,16 +95,16 @@ export function UserMenu() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-2 w-64 bg-white border-2 border-black shadow-[4px_4px_0px_black] z-50 animate-fade-in-up">
+        <div className="absolute right-0 top-full mt-2 w-64 bg-white text-black border-2 border-black shadow-[4px_4px_0px_black] z-50 animate-fade-in-up dark:bg-card dark:text-card-foreground dark:border-border dark:shadow-[4px_4px_0px_rgba(255,255,255,0.14)]">
           {/* User info header */}
-          <div className="px-4 py-3 border-b-2 border-black bg-neo-bg">
+          <div className="px-4 py-3 border-b-2 border-black bg-neo-bg dark:bg-muted dark:border-border">
             <p className="font-display text-sm truncate">{user.name}</p>
             {user.artisticName && (
-              <p className="font-accent text-xs text-black/50 truncate">
+              <p className="font-accent text-xs text-black/50 truncate dark:text-muted-foreground">
                 "{user.artisticName}"
               </p>
             )}
-            <p className="text-xs text-black/40 truncate mt-0.5">
+            <p className="text-xs text-black/40 truncate mt-0.5 dark:text-muted-foreground">
               {user.email}
             </p>
           </div>
@@ -115,7 +115,7 @@ export function UserMenu() {
               <button
                 key={item.tab}
                 onClick={() => handleNavigate(item.tab)}
-                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-bold hover:bg-neo-yellow/50 transition-colors cursor-pointer"
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-bold hover:bg-neo-yellow/50 transition-colors cursor-pointer dark:hover:bg-muted"
               >
                 {item.icon}
                 <span className="font-heading text-sm tracking-wider uppercase">
@@ -126,10 +126,10 @@ export function UserMenu() {
           </nav>
 
           {/* Logout */}
-          <div className="border-t-2 border-black py-1">
+          <div className="border-t-2 border-black py-1 dark:border-border">
             <button
               onClick={handleLogout}
-              className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+              className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-red-600 hover:bg-red-50 transition-colors cursor-pointer dark:text-red-400 dark:hover:bg-red-950/30"
             >
               <LogOut className="h-4 w-4" />
               Sair
