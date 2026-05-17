@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import { Heart, MessageCircle, Send, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,9 +14,13 @@ import {
 interface Props {
   creation: CommunityCreation;
   onStatsChange?: (creation: CommunityCreation) => void;
+  showComposer?: boolean;
 }
 
-export function CreationSocialPanel({ creation, onStatsChange }: Props) {
+export const CreationSocialPanel = forwardRef<HTMLDivElement, Props>(function CreationSocialPanel(
+  { creation, onStatsChange, showComposer = false },
+  ref,
+) {
   const { user } = useAuth();
   const [comments, setComments] = useState<CreationComment[]>([]);
   const [body, setBody] = useState("");
@@ -74,7 +78,7 @@ export function CreationSocialPanel({ creation, onStatsChange }: Props) {
   }
 
   return (
-    <div className="rounded-lg border bg-card p-4 space-y-4">
+    <div ref={ref} className="rounded-lg border bg-muted/20 p-4 space-y-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-xs font-semibold uppercase text-muted-foreground">Publicado por</p>
@@ -124,6 +128,7 @@ export function CreationSocialPanel({ creation, onStatsChange }: Props) {
         ))}
       </div>
 
+      {showComposer && (
       <div className="flex flex-col gap-2">
         <Textarea
           value={body}
@@ -139,6 +144,7 @@ export function CreationSocialPanel({ creation, onStatsChange }: Props) {
           </Button>
         </div>
       </div>
+      )}
     </div>
   );
-}
+});

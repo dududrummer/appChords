@@ -32,6 +32,7 @@ export function CommunityTab({ onOpenCreation }: Props) {
   const { user } = useAuth();
   const [items, setItems] = useState<CommunityCreation[]>([]);
   const [selected, setSelected] = useState<CommunityCreation | null>(null);
+  const [expandedCommentsId, setExpandedCommentsId] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -52,6 +53,11 @@ export function CommunityTab({ onOpenCreation }: Props) {
   function updateItem(next: CommunityCreation) {
     setItems((current) => current.map((item) => (item.id === next.id ? next : item)));
     setSelected((current) => (current?.id === next.id ? next : current));
+  }
+
+  function handleComments(item: CommunityCreation) {
+    setSelected(item);
+    setExpandedCommentsId((current) => (current === item.id ? null : item.id));
   }
 
   async function handleLike(item: CommunityCreation) {
@@ -123,7 +129,7 @@ export function CommunityTab({ onOpenCreation }: Props) {
         {hotItems.length > 0 && (
           <section className="space-y-2">
             <h3 className="text-sm font-bold">Fixados em alta</h3>
-            <div className="grid md:grid-cols-3 gap-3">
+            <div className="space-y-3">
               {hotItems.map((item) => (
                 <CommunityCard
                   key={item.id}
@@ -131,17 +137,19 @@ export function CommunityTab({ onOpenCreation }: Props) {
                   compact
                   onLike={() => handleLike(item)}
                   onSelect={() => setSelected(item)}
+                  onComments={() => handleComments(item)}
                   onOpen={() => onOpenCreation?.(item)}
                   onDelete={() => handleDelete(item)}
                   canDelete={item.authorId === user?.id}
+                  commentsOpen={expandedCommentsId === item.id}
+                  onStatsChange={updateItem}
                 />
               ))}
             </div>
           </section>
         )}
 
-        <div className="grid xl:grid-cols-[1fr_360px] gap-4 items-start">
-          <div className="space-y-4">
+        <div className="space-y-4">
             {(["progression", "dictionary", "exercise"] as const).map((type) => (
               <section key={type} className="space-y-2">
                 <h3 className="flex items-center gap-2 text-sm font-bold">
@@ -153,33 +161,25 @@ export function CommunityTab({ onOpenCreation }: Props) {
                     Nenhuma publicacao nesta area.
                   </div>
                 ) : (
-                  <div className="grid md:grid-cols-2 gap-3">
+                  <div className="space-y-3">
                     {itemsByType[type].map((item) => (
                       <CommunityCard
                         key={item.id}
                         item={item}
                         onLike={() => handleLike(item)}
                         onSelect={() => setSelected(item)}
+                        onComments={() => handleComments(item)}
                         onOpen={() => onOpenCreation?.(item)}
                         onDelete={() => handleDelete(item)}
                         canDelete={item.authorId === user?.id}
+                        commentsOpen={expandedCommentsId === item.id}
+                        onStatsChange={updateItem}
                       />
                     ))}
                   </div>
                 )}
               </section>
             ))}
-          </div>
-
-          <aside className="xl:sticky xl:top-24 space-y-3">
-            {selected ? (
-              <CreationSocialPanel creation={selected} onStatsChange={updateItem} />
-            ) : (
-              <div className="rounded-lg border bg-muted/30 p-4 text-sm text-muted-foreground">
-                Selecione uma publicacao para ver comentarios, ou abra na ferramenta para estudar no seu ambiente.
-              </div>
-            )}
-          </aside>
         </div>
 
         {!loading && !error && items.length === 0 && (
@@ -197,45 +197,51 @@ function CommunityCard({
   compact = false,
   onLike,
   onSelect,
+  onComments,
   onOpen,
   onDelete,
   canDelete,
+  commentsOpen,
+  onStatsChange,
 }: {
   item: CommunityCreation;
   compact?: boolean;
   onLike: () => void;
   onSelect: () => void;
+  onComments: () => void;
   onOpen: () => void;
   onDelete: () => void;
   canDelete: boolean;
+  commentsOpen: boolean;
+  onStatsChange: (creation: CommunityCreation) => void;
 }) {
   return (
     <article className="rounded-lg border bg-card p-4 space-y-3">
-      <div className="flex items-center justify-between gap-3">
-        <span className="inline-flex items-center gap-1.5 rounded bg-muted px-2 py-1 text-xs font-bold">
-          {TYPE_ICON[item.type]}
-          {TYPE_LABEL[item.type]}
-        </span>
-        <span className="text-xs text-muted-foreground">por {item.authorName}</span>
-      </div>
+      <div className="flex flex-col gap-3 md:flex-row md:items-center">
+        <button type="button" onClick={onSelect} className="min-w-0 flex-1 text-left">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 rounded bg-muted px-2 py-1 text-xs font-bold">
+              {TYPE_ICON[item.type]}
+              {TYPE_LABEL[item.type]}
+            </span>
+            <span className="text-xs text-muted-foreground">por {item.authorName}</span>
+          </div>
+          <h3 className="mt-2 font-bold">{item.title}</h3>
+          {item.description && !compact && (
+            <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{item.description}</p>
+          )}
+        </button>
 
-      <button type="button" onClick={onSelect} className="block w-full text-left">
-        <h3 className="font-bold">{item.title}</h3>
-        {item.description && !compact && (
-          <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{item.description}</p>
-        )}
-      </button>
-
-      <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 md:justify-end">
         <Button type="button" variant={item.viewerHasLiked ? "default" : "outline"} size="sm" onClick={onLike}>
           <Heart className={`h-4 w-4 mr-1.5 ${item.viewerHasLiked ? "fill-current" : ""}`} />
           {item.likesCount}
         </Button>
-        <Button type="button" variant="outline" size="sm" onClick={onSelect}>
+        <Button type="button" variant={commentsOpen ? "default" : "outline"} size="sm" onClick={onComments}>
           <MessageCircle className="h-4 w-4 mr-1.5" />
           {item.commentsCount}
         </Button>
-        <Button type="button" size="sm" onClick={onOpen} className="ml-auto">
+        <Button type="button" size="sm" onClick={onOpen}>
           <ExternalLink className="h-4 w-4 mr-1.5" />
           Abrir
         </Button>
@@ -245,7 +251,12 @@ function CommunityCard({
             <span className="sr-only">Remover</span>
           </Button>
         )}
+        </div>
       </div>
+
+      {commentsOpen && (
+        <CreationSocialPanel creation={item} onStatsChange={onStatsChange} showComposer />
+      )}
     </article>
   );
 }
