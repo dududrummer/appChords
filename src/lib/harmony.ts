@@ -25,7 +25,7 @@ export interface HarmonicAnalysis {
 
 // ── Pearson correlation ───────────────────────────────────────────────────────
 function correlate(counts: number[], profile: number[], root: number): number {
-  const rotated = Array.from({ length: 12 }, (_, i) => profile[(i + root) % 12]);
+  const rotated = Array.from({ length: 12 }, (_, i) => profile[(i - root + 12) % 12]);
   const n = 12;
   const mA = counts.reduce((a, b) => a + b, 0) / n;
   const mB = rotated.reduce((a, b) => a + b, 0) / n;
@@ -35,6 +35,91 @@ function correlate(counts: number[], profile: number[], root: number): number {
     num += a * b; dA += a * a; dB += b * b;
   }
   return dA === 0 || dB === 0 ? 0 : num / Math.sqrt(dA * dB);
+}
+
+function isMinorQuality(quality: string): boolean {
+  return /^m(?!aj)/i.test(quality) && quality !== '';
+}
+
+function isDiminishedQuality(quality: string): boolean {
+  return quality.startsWith('dim');
+}
+
+function isDominantQuality(quality: string): boolean {
+  return /^7(?!M|maj)/i.test(quality) || quality === '7';
+}
+
+function getExpectedQuality(isMinorKey: boolean, degreeIndex: number): 'major' | 'minor' | 'dim' {
+  if (isMinorKey) {
+    return (['minor', 'dim', 'major', 'minor', 'minor', 'major', 'major'] as const)[degreeIndex] ?? 'major';
+  }
+  return (['major', 'minor', 'minor', 'major', 'major', 'minor', 'dim'] as const)[degreeIndex] ?? 'major';
+}
+
+function qualityFitsKey(quality: string, isMinorKey: boolean, degreeIndex: number): boolean {
+  const expected = getExpectedQuality(isMinorKey, degreeIndex);
+  if (expected === 'minor') return isMinorQuality(quality);
+  if (expected === 'dim') return isDiminishedQuality(quality);
+  return !isMinorQuality(quality) && !isDiminishedQuality(quality);
+}
+
+function scoreKey(
+  measures: Measure[],
+  counts: number[],
+  root: number,
+  isMinor: boolean
+): number {
+  const scale = isMinor ? MINOR_SCALE : MAJOR_SCALE;
+  const profile = isMinor ? MINOR_PROFILE : MAJOR_PROFILE;
+  const parsedBeats = measures
+    .flatMap(m => m.beats)
+    .map(beat => ({ beat, parsed: parseChord(beat.chordName) }))
+    .filter((item): item is typeof item & { parsed: NonNullable<ReturnType<typeof parseChord>> } => item.parsed !== null);
+
+  let score = correlate(counts, profile, root) * 4;
+
+  for (const { beat, parsed } of parsedBeats) {
+    const chordRoot = getNoteIndex(parsed.root);
+    const degree = (chordRoot - root + 12) % 12;
+    const degreeIndex = scale.indexOf(degree);
+
+    if (degreeIndex !== -1) {
+      score += beat.durationBeats * 0.45;
+      if (qualityFitsKey(parsed.quality, isMinor, degreeIndex)) score += beat.durationBeats * 0.25;
+    } else {
+      score -= beat.durationBeats * 0.35;
+    }
+
+    if (degree === 0) score += beat.durationBeats * 1.2;
+    if (degree === 7) score += beat.durationBeats * 0.65;
+    if (degree === 5) score += beat.durationBeats * 0.3;
+    if (degree === 7 && isDominantQuality(parsed.quality)) score += beat.durationBeats * 0.65;
+  }
+
+  const first = parsedBeats[0];
+  const last = parsedBeats[parsedBeats.length - 1];
+  for (const item of [first, last]) {
+    if (!item) continue;
+    const chordRoot = getNoteIndex(item.parsed.root);
+    const degree = (chordRoot - root + 12) % 12;
+    if (degree === 0) score += 2.5;
+    if (degree === 7 && isDominantQuality(item.parsed.quality)) score += 0.8;
+  }
+
+  for (let i = 0; i < parsedBeats.length - 1; i++) {
+    const current = parsedBeats[i].parsed;
+    const next = parsedBeats[i + 1].parsed;
+    const currentRoot = getNoteIndex(current.root);
+    const nextRoot = getNoteIndex(next.root);
+    const currentDegree = (currentRoot - root + 12) % 12;
+    const nextDegree = (nextRoot - root + 12) % 12;
+
+    if (currentDegree === 7 && nextDegree === 0) score += isDominantQuality(current.quality) ? 2.2 : 1.2;
+    if (currentDegree === 5 && nextDegree === 7) score += 0.8;
+    if (currentDegree === 5 && nextDegree === 0) score += 0.6;
+  }
+
+  return score;
 }
 
 // ── Key detection ─────────────────────────────────────────────────────────────
@@ -48,9 +133,9 @@ export function detectKey(measures: Measure[]): { root: number; isMinor: boolean
   }
   let best = -Infinity, root = 0, isMinor = false;
   for (let r = 0; r < 12; r++) {
-    const maj = correlate(counts, MAJOR_PROFILE, r);
+    const maj = scoreKey(measures, counts, r, false);
     if (maj > best) { best = maj; root = r; isMinor = false; }
-    const min = correlate(counts, MINOR_PROFILE, r);
+    const min = scoreKey(measures, counts, r, true);
     if (min > best) { best = min; root = r; isMinor = true; }
   }
   return { root, isMinor, name: `${NOTE_NAMES[root]} ${isMinor ? 'menor' : 'maior'}` };
