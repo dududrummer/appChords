@@ -2,7 +2,7 @@
  * Standalone Chord Dictionary page — displayed as a sidebar tab.
  * Lets users type any chord name and browse all available voicings.
  */
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Search, BookOpen } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -13,6 +13,7 @@ import { searchVoicings } from '@/lib/voicing-search';
 import type { Voicing } from '@/lib/chord-finder';
 import { VoicingMiniSvg } from './VoicingMiniSvg';
 import { CreationSavePanel } from './CreationSavePanel';
+import type { SavedCreation } from '@/lib/creations';
 
 interface Props {
   instrument: string;
@@ -21,11 +22,12 @@ interface Props {
   markerColor: string;
   primaryColor: string;
   onInstrumentChange: (instrument: string) => void;
+  openedCreation?: SavedCreation | null;
 }
 
 export function ChordDictionaryPage({
   instrument, stringCount, stringNames,
-  markerColor, primaryColor, onInstrumentChange,
+  markerColor, primaryColor, onInstrumentChange, openedCreation,
 }: Props) {
   const [query, setQuery] = useState('');
   const [voicings, setVoicings] = useState<Voicing[]>([]);
@@ -61,6 +63,13 @@ export function ChordDictionaryPage({
     setVoicings(results);
   }, [getActiveTuning, instrument]);
 
+  useEffect(() => {
+    if (!openedCreation || openedCreation.type !== "dictionary") return;
+    const payload = openedCreation.payload;
+    if (typeof payload.instrument === "string") onInstrumentChange(payload.instrument);
+    if (typeof payload.query === "string") handleSearch(payload.query);
+  }, [handleSearch, onInstrumentChange, openedCreation]);
+
   const activeTuning = getActiveTuning();
   const isSmallInstrument = (INSTRUMENT_PRESETS[instrument]?.strings ?? 6) <= 4;
 
@@ -72,6 +81,13 @@ export function ChordDictionaryPage({
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
+        {openedCreation?.type === "dictionary" && (
+          <div className="rounded-lg border bg-muted/30 px-3 py-2 text-sm">
+            <span className="font-bold">{openedCreation.title}</span>
+            <span className="text-muted-foreground"> por {openedCreation.authorName}</span>
+          </div>
+        )}
+
         {/* Instrument selector */}
         <div className="flex flex-wrap gap-4 items-end">
           <div className="space-y-1">

@@ -16,10 +16,12 @@ import { ChordDictionaryPage } from "@/components/ChordDictionaryPage";
 import { ExercisesTab } from "@/components/ExercisesTab";
 import { ProfileTab } from "@/components/ProfileTab";
 import { CommunityTab } from "@/components/CommunityTab";
+import { CreationSocialPanel } from "@/components/CreationSocialPanel";
 import { WelcomeTour } from "@/components/WelcomeTour";
 import { UserMenu } from "@/components/UserMenu";
 import { INSTRUMENT_PRESETS } from "@/lib/music-theory";
 import { useAuth } from "@/lib/auth-context";
+import type { CommunityCreation, SavedCreation } from "@/lib/creations";
 
 interface Marker {
   string: number;
@@ -56,6 +58,7 @@ function ChordGenerator() {
   const { isAuthenticated, isLoading } = useAuth();
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [activePage, setActivePage] = useState<AppTab>((tab as AppTab) || 'dictionary');
+  const [openedCreation, setOpenedCreation] = useState<SavedCreation | CommunityCreation | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [instrument, setInstrument] = useState('cavaquinho');
 
@@ -65,6 +68,29 @@ function ChordGenerator() {
       setActivePage(tab as AppTab);
     }
   }, [tab]);
+
+  const openCreation = useCallback((creation: SavedCreation | CommunityCreation) => {
+    const pageByType: Record<SavedCreation["type"], AppTab> = {
+      dictionary: "dictionary",
+      progression: "progression",
+      exercise: "exercises",
+    };
+    const nextPage = pageByType[creation.type];
+    setOpenedCreation(creation);
+    setActivePage(nextPage);
+    setSidebarOpen(false);
+    navigate({ to: "/app", search: { tab: nextPage } });
+  }, [navigate]);
+
+  useEffect(() => {
+    function handleOpenCreation(event: Event) {
+      const creation = (event as CustomEvent<SavedCreation>).detail;
+      if (creation?.type) openCreation(creation);
+    }
+
+    window.addEventListener("sambatune:open-creation", handleOpenCreation);
+    return () => window.removeEventListener("sambatune:open-creation", handleOpenCreation);
+  }, [openCreation]);
   const [chordTitle, setChordTitle] = useState("C Major");
   const [startingFret, setStartingFret] = useState(1);
   const [fretCount, setFretCount] = useState(5);
@@ -561,7 +587,7 @@ function ChordGenerator() {
           ].map(({ page, icon, label, sub }) => (
             <button
               key={page}
-              onClick={() => { setActivePage(page); setSidebarOpen(false); }}
+              onClick={() => { setOpenedCreation(null); setActivePage(page); setSidebarOpen(false); }}
               className={`w-full text-left border-2 border-transparent px-3 py-2.5 flex items-center gap-3 transition-all group ${
                 activePage === page
                   ? `bg-neo-orange text-white ${isDarkMode ? "border-border shadow-[3px_3px_0px_rgba(255,255,255,0.18)]" : "border-black shadow-[3px_3px_0px_black]"}`
@@ -603,7 +629,7 @@ function ChordGenerator() {
           {activePage === 'profile' ? (
             <ProfileTab />
           ) : activePage === 'community' ? (
-            <CommunityTab />
+            <CommunityTab onOpenCreation={openCreation} />
           ) : activePage === 'plan' ? (
             <Card className="w-full">
               <CardHeader>
@@ -625,25 +651,42 @@ function ChordGenerator() {
               </CardContent>
             </Card>
           ) : activePage === 'progression' ? (
-            <ProgressionEditor
-              instrument={instrument}
-              stringCount={stringCount}
-              stringNames={stringNames}
-              markerColor={markerColor}
-              primaryColor={primaryColor}
-              onInstrumentChange={handleInstrumentChange}
-            />
+            <>
+              <ProgressionEditor
+                instrument={instrument}
+                stringCount={stringCount}
+                stringNames={stringNames}
+                markerColor={markerColor}
+                primaryColor={primaryColor}
+                onInstrumentChange={handleInstrumentChange}
+                openedCreation={openedCreation}
+              />
+              {openedCreation?.visibility === "public" && openedCreation.type === "progression" && "likesCount" in openedCreation && (
+                <CreationSocialPanel creation={openedCreation} />
+              )}
+            </>
           ) : activePage === 'dictionary' ? (
-            <ChordDictionaryPage
-              instrument={instrument}
-              stringCount={stringCount}
-              stringNames={stringNames}
-              markerColor={markerColor}
-              primaryColor={primaryColor}
-              onInstrumentChange={handleInstrumentChange}
-            />
+            <>
+              <ChordDictionaryPage
+                instrument={instrument}
+                stringCount={stringCount}
+                stringNames={stringNames}
+                markerColor={markerColor}
+                primaryColor={primaryColor}
+                onInstrumentChange={handleInstrumentChange}
+                openedCreation={openedCreation}
+              />
+              {openedCreation?.visibility === "public" && openedCreation.type === "dictionary" && "likesCount" in openedCreation && (
+                <CreationSocialPanel creation={openedCreation} />
+              )}
+            </>
           ) : activePage === 'exercises' ? (
-            <ExercisesTab />
+            <>
+              <ExercisesTab openedCreation={openedCreation} />
+              {openedCreation?.visibility === "public" && openedCreation.type === "exercise" && "likesCount" in openedCreation && (
+                <CreationSocialPanel creation={openedCreation} />
+              )}
+            </>
           ) : (<>
         {/* ── Criador de Diagramas — layout lado a lado ── */}
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">

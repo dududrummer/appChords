@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Globe2, Lock, Save } from "lucide-react";
+import { ExternalLink, Globe2, Lock, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -71,6 +71,10 @@ export function CreationSavePanel({
     );
   }
 
+  function handleOpen(item: SavedCreation) {
+    window.dispatchEvent(new CustomEvent("sambatune:open-creation", { detail: item }));
+  }
+
   return (
     <div className="rounded-lg border bg-card p-4 space-y-4">
       <div className="flex items-center justify-between gap-3">
@@ -117,13 +121,21 @@ export function CreationSavePanel({
           <div className="grid md:grid-cols-2 gap-2">
             {saved.slice(0, 4).map((item) => (
               <div key={item.id} className="rounded-md border bg-muted/30 px-3 py-2">
-                <div className="flex items-center gap-2 text-sm font-bold">
-                  <Save className="h-3.5 w-3.5" />
-                  {item.title}
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 text-sm font-bold">
+                      <Save className="h-3.5 w-3.5 shrink-0" />
+                      <span className="truncate">{item.title}</span>
+                    </div>
+                    {item.description && (
+                      <p className="text-xs text-muted-foreground mt-0.5">{item.description}</p>
+                    )}
+                  </div>
+                  <Button type="button" size="sm" variant="ghost" className="h-7 px-2" onClick={() => handleOpen(item)}>
+                    <ExternalLink className="h-3.5 w-3.5" />
+                    <span className="sr-only">Abrir</span>
+                  </Button>
                 </div>
-                {item.description && (
-                  <p className="text-xs text-muted-foreground mt-0.5">{item.description}</p>
-                )}
               </div>
             ))}
           </div>

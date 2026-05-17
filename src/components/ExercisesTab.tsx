@@ -1,12 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Dumbbell } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { CreationSavePanel } from './CreationSavePanel';
+import type { SavedCreation } from '@/lib/creations';
 
-export function ExercisesTab() {
+interface Props {
+  openedCreation?: SavedCreation | null;
+}
+
+export function ExercisesTab({ openedCreation }: Props) {
   const [title, setTitle] = useState('Treino de sequência e regiões');
   const [focus, setFocus] = useState('Troca de acordes com arpejos por região');
   const [routine, setRoutine] = useState(
@@ -14,6 +19,16 @@ export function ExercisesTab() {
   );
   const [bpm, setBpm] = useState(80);
   const [duration, setDuration] = useState(15);
+
+  useEffect(() => {
+    if (!openedCreation || openedCreation.type !== "exercise") return;
+    const payload = openedCreation.payload;
+    setTitle(typeof payload.title === "string" ? payload.title : openedCreation.title);
+    setFocus(typeof payload.focus === "string" ? payload.focus : openedCreation.description || "");
+    setRoutine(typeof payload.routine === "string" ? payload.routine : "");
+    setBpm(typeof payload.bpm === "number" ? payload.bpm : 80);
+    setDuration(typeof payload.duration === "number" ? payload.duration : 15);
+  }, [openedCreation]);
 
   return (
     <Card className="w-full">
@@ -24,6 +39,13 @@ export function ExercisesTab() {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
+        {openedCreation?.type === "exercise" && (
+          <div className="rounded-lg border bg-muted/30 px-3 py-2 text-sm">
+            <span className="font-bold">{openedCreation.title}</span>
+            <span className="text-muted-foreground"> por {openedCreation.authorName}</span>
+          </div>
+        )}
+
         <div className="grid md:grid-cols-2 gap-4">
           <div className="space-y-1">
             <Label>Título do exercício</Label>

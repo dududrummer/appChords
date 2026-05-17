@@ -16,6 +16,21 @@ export interface SavedCreation {
   createdAt: string;
 }
 
+export interface CommunityCreation extends SavedCreation {
+  likesCount: number;
+  commentsCount: number;
+  viewerHasLiked: boolean;
+}
+
+export interface CreationComment {
+  id: string;
+  creationId: string;
+  authorId: string;
+  authorName: string;
+  body: string;
+  createdAt: string;
+}
+
 const STORAGE_PREFIX = "sambatune_creations";
 
 function storageKey(userId: string) {
@@ -89,8 +104,42 @@ export async function loadPublicCreations() {
     return { creations: [] as SavedCreation[], error: error.message };
   }
 
+  const rows = data || [];
+  const ids = rows.map((row: Record<string, any>) => row.id).filter(Boolean);
+  const [likesResult, commentsResult, userResult] = await Promise.all([
+    ids.length
+      ? supabase.from("community_creation_likes").select("creation_id").in("creation_id", ids)
+      : Promise.resolve({ data: [] as Array<{ creation_id: string }>, error: null }),
+    ids.length
+      ? supabase.from("community_creation_comments").select("creation_id").in("creation_id", ids)
+      : Promise.resolve({ data: [] as Array<{ creation_id: string }>, error: null }),
+    supabase.auth.getUser(),
+  ]);
+
+  const currentUserId = userResult.data.user?.id;
+  const viewerLikesResult =
+    currentUserId && ids.length
+      ? await supabase
+          .from("community_creation_likes")
+          .select("creation_id")
+          .eq("user_id", currentUserId)
+          .in("creation_id", ids)
+      : { data: [] as Array<{ creation_id: string }>, error: null };
+
+  const likesCount = new Map<string, number>();
+  for (const like of likesResult.data || []) {
+    likesCount.set(like.creation_id, (likesCount.get(like.creation_id) || 0) + 1);
+  }
+
+  const commentsCount = new Map<string, number>();
+  for (const comment of commentsResult.data || []) {
+    commentsCount.set(comment.creation_id, (commentsCount.get(comment.creation_id) || 0) + 1);
+  }
+
+  const viewerLikes = new Set((viewerLikesResult.data || []).map((like) => like.creation_id));
+
   return {
-    creations: (data || []).map((row: Record<string, any>) => ({
+    creations: rows.map((row: Record<string, any>): CommunityCreation => ({
       id: row.id,
       type: row.type,
       title: row.title,
@@ -100,6 +149,66 @@ export async function loadPublicCreations() {
       authorId: row.author_id,
       authorName: row.author_name,
       createdAt: row.created_at,
+      likesCount: likesCount.get(row.id) || 0,
+      commentsCount: commentsCount.get(row.id) || 0,
+      viewerHasLiked: viewerLikes.has(row.id),
     })),
   };
+}
+
+export async function toggleCommunityLike(user: UserProfile, creation: CommunityCreation) {
+  if (!supabase) return { error: "Supabase nÃ£o configurado." };
+
+  if (creation.viewerHasLiked) {
+    const { error } = await supabase
+      .from("community_creation_likes")
+      .delete()
+      .eq("creation_id", creation.id)
+      .eq("user_id", user.id);
+    return { error: error?.message };
+  }
+
+  const { error } = await supabase.from("community_creation_likes").insert({
+    creation_id: creation.id,
+    user_id: user.id,
+  });
+  return { error: error?.message };
+}
+
+export async function loadCommunityComments(creationId: string) {
+  if (!supabase) {
+    return { comments: [] as CreationComment[], error: "Supabase nÃ£o configurado." };
+  }
+
+  const { data, error } = await supabase
+    .from("community_creation_comments")
+    .select("*")
+    .eq("creation_id", creationId)
+    .order("created_at", { ascending: true });
+
+  if (error) return { comments: [] as CreationComment[], error: error.message };
+
+  return {
+    comments: (data || []).map((row: Record<string, any>) => ({
+      id: row.id,
+      creationId: row.creation_id,
+      authorId: row.author_id,
+      authorName: row.author_name,
+      body: row.body,
+      createdAt: row.created_at,
+    })),
+  };
+}
+
+export async function addCommunityComment(user: UserProfile, creationId: string, body: string) {
+  if (!supabase) return { error: "Supabase nÃ£o configurado." };
+
+  const { error } = await supabase.from("community_creation_comments").insert({
+    creation_id: creationId,
+    author_id: user.id,
+    author_name: getAuthorName(user),
+    body,
+  });
+
+  return { error: error?.message };
 }

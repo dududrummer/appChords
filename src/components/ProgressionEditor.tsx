@@ -18,6 +18,7 @@ import { PercussionPlayers } from './PercussionPlayers';
 import { CreationSavePanel } from './CreationSavePanel';
 import type { Voicing } from '@/lib/chord-finder';
 import { startPlayback, stopPlayback, setBpm as setAudioBpm } from '@/lib/audio';
+import type { SavedCreation } from '@/lib/creations';
 
 interface StoredVoicing extends Voicing { tuning: string[] }
 
@@ -28,10 +29,11 @@ interface Props {
   markerColor: string;
   primaryColor: string;
   onInstrumentChange?: (instrument: string) => void;
+  openedCreation?: SavedCreation | null;
 }
 
 export function ProgressionEditor({
-  instrument, stringCount, stringNames, markerColor, primaryColor, onInstrumentChange
+  instrument, stringCount, stringNames, markerColor, primaryColor, onInstrumentChange, openedCreation
 }: Props) {
   const [selectedCategory, setSelectedCategory] = useState<Category | ''>('');
   const [selectedTemplate, setSelectedTemplate] = useState('');
@@ -42,6 +44,21 @@ export function ProgressionEditor({
   const [isPlaying, setIsPlaying]               = useState(false);
   const [activeMeasure, setActiveMeasure]       = useState<number | null>(null);
   const [bpm, setBpm]                           = useState(90);
+
+  useEffect(() => {
+    if (!openedCreation || openedCreation.type !== "progression") return;
+    const payload = openedCreation.payload;
+    setInput(typeof payload.input === "string" ? payload.input : "");
+    setSelectedCategory("");
+    setSelectedTemplate("");
+    setSelectedKey(typeof payload.key === "string" ? payload.key : "");
+    setBpm(typeof payload.bpm === "number" ? payload.bpm : 90);
+    setVoicings(
+      payload.voicings && typeof payload.voicings === "object"
+        ? (payload.voicings as Record<string, StoredVoicing>)
+        : {},
+    );
+  }, [openedCreation]);
 
   // Stop playback on unmount
   useEffect(() => {
@@ -150,6 +167,12 @@ export function ProgressionEditor({
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
+        {openedCreation?.type === "progression" && (
+          <div className="rounded-lg border bg-muted/30 px-3 py-2 text-sm">
+            <span className="font-bold">{openedCreation.title}</span>
+            <span className="text-muted-foreground"> por {openedCreation.authorName}</span>
+          </div>
+        )}
 
         {/* Instrumento */}
         <div className="flex items-center gap-3">

@@ -19,6 +19,8 @@ O produto combina:
 - Construtor de exercicios.
 - Salvamento privado local por usuario.
 - Publicacao publica na comunidade via Supabase.
+- Abertura de criacoes salvas/publicadas de volta na ferramenta de origem.
+- Curtidas e comentarios publicos em criacoes da comunidade.
 - Playback de sequencias com sintetizador, metronomo e loops de percussao.
 
 ## 2. Stack Tecnica
@@ -480,7 +482,11 @@ Arquivos:
 - `src/lib/creations.ts`
 - `supabase-community-creations.sql`
 
-Tabela esperada: `community_creations`.
+Tabelas esperadas:
+
+- `community_creations`
+- `community_creation_likes`
+- `community_creation_comments`
 
 Campos:
 
@@ -509,13 +515,21 @@ Fluxo:
    - nome;
    - prefixo do email;
    - fallback "Musico".
-5. Comunidade lista os 50 itens mais recentes.
+5. Comunidade lista os 50 itens mais recentes por secao.
+6. Publicacoes em alta nas ultimas 72 horas ficam fixadas no topo, ordenadas por curtidas e comentarios.
+7. Usuario pode abrir uma publicacao na ferramenta de origem dentro da propria area `/app`.
+8. Ao abrir publicacao publica, a ferramenta exibe credito do autor e painel social com curtidas e comentarios.
+9. Comentarios feitos em publicacoes publicas ficam visiveis para a comunidade.
 
 Seguranca RLS esperada:
 
 - Usuarios autenticados podem ler todos os itens.
 - Usuarios autenticados podem inserir apenas com `author_id = auth.uid()`.
 - Usuarios autenticados podem excluir apenas os proprios itens.
+- Usuarios autenticados podem ler curtidas e comentarios.
+- Usuarios autenticados podem curtir apenas como `user_id = auth.uid()`.
+- Usuarios autenticados podem comentar apenas como `author_id = auth.uid()`.
+- Usuarios autenticados podem excluir apenas as proprias curtidas/comentarios.
 
 SQL esta em:
 
@@ -703,6 +717,10 @@ O usuario deve poder publicar criacoes na comunidade com nickname.
 
 Usuarios autenticados devem poder visualizar criacoes publicas.
 
+### RF-013 Interacao social
+
+Usuarios autenticados devem poder curtir e comentar publicacoes da comunidade.
+
 ## 21. Requisitos Nao Funcionais
 
 - O build de producao deve passar com `npm run build`.
@@ -745,6 +763,29 @@ interface SavedCreation {
   visibility: "private" | "public";
   authorId: string;
   authorName: string;
+  createdAt: string;
+}
+```
+
+### CommunityCreation
+
+```ts
+interface CommunityCreation extends SavedCreation {
+  likesCount: number;
+  commentsCount: number;
+  viewerHasLiked: boolean;
+}
+```
+
+### CreationComment
+
+```ts
+interface CreationComment {
+  id: string;
+  creationId: string;
+  authorId: string;
+  authorName: string;
+  body: string;
   createdAt: string;
 }
 ```
