@@ -307,7 +307,8 @@ function ChordGenerator() {
     const p = f / fretCount; // 0 at top (nut), 1 at bottom
     const scale = 1 - taperFactor / 2 + p * taperFactor;
     const middlePos = margin + ((stringCount - 1) * stringDistance) / 2;
-    const distFromCenter = s * stringDistance - ((stringCount - 1) * stringDistance) / 2;
+    const visualString = isVertical ? s : stringCount - 1 - s;
+    const distFromCenter = visualString * stringDistance - ((stringCount - 1) * stringDistance) / 2;
     const variablePos = middlePos + distFromCenter * scale;
     const constantPos = margin + f * fretDistance;
 
@@ -430,12 +431,14 @@ function ChordGenerator() {
             />
           );
         } else {
+          const y = Math.min(pStart.y, pEnd.y) - thickness / 2;
+          const height = Math.abs(pEnd.y - pStart.y) + thickness;
           return (
             <rect
               x={pStart.x - thickness / 2}
-              y={pStart.y - thickness / 2}
+              y={y}
               width={thickness}
-              height={pEnd.y - pStart.y + thickness}
+              height={height}
               rx={thickness / 2}
               fill={barreColor}
             />
