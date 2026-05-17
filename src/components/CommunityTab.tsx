@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { BookOpen, Dumbbell, ExternalLink, Heart, MessageCircle, Music2, Users } from "lucide-react";
+import { BookOpen, Dumbbell, ExternalLink, Heart, MessageCircle, Music2, Trash2, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/lib/auth-context";
 import {
+  deleteCommunityCreation,
   loadPublicCreations,
   toggleCommunityLike,
   type CommunityCreation,
@@ -67,6 +68,21 @@ export function CommunityTab({ onOpenCreation }: Props) {
     });
   }
 
+  async function handleDelete(item: CommunityCreation) {
+    if (!user || item.authorId !== user.id) return;
+    const confirmed = window.confirm("Remover esta publicacao da comunidade?");
+    if (!confirmed) return;
+
+    const result = await deleteCommunityCreation(user, item.id);
+    if (result.error) {
+      setError(result.error);
+      return;
+    }
+
+    setItems((current) => current.filter((currentItem) => currentItem.id !== item.id));
+    setSelected((current) => (current?.id === item.id ? null : current));
+  }
+
   const recentItems = [...items].sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
   );
@@ -114,6 +130,8 @@ export function CommunityTab({ onOpenCreation }: Props) {
                   onLike={() => handleLike(item)}
                   onSelect={() => setSelected(item)}
                   onOpen={() => onOpenCreation?.(item)}
+                  onDelete={() => handleDelete(item)}
+                  canDelete={item.authorId === user?.id}
                 />
               ))}
             </div>
@@ -141,6 +159,8 @@ export function CommunityTab({ onOpenCreation }: Props) {
                         onLike={() => handleLike(item)}
                         onSelect={() => setSelected(item)}
                         onOpen={() => onOpenCreation?.(item)}
+                        onDelete={() => handleDelete(item)}
+                        canDelete={item.authorId === user?.id}
                       />
                     ))}
                   </div>
@@ -176,12 +196,16 @@ function CommunityCard({
   onLike,
   onSelect,
   onOpen,
+  onDelete,
+  canDelete,
 }: {
   item: CommunityCreation;
   compact?: boolean;
   onLike: () => void;
   onSelect: () => void;
   onOpen: () => void;
+  onDelete: () => void;
+  canDelete: boolean;
 }) {
   return (
     <article className="rounded-lg border bg-card p-4 space-y-3">
@@ -213,6 +237,12 @@ function CommunityCard({
           <ExternalLink className="h-4 w-4 mr-1.5" />
           Abrir
         </Button>
+        {canDelete && (
+          <Button type="button" size="sm" variant="destructive" onClick={onDelete}>
+            <Trash2 className="h-4 w-4" />
+            <span className="sr-only">Remover</span>
+          </Button>
+        )}
       </div>
     </article>
   );

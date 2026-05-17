@@ -75,7 +75,10 @@ create policy "users can like as themselves"
 on public.community_creation_likes
 for insert
 to authenticated
-with check (auth.uid() = user_id);
+with check (
+  auth.uid() is not null
+  and auth.uid() = user_id
+);
 
 drop policy if exists "users can remove own likes" on public.community_creation_likes;
 create policy "users can remove own likes"
@@ -96,7 +99,10 @@ create policy "users can comment as themselves"
 on public.community_creation_comments
 for insert
 to authenticated
-with check (auth.uid() = author_id);
+with check (
+  auth.uid() is not null
+  and auth.uid() = author_id
+);
 
 drop policy if exists "users can delete own comments" on public.community_creation_comments;
 create policy "users can delete own comments"
@@ -104,3 +110,5 @@ on public.community_creation_comments
 for delete
 to authenticated
 using (auth.uid() = author_id);
+
+notify pgrst, 'reload schema';

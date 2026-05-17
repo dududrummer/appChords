@@ -66,9 +66,9 @@ export function CreationSocialPanel({ creation, onStatsChange }: Props) {
     }
 
     setBody("");
-    const refreshed = await loadCommunityComments(localCreation.id);
-    setComments(refreshed.comments);
-    const next = { ...localCreation, commentsCount: refreshed.comments.length };
+    const nextComments = result.comment ? [...comments, result.comment] : comments;
+    setComments(nextComments);
+    const next = { ...localCreation, commentsCount: nextComments.length };
     setLocalCreation(next);
     onStatsChange?.(next);
   }
@@ -91,7 +91,7 @@ export function CreationSocialPanel({ creation, onStatsChange }: Props) {
           </Button>
           <span className="inline-flex items-center rounded-md border px-3 text-sm font-semibold">
             <MessageCircle className="h-4 w-4 mr-2" />
-            {comments.length}
+            {localCreation.commentsCount}
           </span>
         </div>
       </div>

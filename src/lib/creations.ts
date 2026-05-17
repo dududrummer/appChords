@@ -175,6 +175,18 @@ export async function toggleCommunityLike(user: UserProfile, creation: Community
   return { error: error?.message };
 }
 
+export async function deleteCommunityCreation(user: UserProfile, creationId: string) {
+  if (!supabase) return { error: "Supabase nÃ£o configurado." };
+
+  const { error } = await supabase
+    .from("community_creations")
+    .delete()
+    .eq("id", creationId)
+    .eq("author_id", user.id);
+
+  return { error: error?.message };
+}
+
 export async function loadCommunityComments(creationId: string) {
   if (!supabase) {
     return { comments: [] as CreationComment[], error: "Supabase nÃ£o configurado." };
@@ -203,12 +215,25 @@ export async function loadCommunityComments(creationId: string) {
 export async function addCommunityComment(user: UserProfile, creationId: string, body: string) {
   if (!supabase) return { error: "Supabase nÃ£o configurado." };
 
+  const authorName = getAuthorName(user);
   const { error } = await supabase.from("community_creation_comments").insert({
     creation_id: creationId,
     author_id: user.id,
-    author_name: getAuthorName(user),
+    author_name: authorName,
     body,
   });
 
-  return { error: error?.message };
+  return {
+    comment: error
+      ? null
+      : ({
+          id: crypto.randomUUID(),
+          creationId,
+          authorId: user.id,
+          authorName,
+          body,
+          createdAt: new Date().toISOString(),
+        } satisfies CreationComment),
+    error: error?.message,
+  };
 }
