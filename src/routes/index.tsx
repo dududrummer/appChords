@@ -160,13 +160,18 @@ function LandingPage() {
                 <span className="mb-3 text-[11px] font-black uppercase tracking-[0.55em] text-black/70">
                   Cavaquinho · Banjo
                 </span>
-                <span className="inline-block origin-left -rotate-2 text-5xl leading-[0.9] text-[var(--orange)] [font-family:var(--display)] [text-shadow:4px_4px_0_var(--ink)] sm:text-6xl lg:text-7xl">
-                  SambaTune
+                <span className="inline-flex origin-left -rotate-2 flex-wrap text-5xl leading-[0.9] [font-family:var(--display)] sm:text-6xl lg:text-7xl">
+                  <span className="text-[var(--ink)] [text-shadow:4px_4px_0_var(--orange)]">
+                    Samba
+                  </span>
+                  <span className="text-[var(--orange)] [text-shadow:4px_4px_0_var(--ink)]">
+                    Tune
+                  </span>
                 </span>
               </div>
 
               <Pill className="mb-6 -rotate-1 bg-[var(--ink)] text-[var(--yellow)]">
-                <Zap className="h-4 w-4" /> estudo musical sem enrolação
+                <Zap className="h-4 w-4" /> Menos teoria solta, mais prática organizada.
               </Pill>
 
               <h1 className="max-w-2xl text-balance text-4xl uppercase leading-[1.08] text-[var(--ink)] sm:text-5xl lg:text-6xl [font-family:var(--display-light)]">
