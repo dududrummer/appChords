@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BookOpen, Dumbbell, ExternalLink, Heart, MessageCircle, Music2, Trash2, Users } from "lucide-react";
+import { ArrowLeft, BookOpen, Dumbbell, ExternalLink, Heart, MessageCircle, Music2, Sparkles, Trash2, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/lib/auth-context";
@@ -12,17 +12,32 @@ import {
 } from "@/lib/creations";
 import { CreationSocialPanel } from "./CreationSocialPanel";
 
-const TYPE_LABEL: Record<SavedCreation["type"], string> = {
-  dictionary: "Dicionario",
-  progression: "Sequencia",
-  exercise: "Exercicio",
+type CommunitySection = "progression" | "dictionary" | "scales" | "arpeggios";
+
+const SECTION_META: Record<CommunitySection, { label: string; description: string; icon: React.ReactNode }> = {
+  progression: {
+    label: "Sequencias",
+    description: "Progressões harmonicas e estudos de encadeamento.",
+    icon: <Music2 className="h-5 w-5" />,
+  },
+  dictionary: {
+    label: "Dicionario",
+    description: "Acordes e posicoes publicados pela comunidade.",
+    icon: <BookOpen className="h-5 w-5" />,
+  },
+  scales: {
+    label: "Escalas",
+    description: "Rotinas e ideias de treino melodico.",
+    icon: <Dumbbell className="h-5 w-5" />,
+  },
+  arpeggios: {
+    label: "Arpejos",
+    description: "Exercicios de arpejo por regiao e acorde.",
+    icon: <Sparkles className="h-5 w-5" />,
+  },
 };
 
-const TYPE_ICON = {
-  dictionary: <BookOpen className="h-4 w-4" />,
-  progression: <Music2 className="h-4 w-4" />,
-  exercise: <Dumbbell className="h-4 w-4" />,
-};
+const SECTION_ORDER: CommunitySection[] = ["progression", "dictionary", "scales", "arpeggios"];
 
 interface Props {
   onOpenCreation?: (creation: CommunityCreation) => void;
@@ -33,6 +48,7 @@ export function CommunityTab({ onOpenCreation }: Props) {
   const [items, setItems] = useState<CommunityCreation[]>([]);
   const [selected, setSelected] = useState<CommunityCreation | null>(null);
   const [expandedCommentsId, setExpandedCommentsId] = useState<string | null>(null);
+  const [activeSection, setActiveSection] = useState<CommunitySection | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -92,20 +108,22 @@ export function CommunityTab({ onOpenCreation }: Props) {
   const recentItems = [...items].sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
   );
-  const hotItems = recentItems
-    .filter((item) => Date.now() - new Date(item.createdAt).getTime() <= 72 * 60 * 60 * 1000)
-    .sort((a, b) => b.likesCount + b.commentsCount * 2 - (a.likesCount + a.commentsCount * 2))
-    .slice(0, 3);
-  const hotItemIds = new Set(hotItems.map((item) => item.id));
-  const sectionItems = recentItems.filter((item) => !hotItemIds.has(item.id));
 
-  const itemsByType = sectionItems.reduce<Record<SavedCreation["type"], CommunityCreation[]>>(
+  const itemsBySection = recentItems.reduce<Record<CommunitySection, CommunityCreation[]>>(
     (acc, item) => {
-      acc[item.type].push(item);
+      acc[getCommunitySection(item)].push(item);
       return acc;
     },
-    { dictionary: [], progression: [], exercise: [] },
+    { progression: [], dictionary: [], scales: [], arpeggios: [] },
   );
+
+  const sectionStats = SECTION_ORDER.map((section) => {
+    const sectionItems = itemsBySection[section];
+    const totalLikes = sectionItems.reduce((sum, item) => sum + item.likesCount, 0);
+    const totalComments = sectionItems.reduce((sum, item) => sum + item.commentsCount, 0);
+    const hotItem = [...sectionItems].sort((a, b) => getHeatScore(b) - getHeatScore(a))[0] ?? null;
+    return { section, sectionItems, totalLikes, totalComments, hotItem };
+  });
 
   return (
     <Card className="w-full">
@@ -126,61 +144,78 @@ export function CommunityTab({ onOpenCreation }: Props) {
           </p>
         )}
 
-        {hotItems.length > 0 && (
-          <section className="space-y-2">
-            <h3 className="text-sm font-bold">Fixados em alta</h3>
-            <div className="space-y-3">
-              {hotItems.map((item) => (
-                <CommunityCard
-                  key={item.id}
-                  item={item}
-                  compact
-                  onLike={() => handleLike(item)}
-                  onSelect={() => setSelected(item)}
-                  onComments={() => handleComments(item)}
-                  onOpen={() => onOpenCreation?.(item)}
-                  onDelete={() => handleDelete(item)}
-                  canDelete={item.authorId === user?.id}
-                  commentsOpen={expandedCommentsId === item.id}
-                  onStatsChange={updateItem}
-                />
-              ))}
+        {!activeSection ? (
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {sectionStats.map(({ section, sectionItems, totalLikes, totalComments, hotItem }) => (
+              <button
+                key={section}
+                type="button"
+                onClick={() => {
+                  setActiveSection(section);
+                  setExpandedCommentsId(null);
+                }}
+                className="min-h-56 rounded-lg border bg-card p-5 text-left transition-colors hover:bg-muted/30"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-md border bg-muted">
+                    {SECTION_META[section].icon}
+                  </span>
+                  <span className="text-3xl font-bold">{sectionItems.length}</span>
+                </div>
+                <h3 className="mt-4 text-lg font-bold">{SECTION_META[section].label}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">{SECTION_META[section].description}</p>
+                <div className="mt-4 grid grid-cols-2 gap-2 text-sm">
+                  <span className="rounded-md border bg-muted/30 px-2 py-1 font-semibold">{totalLikes} curtidas</span>
+                  <span className="rounded-md border bg-muted/30 px-2 py-1 font-semibold">{totalComments} comentarios</span>
+                </div>
+                <div className="mt-4 rounded-md border bg-muted/20 p-2">
+                  <p className="text-[11px] font-semibold uppercase text-muted-foreground">Mais quente</p>
+                  <p className="mt-1 truncate text-sm font-bold">{hotItem?.title || "Sem publicacoes"}</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        ) : (
+          <section className="space-y-3">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h3 className="flex items-center gap-2 text-lg font-bold">
+                  {SECTION_META[activeSection].icon}
+                  {SECTION_META[activeSection].label}
+                </h3>
+                <p className="text-sm text-muted-foreground">{SECTION_META[activeSection].description}</p>
+              </div>
+              <Button type="button" variant="outline" onClick={() => setActiveSection(null)}>
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Voltar
+              </Button>
             </div>
+
+            {itemsBySection[activeSection].length === 0 ? (
+              <div className="rounded-lg border bg-muted/30 p-4 text-sm text-muted-foreground">
+                Nenhuma publicacao nesta secao.
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {itemsBySection[activeSection].map((item) => (
+                  <CommunityCard
+                    key={item.id}
+                    item={item}
+                    section={getCommunitySection(item)}
+                    onLike={() => handleLike(item)}
+                    onSelect={() => setSelected(item)}
+                    onComments={() => handleComments(item)}
+                    onOpen={() => onOpenCreation?.(item)}
+                    onDelete={() => handleDelete(item)}
+                    canDelete={item.authorId === user?.id}
+                    commentsOpen={expandedCommentsId === item.id}
+                    onStatsChange={updateItem}
+                  />
+                ))}
+              </div>
+            )}
           </section>
         )}
-
-        <div className="space-y-4">
-            {(["progression", "dictionary", "exercise"] as const).map((type) => (
-              <section key={type} className="space-y-2">
-                <h3 className="flex items-center gap-2 text-sm font-bold">
-                  {TYPE_ICON[type]}
-                  {TYPE_LABEL[type]}
-                </h3>
-                {itemsByType[type].length === 0 ? (
-                  <div className="rounded-lg border bg-muted/30 p-3 text-sm text-muted-foreground">
-                    Nenhuma publicacao nesta area.
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    {itemsByType[type].map((item) => (
-                      <CommunityCard
-                        key={item.id}
-                        item={item}
-                        onLike={() => handleLike(item)}
-                        onSelect={() => setSelected(item)}
-                        onComments={() => handleComments(item)}
-                        onOpen={() => onOpenCreation?.(item)}
-                        onDelete={() => handleDelete(item)}
-                        canDelete={item.authorId === user?.id}
-                        commentsOpen={expandedCommentsId === item.id}
-                        onStatsChange={updateItem}
-                      />
-                    ))}
-                  </div>
-                )}
-              </section>
-            ))}
-        </div>
 
         {!loading && !error && items.length === 0 && (
           <div className="rounded-lg border bg-muted/30 p-4 text-sm text-muted-foreground">
@@ -194,7 +229,7 @@ export function CommunityTab({ onOpenCreation }: Props) {
 
 function CommunityCard({
   item,
-  compact = false,
+  section,
   onLike,
   onSelect,
   onComments,
@@ -205,7 +240,7 @@ function CommunityCard({
   onStatsChange,
 }: {
   item: CommunityCreation;
-  compact?: boolean;
+  section: CommunitySection;
   onLike: () => void;
   onSelect: () => void;
   onComments: () => void;
@@ -221,13 +256,13 @@ function CommunityCard({
         <button type="button" onClick={onSelect} className="min-w-0 flex-1 text-left">
           <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-1.5 rounded bg-muted px-2 py-1 text-xs font-bold">
-              {TYPE_ICON[item.type]}
-              {TYPE_LABEL[item.type]}
+              {SECTION_META[section].icon}
+              {SECTION_META[section].label}
             </span>
             <span className="text-xs text-muted-foreground">por {item.authorName}</span>
           </div>
           <h3 className="mt-2 font-bold">{item.title}</h3>
-          {item.description && !compact && (
+          {item.description && (
             <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{item.description}</p>
           )}
         </button>
@@ -259,4 +294,23 @@ function CommunityCard({
       )}
     </article>
   );
+}
+
+function getCommunitySection(item: CommunityCreation): CommunitySection {
+  if (item.type === "progression") return "progression";
+  if (item.type === "dictionary") return "dictionary";
+
+  const text = [
+    item.title,
+    item.description,
+    String(item.payload.focus || ""),
+    String(item.payload.routine || ""),
+  ].join(" ").toLowerCase();
+
+  return text.includes("arpej") ? "arpeggios" : "scales";
+}
+
+function getHeatScore(item: CommunityCreation) {
+  const recentBoost = Date.now() - new Date(item.createdAt).getTime() <= 72 * 60 * 60 * 1000 ? 5 : 0;
+  return item.likesCount + item.commentsCount * 2 + recentBoost;
 }

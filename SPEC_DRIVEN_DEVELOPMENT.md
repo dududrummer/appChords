@@ -515,11 +515,13 @@ Fluxo:
    - nome;
    - prefixo do email;
    - fallback "Musico".
-5. Comunidade lista os 50 itens mais recentes por secao.
-6. Publicacoes em alta nas ultimas 72 horas ficam fixadas no topo, ordenadas por curtidas e comentarios.
-7. Usuario pode abrir uma publicacao na ferramenta de origem dentro da propria area `/app`.
-8. Ao abrir publicacao publica, a ferramenta exibe credito do autor e painel social com curtidas e comentarios.
-9. Comentarios feitos em publicacoes publicas ficam visiveis para a comunidade.
+5. Comunidade abre em dashboard responsivo por assunto: Sequencias, Dicionario, Escalas e Arpejos.
+6. Cada cartao do dashboard mostra quantidade de publicacoes, total de curtidas, total de comentarios e publicacao mais quente da secao.
+7. Ao clicar em uma secao, a comunidade exibe as publicacoes em lista.
+8. Publicacoes de `exercise` sao exibidas como Escalas ou Arpejos conforme conteudo salvo.
+9. Usuario pode abrir uma publicacao na ferramenta de origem dentro da propria area `/app`.
+10. Ao clicar no icone de comentario, os comentarios e a caixa de resposta aparecem abaixo da publicacao.
+11. Comentarios feitos em publicacoes publicas ficam visiveis para a comunidade.
 
 Seguranca RLS esperada:
 
