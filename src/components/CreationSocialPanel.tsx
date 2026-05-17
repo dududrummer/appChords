@@ -179,8 +179,7 @@ export const CreationSocialPanel = forwardRef<HTMLDivElement, Props>(function Cr
 function mergeComments(current: CreationComment[], incoming: CreationComment[]) {
   const byKey = new Map<string, CreationComment>();
   for (const comment of [...current, ...incoming]) {
-    const key = `${comment.authorId}:${comment.createdAt}:${comment.body}`;
-    byKey.set(key, comment);
+    byKey.set(comment.id, comment);
   }
   return [...byKey.values()].sort(
     (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
