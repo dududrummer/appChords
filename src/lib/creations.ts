@@ -196,7 +196,8 @@ export async function loadCommunityComments(creationId: string) {
     .from("community_creation_comments")
     .select("*")
     .eq("creation_id", creationId)
-    .order("created_at", { ascending: true });
+    .order("created_at", { ascending: true })
+    .limit(500);
 
   if (error) return { comments: [] as CreationComment[], error: error.message };
 

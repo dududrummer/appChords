@@ -31,13 +31,16 @@ export const CreationSocialPanel = forwardRef<HTMLDivElement, Props>(function Cr
 
   useEffect(() => {
     setLocalCreation(creation);
+  }, [creation]);
+
+  useEffect(() => {
     setLoading(true);
     loadCommunityComments(creation.id).then((result) => {
       setComments(result.comments);
       setError(result.error || "");
       setLoading(false);
     });
-  }, [creation]);
+  }, [creation.id]);
 
   async function handleLike() {
     if (!user) return;
@@ -70,11 +73,21 @@ export const CreationSocialPanel = forwardRef<HTMLDivElement, Props>(function Cr
     }
 
     setBody("");
-    const nextComments = result.comment ? [...comments, result.comment] : comments;
+    const nextComments = result.comment ? mergeComments(comments, [result.comment]) : comments;
     setComments(nextComments);
     const next = { ...localCreation, commentsCount: nextComments.length };
     setLocalCreation(next);
     onStatsChange?.(next);
+
+    window.setTimeout(async () => {
+      const refreshed = await loadCommunityComments(localCreation.id);
+      if (refreshed.error) return;
+      const merged = mergeComments(nextComments, refreshed.comments);
+      setComments(merged);
+      const refreshedCreation = { ...next, commentsCount: merged.length };
+      setLocalCreation(refreshedCreation);
+      onStatsChange?.(refreshedCreation);
+    }, 700);
   }
 
   return (
@@ -115,17 +128,21 @@ export const CreationSocialPanel = forwardRef<HTMLDivElement, Props>(function Cr
           </p>
         )}
 
-        {comments.map((comment) => (
-          <div key={comment.id} className="rounded-md border bg-muted/20 px-3 py-2">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <span className="text-sm font-bold">{comment.authorName}</span>
-              <span className="text-[11px] text-muted-foreground">
-                {new Date(comment.createdAt).toLocaleString("pt-BR")}
-              </span>
-            </div>
-            <p className="mt-1 whitespace-pre-wrap text-sm">{comment.body}</p>
+        {comments.length > 0 && (
+          <div className="max-h-80 space-y-2 overflow-y-auto pr-1">
+            {comments.map((comment) => (
+              <div key={comment.id} className="rounded-md border bg-muted/20 px-3 py-2">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="text-sm font-bold">{comment.authorName}</span>
+                  <span className="text-[11px] text-muted-foreground">
+                    {new Date(comment.createdAt).toLocaleString("pt-BR")}
+                  </span>
+                </div>
+                <p className="mt-1 whitespace-pre-wrap break-words text-sm">{comment.body}</p>
+              </div>
+            ))}
           </div>
-        ))}
+        )}
       </div>
 
       {showComposer && (
@@ -148,3 +165,14 @@ export const CreationSocialPanel = forwardRef<HTMLDivElement, Props>(function Cr
     </div>
   );
 });
+
+function mergeComments(current: CreationComment[], incoming: CreationComment[]) {
+  const byKey = new Map<string, CreationComment>();
+  for (const comment of [...current, ...incoming]) {
+    const key = `${comment.authorId}:${comment.createdAt}:${comment.body}`;
+    byKey.set(key, comment);
+  }
+  return [...byKey.values()].sort(
+    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+  );
+}
