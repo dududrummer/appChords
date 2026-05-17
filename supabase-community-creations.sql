@@ -11,6 +11,9 @@ create table if not exists public.community_creations (
 
 alter table public.community_creations enable row level security;
 
+grant usage on schema public to authenticated;
+grant select, insert, delete on table public.community_creations to authenticated;
+
 drop policy if exists "community creations are readable by authenticated users" on public.community_creations;
 create policy "community creations are readable by authenticated users"
 on public.community_creations
