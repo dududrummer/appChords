@@ -372,6 +372,13 @@ Funcionalidades:
 - Playback com metronomo/sintese/loops.
 - Salvamento privado e publicacao na comunidade.
 
+Analise harmonica:
+
+- `src/lib/harmony.ts` detecta a tonalidade antes de gerar graus romanos e funcoes.
+- A deteccao usa pontuacao hibrida: perfil Krumhansl-Schmuckler, raizes dos acordes, encaixe diatonico, qualidade esperada do grau, dominantes resolvendo e peso de primeiro/ultimo acorde.
+- A rotacao do perfil tonal deve preservar a raiz candidata como centro; progresses claras em do maior como `C | F | G | C`, `C7M | Dm7 G7 | C7M` e `C | Am | F | G` devem retornar `C maior`, nao `F maior`.
+- Casos de referencia: `F | Bb | C7 | F` deve retornar `F maior`; `Am | Dm | E7 | Am` deve retornar `A menor`.
+
 Categorias atuais:
 
 - Quadradas Maiores.
