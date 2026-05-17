@@ -222,27 +222,23 @@ export async function addCommunityComment(user: UserProfile, creationId: string,
   if (!supabase) return { error: "Supabase nÃ£o configurado." };
 
   const authorName = getAuthorName(user);
-  const { data, error } = await supabase
-    .from("community_creation_comments")
-    .insert({
-      creation_id: creationId,
-      author_id: user.id,
-      author_name: authorName,
-      body,
-    })
-    .select("*")
-    .single();
+  const { error } = await supabase.from("community_creation_comments").insert({
+    creation_id: creationId,
+    author_id: user.id,
+    author_name: authorName,
+    body,
+  });
 
   return {
     comment: error
       ? null
       : ({
-          id: data.id,
-          creationId: data.creation_id,
-          authorId: data.author_id,
-          authorName: data.author_name,
-          body: data.body,
-          createdAt: data.created_at,
+          id: crypto.randomUUID(),
+          creationId,
+          authorId: user.id,
+          authorName,
+          body,
+          createdAt: new Date().toISOString(),
         } satisfies CreationComment),
     error: error?.message,
   };
