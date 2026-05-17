@@ -44,6 +44,7 @@ export interface RegisterData {
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
+const PROFILE_FETCH_TIMEOUT_MS = 5000;
 
 const NO_SUPABASE_MSG = "Supabase não configurado. Funcionalidade de autenticação indisponível.";
 
@@ -80,8 +81,22 @@ function mapSupabaseUser(user: User, profile?: Record<string, unknown> | null): 
 
 async function fetchProfile(userId: string): Promise<Record<string, unknown> | null> {
   if (!supabase) return null;
-  const { data } = await supabase.from("profiles").select("*").eq("id", userId).maybeSingle();
-  return data;
+  try {
+    const query = supabase.from("profiles").select("*").eq("id", userId).maybeSingle();
+    const timeout = new Promise<null>((resolve) => {
+      window.setTimeout(() => resolve(null), PROFILE_FETCH_TIMEOUT_MS);
+    });
+    const result = await Promise.race([query, timeout]);
+    if (!result) return null;
+    if ("error" in result && result.error) {
+      console.warn("Profile fetch error:", result.error.message);
+      return null;
+    }
+    return result.data;
+  } catch (error) {
+    console.warn("Profile fetch failed:", error);
+    return null;
+  }
 }
 
 async function upsertProfile(userId: string, profileData: Record<string, unknown>): Promise<string | null> {
@@ -112,38 +127,49 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!supabase) return;
 
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
+    let mounted = true;
+
+    async function applySession(session: Session | null) {
       if (session?.user) {
         const profile = await fetchProfile(session.user.id);
+        if (!mounted) return;
         setState({
           user: mapSupabaseUser(session.user, profile),
           supabaseUser: session.user, session,
           isAuthenticated: true, isLoading: false,
         });
       } else {
+        if (!mounted) return;
         setState((s) => ({ ...s, isLoading: false }));
       }
-    });
+    }
+
+    supabase.auth.getSession()
+      .then(({ data: { session } }) => applySession(session))
+      .catch((error) => {
+        console.warn("Session restore failed:", error);
+        if (mounted) setState((s) => ({ ...s, isLoading: false }));
+      });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
-        if (session?.user) {
-          const profile = await fetchProfile(session.user.id);
-          setState({
-            user: mapSupabaseUser(session.user, profile),
-            supabaseUser: session.user, session,
-            isAuthenticated: true, isLoading: false,
-          });
-        } else {
-          setState({
-            user: null, supabaseUser: null, session: null,
-            isAuthenticated: false, isLoading: false,
-          });
-        }
+      (_event, session) => {
+        window.setTimeout(() => {
+          if (session?.user) {
+            void applySession(session);
+          } else if (mounted) {
+            setState({
+              user: null, supabaseUser: null, session: null,
+              isAuthenticated: false, isLoading: false,
+            });
+          }
+        }, 0);
       },
     );
 
-    return () => subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   const setAuthenticatedSession = useCallback(async (session: Session) => {
