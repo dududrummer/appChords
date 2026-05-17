@@ -15,6 +15,7 @@ import { ProgressionEditor } from "@/components/ProgressionEditor";
 import { ChordDictionaryPage } from "@/components/ChordDictionaryPage";
 import { ExercisesTab } from "@/components/ExercisesTab";
 import { ProfileTab } from "@/components/ProfileTab";
+import { CommunityTab } from "@/components/CommunityTab";
 import { WelcomeTour } from "@/components/WelcomeTour";
 import { UserMenu } from "@/components/UserMenu";
 import { INSTRUMENT_PRESETS } from "@/lib/music-theory";
@@ -602,25 +603,7 @@ function ChordGenerator() {
           {activePage === 'profile' ? (
             <ProfileTab />
           ) : activePage === 'community' ? (
-            <Card className="w-full">
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Users className="h-5 w-5" /> Comunidade
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  Compartilhe sequências, dicas, exercícios e músicas para aplicar progressões no repertório.
-                </p>
-                <div className="grid md:grid-cols-3 gap-4">
-                  {["Sequências harmônicas", "Dicas e exercícios", "Músicas para aplicar"].map((item) => (
-                    <div key={item} className="rounded-lg border bg-card p-4 text-sm font-semibold">
-                      {item}
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            <CommunityTab />
           ) : activePage === 'plan' ? (
             <Card className="w-full">
               <CardHeader>

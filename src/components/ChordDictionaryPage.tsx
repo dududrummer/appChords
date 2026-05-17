@@ -12,6 +12,7 @@ import { parseChord, INSTRUMENT_PRESETS } from '@/lib/music-theory';
 import { searchVoicings } from '@/lib/voicing-search';
 import type { Voicing } from '@/lib/chord-finder';
 import { VoicingMiniSvg } from './VoicingMiniSvg';
+import { CreationSavePanel } from './CreationSavePanel';
 
 interface Props {
   instrument: string;
@@ -145,6 +146,20 @@ export function ChordDictionaryPage({
             </div>
           </div>
         )}
+
+        <CreationSavePanel
+          type="dictionary"
+          defaultTitle={parsedName || query || "Meu acorde"}
+          defaultDescription="Acorde salvo a partir do dicionário interativo."
+          disabled={voicings.length === 0}
+          payload={{
+            query,
+            parsedName,
+            instrument,
+            tuning: activeTuning,
+            voicings,
+          }}
+        />
       </CardContent>
     </Card>
   );

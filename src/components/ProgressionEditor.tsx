@@ -15,6 +15,7 @@ import {
 } from '@/lib/degree-progressions';
 import { ProgressionGrid } from './ProgressionGrid';
 import { PercussionPlayers } from './PercussionPlayers';
+import { CreationSavePanel } from './CreationSavePanel';
 import type { Voicing } from '@/lib/chord-finder';
 import { startPlayback, stopPlayback, setBpm as setAudioBpm } from '@/lib/audio';
 
@@ -290,6 +291,22 @@ export function ProgressionEditor({
             <PercussionPlayers />
           </div>
         )}
+
+        <CreationSavePanel
+          type="progression"
+          defaultTitle={selectedTpl?.name || input || "Minha sequência"}
+          defaultDescription="Sequência harmônica criada no SambaTune."
+          disabled={measures.length === 0}
+          payload={{
+            input,
+            instrument,
+            bpm,
+            category: selectedCategory,
+            template: selectedTemplate,
+            key: selectedKey,
+            voicings,
+          }}
+        />
       </CardContent>
     </Card>
   );
