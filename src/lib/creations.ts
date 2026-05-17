@@ -229,6 +229,8 @@ export async function addCommunityComment(user: UserProfile, creationId: string,
     body,
   }).select("*").single();
 
+  console.log("[DEBUG] addCommunityComment result:", { data, error });
+
   return {
     comment: error || !data
       ? null
