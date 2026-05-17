@@ -28,7 +28,9 @@ interface AuthState {
 interface AuthContextType extends AuthState {
   login: (email: string, password: string) => Promise<{ error?: string }>;
   loginWithGoogle: () => Promise<{ error?: string }>;
-  register: (data: RegisterData) => Promise<{ error?: string; requiresEmailConfirmation?: boolean }>;
+  register: (
+    data: RegisterData,
+  ) => Promise<{ error?: string; requiresEmailConfirmation?: boolean }>;
   logout: () => Promise<void>;
   updateProfile: (data: Partial<UserProfile>) => Promise<void>;
 }
@@ -72,7 +74,8 @@ function mapSupabaseUser(user: User, profile?: Record<string, unknown> | null): 
   return {
     id: user.id,
     email: user.email || "",
-    name: (profile?.name as string) || user.user_metadata?.full_name || user.email?.split("@")[0] || "",
+    name:
+      (profile?.name as string) || user.user_metadata?.full_name || user.email?.split("@")[0] || "",
     artisticName: (profile?.artistic_name as string) || undefined,
     phoneWhatsapp: (profile?.phone_whatsapp as string) || undefined,
     age: (profile?.age as number) || undefined,
@@ -105,7 +108,10 @@ async function fetchProfile(userId: string): Promise<Record<string, unknown> | n
   }
 }
 
-async function upsertProfile(userId: string, profileData: Record<string, unknown>): Promise<string | null> {
+async function upsertProfile(
+  userId: string,
+  profileData: Record<string, unknown>,
+): Promise<string | null> {
   if (!supabase) return null;
   const { error } = await supabase
     .from("profiles")
@@ -119,15 +125,21 @@ async function uploadAvatar(userId: string, file: File): Promise<string | null> 
   const ext = file.name.split(".").pop();
   const path = `avatars/${userId}.${ext}`;
   const { error } = await supabase.storage.from("avatars").upload(path, file, { upsert: true });
-  if (error) { console.error("Avatar upload error:", error); return null; }
+  if (error) {
+    console.error("Avatar upload error:", error);
+    return null;
+  }
   const { data } = supabase.storage.from("avatars").getPublicUrl(path);
   return data.publicUrl;
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<AuthState>({
-    user: null, supabaseUser: null, session: null,
-    isAuthenticated: false, isLoading: !!supabase,
+    user: null,
+    supabaseUser: null,
+    session: null,
+    isAuthenticated: false,
+    isLoading: !!supabase,
   });
 
   useEffect(() => {
@@ -141,8 +153,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (!mounted) return;
         setState({
           user: mapSupabaseUser(session.user, profile),
-          supabaseUser: session.user, session,
-          isAuthenticated: true, isLoading: false,
+          supabaseUser: session.user,
+          session,
+          isAuthenticated: true,
+          isLoading: false,
         });
       } else {
         if (!mounted) return;
@@ -150,27 +164,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     }
 
-    supabase.auth.getSession()
+    supabase.auth
+      .getSession()
       .then(({ data: { session } }) => applySession(session))
       .catch((error) => {
         console.warn("Session restore failed:", error);
         if (mounted) setState((s) => ({ ...s, isLoading: false }));
       });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        window.setTimeout(() => {
-          if (session?.user) {
-            void applySession(session);
-          } else if (mounted) {
-            setState({
-              user: null, supabaseUser: null, session: null,
-              isAuthenticated: false, isLoading: false,
-            });
-          }
-        }, 0);
-      },
-    );
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      window.setTimeout(() => {
+        if (session?.user) {
+          void applySession(session);
+        } else if (mounted) {
+          setState({
+            user: null,
+            supabaseUser: null,
+            session: null,
+            isAuthenticated: false,
+            isLoading: false,
+          });
+        }
+      }, 0);
+    });
 
     return () => {
       mounted = false;
@@ -189,31 +207,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
-  const login = useCallback(async (email: string, password: string) => {
-    if (!supabase) return { error: NO_SUPABASE_MSG };
-    setState((s) => ({ ...s, isLoading: true }));
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: normalizeEmail(email),
-      password,
-    });
-    if (error) {
+  const login = useCallback(
+    async (email: string, password: string) => {
+      if (!supabase) return { error: NO_SUPABASE_MSG };
+      setState((s) => ({ ...s, isLoading: true }));
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: normalizeEmail(email),
+        password,
+      });
+      if (error) {
+        setState((s) => ({ ...s, isLoading: false }));
+        return { error: getAuthErrorMessage(error.message) };
+      }
+      if (data.session) {
+        await setAuthenticatedSession(data.session);
+        return {};
+      }
+
+      const { data: sessionData } = await supabase.auth.getSession();
+      if (sessionData.session) {
+        await setAuthenticatedSession(sessionData.session);
+        return {};
+      }
+
       setState((s) => ({ ...s, isLoading: false }));
-      return { error: getAuthErrorMessage(error.message) };
-    }
-    if (data.session) {
-      await setAuthenticatedSession(data.session);
-      return {};
-    }
-
-    const { data: sessionData } = await supabase.auth.getSession();
-    if (sessionData.session) {
-      await setAuthenticatedSession(sessionData.session);
-      return {};
-    }
-
-    setState((s) => ({ ...s, isLoading: false }));
-    return { error: "Login recebido, mas a sessão não foi criada. Confirme seu e-mail e tente novamente." };
-  }, [setAuthenticatedSession]);
+      return {
+        error:
+          "Login recebido, mas a sessão não foi criada. Confirme seu e-mail e tente novamente.",
+      };
+    },
+    [setAuthenticatedSession],
+  );
 
   const loginWithGoogle = useCallback(async () => {
     if (!supabase) return { error: NO_SUPABASE_MSG };
@@ -251,7 +275,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     if (!authData.user) {
       setState((s) => ({ ...s, isLoading: false }));
-      return { error: "NÃ£o foi possÃ­vel criar o usuÃ¡rio. Tente novamente." };
+      return { error: "Não foi possível criar o usuário. Tente novamente." };
     }
 
     if (authData.user) {
@@ -276,7 +300,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (profileError) {
         setState((s) => ({ ...s, isLoading: false }));
-        return { error: `Conta criada, mas nÃ£o consegui salvar o perfil: ${profileError}` };
+        return { error: `Conta criada, mas não consegui salvar o perfil: ${profileError}` };
       }
     }
 
@@ -300,25 +324,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
-  const updateProfile = useCallback(async (data: Partial<UserProfile>) => {
-    if (!supabase || !state.supabaseUser) return;
-    const profileData: Record<string, unknown> = {};
-    if (data.name !== undefined) profileData.name = data.name;
-    if (data.artisticName !== undefined) profileData.artistic_name = data.artisticName;
-    if (data.phoneWhatsapp !== undefined) profileData.phone_whatsapp = data.phoneWhatsapp;
-    if (data.age !== undefined) profileData.age = data.age;
-    if (data.gender !== undefined) profileData.gender = data.gender;
-    if (data.instrument !== undefined) profileData.instrument = data.instrument;
-    if (data.instagram !== undefined) profileData.instagram = data.instagram;
-    if (data.howDidYouFindUs !== undefined) profileData.how_did_you_find_us = data.howDidYouFindUs;
-    if (data.avatarUrl !== undefined) profileData.avatar_url = data.avatarUrl;
+  const updateProfile = useCallback(
+    async (data: Partial<UserProfile>) => {
+      if (!supabase || !state.supabaseUser) return;
+      const profileData: Record<string, unknown> = {};
+      if (data.name !== undefined) profileData.name = data.name;
+      if (data.artisticName !== undefined) profileData.artistic_name = data.artisticName;
+      if (data.phoneWhatsapp !== undefined) profileData.phone_whatsapp = data.phoneWhatsapp;
+      if (data.age !== undefined) profileData.age = data.age;
+      if (data.gender !== undefined) profileData.gender = data.gender;
+      if (data.instrument !== undefined) profileData.instrument = data.instrument;
+      if (data.instagram !== undefined) profileData.instagram = data.instagram;
+      if (data.howDidYouFindUs !== undefined)
+        profileData.how_did_you_find_us = data.howDidYouFindUs;
+      if (data.avatarUrl !== undefined) profileData.avatar_url = data.avatarUrl;
 
-    await upsertProfile(state.supabaseUser.id, profileData);
-    setState((s) => ({
-      ...s,
-      user: s.user ? { ...s.user, ...data } : null,
-    }));
-  }, [state.supabaseUser]);
+      await upsertProfile(state.supabaseUser.id, profileData);
+      setState((s) => ({
+        ...s,
+        user: s.user ? { ...s.user, ...data } : null,
+      }));
+    },
+    [state.supabaseUser],
+  );
 
   return (
     <AuthContext.Provider

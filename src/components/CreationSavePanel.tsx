@@ -68,7 +68,7 @@ export function CreationSavePanel({
     });
 
     if (lastPublishedSignatureRef.current === signature) {
-      setMessage("Esta criaÃ§Ã£o jÃ¡ foi publicada na comunidade.");
+      setMessage("Esta criação já foi publicada na comunidade.");
       return;
     }
 
@@ -124,7 +124,12 @@ export function CreationSavePanel({
       </div>
 
       <div className="flex flex-wrap gap-3">
-        <Button type="button" variant="outline" onClick={handlePrivateSave} disabled={disabled || !user}>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={handlePrivateSave}
+          disabled={disabled || !user}
+        >
           <Lock className="h-4 w-4 mr-2" />
           Salvar no meu perfil
         </Button>
@@ -152,7 +157,13 @@ export function CreationSavePanel({
                       <p className="text-xs text-muted-foreground mt-0.5">{item.description}</p>
                     )}
                   </div>
-                  <Button type="button" size="sm" variant="ghost" className="h-7 px-2" onClick={() => handleOpen(item)}>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="ghost"
+                    className="h-7 px-2"
+                    onClick={() => handleOpen(item)}
+                  >
                     <ExternalLink className="h-3.5 w-3.5" />
                     <span className="sr-only">Abrir</span>
                   </Button>

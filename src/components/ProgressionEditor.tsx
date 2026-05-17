@@ -1,26 +1,37 @@
-import { useState, useCallback, useMemo, useEffect } from 'react';
-import { Music2, Play, Square } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { parseProgression, uniqueChords, type Measure } from '@/lib/progression';
-import { analyseProgression, type HarmonicAnalysis } from '@/lib/harmony';
-import { INSTRUMENT_PRESETS } from '@/lib/music-theory';
-import { resolveAutoVoicings, searchVoicings } from '@/lib/voicing-search';
+import { useState, useCallback, useMemo, useEffect } from "react";
+import { Music2, Play, Square } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import {
-  PROGRESSION_TEMPLATES, KEY_OPTIONS, CATEGORIES,
-  transposeDegrees, type Category,
-} from '@/lib/degree-progressions';
-import { ProgressionGrid } from './ProgressionGrid';
-import { PercussionPlayers } from './PercussionPlayers';
-import { CreationSavePanel } from './CreationSavePanel';
-import type { Voicing } from '@/lib/chord-finder';
-import { startPlayback, stopPlayback, setBpm as setAudioBpm } from '@/lib/audio';
-import type { SavedCreation } from '@/lib/creations';
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { parseProgression, uniqueChords, type Measure } from "@/lib/progression";
+import { analyseProgression, type HarmonicAnalysis } from "@/lib/harmony";
+import { INSTRUMENT_PRESETS } from "@/lib/music-theory";
+import { resolveAutoVoicings, searchVoicings } from "@/lib/voicing-search";
+import {
+  PROGRESSION_TEMPLATES,
+  KEY_OPTIONS,
+  CATEGORIES,
+  transposeDegrees,
+  type Category,
+} from "@/lib/degree-progressions";
+import { ProgressionGrid } from "./ProgressionGrid";
+import { PercussionPlayers } from "./PercussionPlayers";
+import { CreationSavePanel } from "./CreationSavePanel";
+import type { Voicing } from "@/lib/chord-finder";
+import { startPlayback, stopPlayback, setBpm as setAudioBpm } from "@/lib/audio";
+import type { SavedCreation } from "@/lib/creations";
 
-interface StoredVoicing extends Voicing { tuning: string[] }
+interface StoredVoicing extends Voicing {
+  tuning: string[];
+}
 
 interface Props {
   instrument: string;
@@ -32,18 +43,48 @@ interface Props {
   openedCreation?: SavedCreation | null;
 }
 
+const PROGRESSION_DRAFT_KEY = "sambatune:progression-draft";
+
+interface ProgressionDraft {
+  selectedCategory?: Category | "";
+  selectedTemplate?: string;
+  selectedKey?: string;
+  input?: string;
+  bpm?: number;
+  voicings?: Record<string, StoredVoicing>;
+}
+
+function loadProgressionDraft(): ProgressionDraft {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = window.sessionStorage.getItem(PROGRESSION_DRAFT_KEY);
+    return raw ? (JSON.parse(raw) as ProgressionDraft) : {};
+  } catch {
+    return {};
+  }
+}
+
 export function ProgressionEditor({
-  instrument, stringCount, stringNames, markerColor, primaryColor, onInstrumentChange, openedCreation
+  instrument,
+  stringCount,
+  stringNames,
+  markerColor,
+  primaryColor,
+  onInstrumentChange,
+  openedCreation,
 }: Props) {
-  const [selectedCategory, setSelectedCategory] = useState<Category | ''>('');
-  const [selectedTemplate, setSelectedTemplate] = useState('');
-  const [selectedKey, setSelectedKey]           = useState('');
-  const [input, setInput]                       = useState('');
-  const [voicings, setVoicings]                 = useState<Record<string, StoredVoicing>>({});
-  
-  const [isPlaying, setIsPlaying]               = useState(false);
-  const [activeMeasure, setActiveMeasure]       = useState<number | null>(null);
-  const [bpm, setBpm]                           = useState(90);
+  const draft = useMemo(() => loadProgressionDraft(), []);
+  const [selectedCategory, setSelectedCategory] = useState<Category | "">(
+    draft.selectedCategory ?? "",
+  );
+  const [selectedTemplate, setSelectedTemplate] = useState(draft.selectedTemplate ?? "");
+  const [selectedKey, setSelectedKey] = useState(draft.selectedKey ?? "");
+  const [input, setInput] = useState(draft.input ?? "");
+  const [voicings, setVoicings] = useState<Record<string, StoredVoicing>>(draft.voicings ?? {});
+
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [activeMeasure, setActiveMeasure] = useState<number | null>(null);
+  const [bpm, setBpm] = useState(draft.bpm ?? 90);
 
   useEffect(() => {
     if (!openedCreation || openedCreation.type !== "progression") return;
@@ -60,15 +101,35 @@ export function ProgressionEditor({
     );
   }, [openedCreation]);
 
+  useEffect(() => {
+    try {
+      window.sessionStorage.setItem(
+        PROGRESSION_DRAFT_KEY,
+        JSON.stringify({
+          selectedCategory,
+          selectedTemplate,
+          selectedKey,
+          input,
+          bpm,
+          voicings,
+        }),
+      );
+    } catch {
+      // Ignore storage failures; the editor still works without draft persistence.
+    }
+  }, [selectedCategory, selectedTemplate, selectedKey, input, bpm, voicings]);
+
   // Stop playback on unmount
   useEffect(() => {
-    return () => { stopPlayback(); };
+    return () => {
+      stopPlayback();
+    };
   }, []);
 
   const measures: Measure[] = useMemo(() => parseProgression(input), [input]);
   const analysis: HarmonicAnalysis | null = useMemo(
     () => (measures.length > 0 ? analyseProgression(measures) : null),
-    [measures]
+    [measures],
   );
   const chordNames = useMemo(() => uniqueChords(measures), [measures]);
 
@@ -89,7 +150,7 @@ export function ProgressionEditor({
           "harmony",
           voicings,
           (mi) => setActiveMeasure(mi),
-          true
+          true,
         );
       } catch (err) {
         console.error(err);
@@ -101,17 +162,9 @@ export function ProgressionEditor({
   // Templates filtered by selected category
   const filteredTemplates = useMemo(
     () =>
-      selectedCategory
-        ? PROGRESSION_TEMPLATES.filter((t) => t.category === selectedCategory)
-        : [],
-    [selectedCategory]
+      selectedCategory ? PROGRESSION_TEMPLATES.filter((t) => t.category === selectedCategory) : [],
+    [selectedCategory],
   );
-
-  // Reset template and key when category changes
-  useEffect(() => {
-    setSelectedTemplate("");
-    setSelectedKey("");
-  }, [selectedCategory]);
 
   // Transpose when template + key are both set
   useEffect(() => {
@@ -124,7 +177,7 @@ export function ProgressionEditor({
   }, [selectedTemplate, selectedKey]);
 
   const getActiveTuning = useCallback((): string[] => {
-    const filled = stringNames.slice(0, stringCount).filter(n => n.trim());
+    const filled = stringNames.slice(0, stringCount).filter((n) => n.trim());
     if (filled.length === stringCount) return stringNames.slice(0, stringCount);
     return INSTRUMENT_PRESETS[instrument]?.tuning ?? INSTRUMENT_PRESETS.cavaquinho.tuning;
   }, [stringNames, stringCount, instrument]);
@@ -133,7 +186,7 @@ export function ProgressionEditor({
   useEffect(() => {
     const tuning = getActiveTuning();
     const auto = resolveAutoVoicings(chordNames, { instrument, tuning });
-    setVoicings(prev => {
+    setVoicings((prev) => {
       const next: Record<string, StoredVoicing> = {};
       for (const name of chordNames) {
         next[name] = prev[name] ?? (auto[name] ? { ...auto[name], tuning } : prev[name]);
@@ -142,21 +195,27 @@ export function ProgressionEditor({
     });
   }, [chordNames, instrument, getActiveTuning]);
 
-  const getVoicingsForChord = useCallback((chordName: string): Voicing[] => {
-    return searchVoicings(chordName, { instrument, tuning: getActiveTuning() });
-  }, [getActiveTuning, instrument]);
+  const getVoicingsForChord = useCallback(
+    (chordName: string): Voicing[] => {
+      return searchVoicings(chordName, { instrument, tuning: getActiveTuning() });
+    },
+    [getActiveTuning, instrument],
+  );
 
-  const handleVoicingSelect = useCallback((chordName: string, voicing: Voicing) => {
-    setVoicings(prev => ({ ...prev, [chordName]: { ...voicing, tuning: getActiveTuning() } }));
-  }, [getActiveTuning]);
+  const handleVoicingSelect = useCallback(
+    (chordName: string, voicing: Voicing) => {
+      setVoicings((prev) => ({ ...prev, [chordName]: { ...voicing, tuning: getActiveTuning() } }));
+    },
+    [getActiveTuning],
+  );
 
-  const selectedTpl = PROGRESSION_TEMPLATES.find(t => t.id === selectedTemplate);
+  const selectedTpl = PROGRESSION_TEMPLATES.find((t) => t.id === selectedTemplate);
 
   // Filter keys based on selected category modality
-  const isMinorCategory = selectedCategory.includes('Menor');
-  
-  const availableKeys = KEY_OPTIONS.filter(k => 
-    selectedCategory ? k.isMinor === isMinorCategory : true
+  const isMinorCategory = selectedCategory.includes("Menor");
+
+  const availableKeys = KEY_OPTIONS.filter((k) =>
+    selectedCategory ? k.isMinor === isMinorCategory : true,
   );
 
   return (
@@ -177,11 +236,15 @@ export function ProgressionEditor({
         {/* Instrumento */}
         <div className="flex items-center gap-3">
           <Label className="shrink-0">Instrumento</Label>
-          <Select value={instrument} onValueChange={v => onInstrumentChange?.(v)}>
-            <SelectTrigger className="w-52"><SelectValue /></SelectTrigger>
+          <Select value={instrument} onValueChange={(v) => onInstrumentChange?.(v)}>
+            <SelectTrigger className="w-52">
+              <SelectValue />
+            </SelectTrigger>
             <SelectContent>
               {Object.entries(INSTRUMENT_PRESETS).map(([k, v]) => (
-                <SelectItem key={k} value={k}>{v.label}</SelectItem>
+                <SelectItem key={k} value={k}>
+                  {v.label}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -191,14 +254,18 @@ export function ProgressionEditor({
         <div className="space-y-1.5">
           <Label className="text-xs font-semibold">Sequências Harmônicas</Label>
           <div className="flex flex-wrap gap-2">
-            {CATEGORIES.map(cat => (
+            {CATEGORIES.map((cat) => (
               <button
                 key={cat}
-                onClick={() => setSelectedCategory(cat === selectedCategory ? '' : cat)}
+                onClick={() => {
+                  setSelectedCategory(cat === selectedCategory ? "" : cat);
+                  setSelectedTemplate("");
+                  setSelectedKey("");
+                }}
                 className={`px-4 py-2 rounded-lg border-2 text-sm font-semibold transition-all ${
                   selectedCategory === cat
-                    ? 'bg-primary text-primary-foreground border-primary shadow-sm scale-105'
-                    : 'bg-card border-border hover:border-primary/50 hover:bg-muted text-muted-foreground'
+                    ? "bg-primary text-primary-foreground border-primary shadow-sm scale-105"
+                    : "bg-card border-border hover:border-primary/50 hover:bg-muted text-muted-foreground"
                 }`}
               >
                 {cat}
@@ -217,7 +284,7 @@ export function ProgressionEditor({
                   <SelectValue placeholder="Selecione..." />
                 </SelectTrigger>
                 <SelectContent>
-                  {filteredTemplates.map(tpl => (
+                  {filteredTemplates.map((tpl) => (
                     <SelectItem key={tpl.id} value={tpl.id} className="font-mono text-xs">
                       {tpl.degreesClean}
                     </SelectItem>
@@ -229,11 +296,15 @@ export function ProgressionEditor({
               <Label className="text-xs font-semibold">Tom</Label>
               <Select value={selectedKey} onValueChange={setSelectedKey}>
                 <SelectTrigger>
-                  <SelectValue placeholder={`Selecione o tom ${isMinorCategory ? 'menor' : 'maior'}...`} />
+                  <SelectValue
+                    placeholder={`Selecione o tom ${isMinorCategory ? "menor" : "maior"}...`}
+                  />
                 </SelectTrigger>
                 <SelectContent>
-                  {availableKeys.map(k => (
-                    <SelectItem key={k.value} value={k.value}>{k.label}</SelectItem>
+                  {availableKeys.map((k) => (
+                    <SelectItem key={k.value} value={k.value}>
+                      {k.label}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -251,14 +322,14 @@ export function ProgressionEditor({
         {/* Textarea editável */}
         <div className="space-y-1.5">
           <Label>
-            Progressão{' '}
+            Progressão{" "}
             <span className="text-xs text-muted-foreground font-normal">
               — use <code className="bg-muted px-1 rounded">|</code> para separar compassos
             </span>
           </Label>
           <Textarea
             value={input}
-            onChange={e => setInput(e.target.value)}
+            onChange={(e) => setInput(e.target.value)}
             placeholder="Selecione uma sequência e tom acima, ou digite livremente..."
             className="font-mono text-base resize-none"
             rows={2}
@@ -288,22 +359,24 @@ export function ProgressionEditor({
               {isPlaying ? <Square className="w-4 h-4" /> : <Play className="w-4 h-4" />}
               {isPlaying ? "Parar" : "Tocar Metrônomo"}
             </Button>
-            
+
             <div className="flex-1 max-w-[200px] flex flex-col gap-1.5">
               <div className="flex justify-between text-xs text-muted-foreground font-medium">
                 <span>Andamento</span>
                 <span>{bpm} BPM</span>
               </div>
-              <input 
-                type="range" 
-                min={40} max={200} step={1} 
-                value={bpm} 
-                onChange={e => {
+              <input
+                type="range"
+                min={40}
+                max={200}
+                step={1}
+                value={bpm}
+                onChange={(e) => {
                   const val = Number(e.target.value);
                   setBpm(val);
                   if (isPlaying) setAudioBpm(val);
                 }}
-                className="w-full h-1.5 bg-muted rounded-lg appearance-none cursor-pointer accent-primary" 
+                className="w-full h-1.5 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
               />
             </div>
           </div>

@@ -1,78 +1,110 @@
-import { useState, useCallback, useRef } from 'react';
-import { Play, Square } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { AUDIO_LOOPS, availableBpms, findLoop, type LoopStyle } from '@/config/audio-loops';
+import { useState, useCallback, useEffect, useRef } from "react";
+import { Play, Square } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { AUDIO_LOOPS, availableBpms, findLoop, type LoopStyle } from "@/config/audio-loops";
 
 // Group definitions — add more as files become available
 const GROUPS: { style: LoopStyle; title: string; emoji: string }[] = [
-  { style: 'batucada',    title: 'Batucada de Samba e Pagode', emoji: '🥁' },
-  { style: 'sambaenredo', title: 'Samba Enredo',               emoji: '🎺' },
-  { style: 'jazz',        title: 'Jazz',                       emoji: '🎷' },
-  { style: 'bossanova',   title: 'Bossa Nova',                 emoji: '🎸' },
+  { style: "batucada", title: "Batucada de Samba e Pagode", emoji: "🥁" },
+  { style: "sambaenredo", title: "Samba Enredo", emoji: "🎺" },
+  { style: "jazz", title: "Jazz", emoji: "🎷" },
+  { style: "bossanova", title: "Bossa Nova", emoji: "🎸" },
   // { style: 'blues', title: 'Blues', emoji: '🎵' },
   // { style: 'pop',   title: 'Pop',   emoji: '🎤' },
 ];
 
 // Only show groups that have at least one registered file
-const activeGroups = GROUPS.filter(g => availableBpms(g.style).length > 0);
+const activeGroups = GROUPS.filter((g) => availableBpms(g.style).length > 0);
 
 export function PercussionPlayers() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [activeStyle, setActiveStyle] = useState<LoopStyle | null>(null);
-  const [activeBpm,   setActiveBpm]   = useState<number | null>(null);
+  const [activeBpm, setActiveBpm] = useState<number | null>(null);
   const [selectedBpm, setSelectedBpm] = useState<Partial<Record<LoopStyle, string>>>({});
-  const [errorStyle,  setErrorStyle]  = useState<LoopStyle | null>(null);
+  const [errorStyle, setErrorStyle] = useState<LoopStyle | null>(null);
 
   const stop = useCallback(() => {
     if (audioRef.current) {
       audioRef.current.pause();
-      audioRef.current.src = '';
+      audioRef.current.src = "";
       audioRef.current = null;
     }
     setActiveStyle(null);
     setActiveBpm(null);
   }, []);
 
-  const play = useCallback((style: LoopStyle) => {
-    const bpmStr = selectedBpm[style];
-    if (!bpmStr) return;
-    const bpm = Number(bpmStr);
-    const entry = findLoop(style, bpm);
-    if (!entry) return;
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = "";
+        audioRef.current = null;
+      }
+    };
+  }, []);
 
-    stop();
-    setErrorStyle(null);
+  const play = useCallback(
+    (style: LoopStyle) => {
+      const bpmStr = selectedBpm[style];
+      if (!bpmStr) return;
+      const bpm = Number(bpmStr);
+      const entry = findLoop(style, bpm);
+      if (!entry) return;
 
-    const url = `/audio/loops/${entry.file}`;
-    const audio = new Audio(url);
-    audio.loop = true;
-    audio.volume = 0.9;
-    audio.preload = 'auto';
+      stop();
+      setErrorStyle(null);
 
-    audio.addEventListener('error', () => {
-      console.error(`Erro ao carregar: ${url}`, audio.error?.message);
-      setErrorStyle(style);
-      setActiveStyle(null);
-      setActiveBpm(null);
-    });
+      const url = `/audio/loops/${entry.file}`;
+      const audio = new Audio(url);
+      audio.loop = true;
+      audio.volume = 0.9;
+      audio.preload = "auto";
+      audioRef.current = audio;
 
-    audio.play()
-      .then(() => {
-        audioRef.current = audio;
-        setActiveStyle(style);
-        setActiveBpm(entry.bpm);
-      })
-      .catch(e => {
-        console.error('play() rejeitado:', e);
+      audio.addEventListener("error", () => {
+        console.error(`Erro ao carregar: ${url}`, audio.error?.message);
+        if (audioRef.current === audio) {
+          audioRef.current = null;
+        }
         setErrorStyle(style);
+        setActiveStyle(null);
+        setActiveBpm(null);
       });
-  }, [selectedBpm, stop]);
 
+      audio
+        .play()
+        .then(() => {
+          setActiveStyle(style);
+          setActiveBpm(entry.bpm);
+        })
+        .catch((e) => {
+          console.error("play() rejeitado:", e);
+          if (audioRef.current === audio) {
+            audioRef.current = null;
+          }
+          setErrorStyle(style);
+        });
+    },
+    [selectedBpm, stop],
+  );
 
-  const togglePlay = useCallback((style: LoopStyle) => {
-    if (activeStyle === style) { stop(); } else { play(style); }
-  }, [activeStyle, play, stop]);
+  const togglePlay = useCallback(
+    (style: LoopStyle) => {
+      if (activeStyle === style) {
+        stop();
+      } else {
+        play(style);
+      }
+    },
+    [activeStyle, play, stop],
+  );
 
   if (activeGroups.length === 0) return null;
 
@@ -82,13 +114,16 @@ export function PercussionPlayers() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {activeGroups.map(({ style, title, emoji }) => {
-          const bpms    = availableBpms(style);
+          const bpms = availableBpms(style);
           const playing = activeStyle === style;
 
           return (
-            <div key={style} className={`rounded-xl border-2 p-4 transition-all ${
-              playing ? 'border-primary bg-primary/5' : 'border-border'
-            }`}>
+            <div
+              key={style}
+              className={`rounded-xl border-2 p-4 transition-all ${
+                playing ? "border-primary bg-primary/5" : "border-border"
+              }`}
+            >
               <p className="font-semibold text-sm mb-3">
                 {emoji} {title}
                 {playing && activeBpm && (
@@ -100,9 +135,9 @@ export function PercussionPlayers() {
 
               <div className="flex gap-2 items-center">
                 <Select
-                  value={selectedBpm[style] ?? ''}
-                  onValueChange={val => {
-                    setSelectedBpm(prev => ({ ...prev, [style]: val }));
+                  value={selectedBpm[style] ?? ""}
+                  onValueChange={(val) => {
+                    setSelectedBpm((prev) => ({ ...prev, [style]: val }));
                     setErrorStyle(null);
                   }}
                 >
@@ -110,7 +145,7 @@ export function PercussionPlayers() {
                     <SelectValue placeholder="Escolha o andamento…" />
                   </SelectTrigger>
                   <SelectContent>
-                    {bpms.map(bpm => (
+                    {bpms.map((bpm) => (
                       <SelectItem key={bpm} value={String(bpm)}>
                         {bpm} BPM
                       </SelectItem>
@@ -120,7 +155,7 @@ export function PercussionPlayers() {
 
                 <Button
                   size="icon"
-                  variant={playing ? 'destructive' : 'default'}
+                  variant={playing ? "destructive" : "default"}
                   disabled={!selectedBpm[style]}
                   onClick={() => togglePlay(style)}
                   className="shrink-0"
