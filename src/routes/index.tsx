@@ -170,7 +170,7 @@ function LandingPage() {
                 </span>
               </div>
 
-              <Pill className="mb-6 -rotate-1 bg-[var(--ink)] text-[var(--yellow)]">
+              <Pill className="mb-6 -rotate-1 bg-[var(--orange)] text-white shadow-[var(--shadow)]">
                 <Zap className="h-4 w-4" /> Menos teoria solta, mais prática organizada.
               </Pill>
 
