@@ -17,12 +17,31 @@ export function VoicingMiniSvg({
 }: Props) {
   const ml = 9, mr = 9, mt = 14, mb = 5;
   const iW = width - ml - mr, iH = height - mt - mb;
-  const FRETS = 8, fretH = iH / FRETS;
-  const strSp = stringCount > 1 ? iW / (stringCount - 1) : iW;
-  const sx = (s: number) => ml + s * strSp;
   const sf = voicing.startingFret;
   const showNut = sf === 1;
-  const r = Math.min(fretH, strSp) * 0.3;
+
+  // Dynamically calculate the required number of frets (at least 6)
+  const pressedFrets = voicing.frets.filter(f => f > 0);
+  const maxChordFret = pressedFrets.length > 0 ? Math.max(...pressedFrets) : sf;
+  let maxArpFret = sf;
+  if (voicing.arpeggioFrets) {
+    for (const stringFrets of voicing.arpeggioFrets) {
+      if (!stringFrets) continue;
+      for (const fret of stringFrets) {
+        if (fret > 0 && fret > maxArpFret) {
+          maxArpFret = fret;
+        }
+      }
+    }
+  }
+  const maxFret = Math.max(maxChordFret, maxArpFret);
+  const requiredFrets = maxFret - sf + 1;
+  const FRETS = Math.max(6, requiredFrets);
+  
+  const fretH = iH / FRETS;
+  const strSp = stringCount > 1 ? iW / (stringCount - 1) : iW;
+  const sx = (s: number) => ml + s * strSp;
+  const r = Math.min(fretH, strSp) * 0.35; // 70% diameter
 
   return (
     <svg viewBox={`0 0 ${width} ${height}`} width={width} height={height} style={{display:'block'}}>
@@ -41,19 +60,15 @@ export function VoicingMiniSvg({
         <text x={ml - 2} y={mt + fretH * 0.55} textAnchor="end" dominantBaseline="middle"
           fill={primaryColor} fontSize={6}>{sf}ª</text>
       )}
-      {/* Arpeggio Notes */}
-      {voicing.arpeggioFrets && voicing.arpeggioFrets.map((stringFrets, s) => {
-        if (!stringFrets) return null;
-        return stringFrets.map((fret) => {
-          if (fret === 0) {
-            return <circle key={`arp-0-${s}`} cx={sx(s)} cy={mt - 4} r={2.5} fill={arpeggioColor} stroke="none" />;
-          }
-          const rel = fret - sf + 1;
-          if (rel < 1 || rel > FRETS) return null;
-          return <circle key={`arp-${fret}-${s}`} cx={sx(s)} cy={mt + (rel - 0.5) * fretH} r={r * 0.8} fill={arpeggioColor} />;
-        });
+      {/* Barres */}
+      {voicing.barres.map((b, i) => {
+        const rel = b.fret - sf + 1;
+        if (rel < 1 || rel > FRETS) return null;
+        const cy = mt + (rel - 0.5) * fretH;
+        return <rect key={i} x={sx(b.startString) - r} y={cy - r}
+          width={sx(b.endString) - sx(b.startString) + r * 2} height={r * 2} rx={r} fill={markerColor} />;
       })}
-      {/* Markers */}
+      {/* Markers (Chord Notes) */}
       {voicing.frets.map((fret, s) => {
         if (fret === -1) return (
           <text key={s} x={sx(s)} y={mt - 4} textAnchor="middle" fill={primaryColor} fontSize={7} fontWeight="bold">✕</text>
@@ -65,13 +80,18 @@ export function VoicingMiniSvg({
         if (rel < 1 || rel > FRETS) return null;
         return <circle key={s} cx={sx(s)} cy={mt + (rel - 0.5) * fretH} r={r} fill={markerColor} />;
       })}
-      {/* Barres */}
-      {voicing.barres.map((b, i) => {
-        const rel = b.fret - sf + 1;
-        if (rel < 1 || rel > FRETS) return null;
-        const cy = mt + (rel - 0.5) * fretH;
-        return <rect key={i} x={sx(b.startString) - r} y={cy - r}
-          width={sx(b.endString) - sx(b.startString) + r * 2} height={r * 2} rx={r} fill={markerColor} />;
+      {/* Arpeggio Notes (Drawn on top) */}
+      {voicing.arpeggioFrets && voicing.arpeggioFrets.map((stringFrets, s) => {
+        if (!stringFrets) return null;
+        return stringFrets.map((fret) => {
+          if (fret === 0) {
+            return <circle key={`arp-0-${s}`} cx={sx(s)} cy={mt - 4} r={2.5} fill={arpeggioColor} stroke="none" />;
+          }
+          const rel = fret - sf + 1;
+          if (rel < 1 || rel > FRETS) return null;
+          // Arpeggio notes have a slight stroke so they pop if overlaid on a black chord marker
+          return <circle key={`arp-${fret}-${s}`} cx={sx(s)} cy={mt + (rel - 0.5) * fretH} r={r} fill={arpeggioColor} stroke={markerColor} strokeWidth={1} />;
+        });
       })}
     </svg>
   );
