@@ -15,7 +15,8 @@ import { CavaquinhoIcon } from "@/components/icons/CavaquinhoIcon";
 import { useState, useRef, useEffect } from "react";
 
 const MENU_ITEMS = [
-  { icon: <BookOpen className="h-4 w-4" />, label: "Dicionário Interativo", tab: "dictionary" },
+  { icon: <BookOpen className="h-4 w-4" />, label: "Dicionário de Acordes", tab: "dictionary" },
+  { icon: <BookOpen className="h-4 w-4 text-orange-500" />, label: "Dicionário de Arpejos", tab: "arpeggio" },
   { icon: <Music2 className="h-4 w-4" />, label: "Sequências Harmônicas", tab: "progression" },
   { icon: <CavaquinhoIcon className="h-4 w-4" />, label: "Criador de Diagramas", tab: "diagram" },
   { icon: <Dumbbell className="h-4 w-4" />, label: "Exercícios", tab: "exercises" },

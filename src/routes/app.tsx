@@ -32,6 +32,7 @@ import { toast } from "sonner";
 import { ChordSearch } from "@/components/ChordSearch";
 import { ProgressionEditor } from "@/components/ProgressionEditor";
 import { ChordDictionaryPage } from "@/components/ChordDictionaryPage";
+import { ArpeggioDictionaryPage } from "@/components/ArpeggioDictionaryPage";
 import { ExercisesTab } from "@/components/ExercisesTab";
 import { ProfileTab } from "@/components/ProfileTab";
 import { CommunityTab } from "@/components/CommunityTab";
@@ -73,6 +74,7 @@ type AppTab =
   | "diagram"
   | "progression"
   | "dictionary"
+  | "arpeggio"
   | "exercises"
   | "plan"
   | "community"
@@ -892,8 +894,14 @@ function ChordGenerator() {
             {
               page: "dictionary" as const,
               icon: <BookOpen className="h-4 w-4" />,
-              label: "Dicionário Interativo",
+              label: "Dicionário de Acordes",
               sub: "Shapes mais usados",
+            },
+            {
+              page: "arpeggio" as const,
+              icon: <BookOpen className="h-4 w-4 text-orange-500" />,
+              label: "Dicionário de Arpejos",
+              sub: "Arpejos por região",
             },
             {
               page: "progression" as const,
@@ -991,7 +999,9 @@ function ChordGenerator() {
                       ? "Comunidade"
                       : activePage === "profile"
                         ? "Meu Perfil"
-                        : "Dicionário Interativo"}
+                        : activePage === "arpeggio"
+                          ? "Dicionário de Arpejos"
+                          : "Dicionário de Acordes"}
           </h1>
           <UserMenu />
         </header>
@@ -1068,6 +1078,15 @@ function ChordGenerator() {
                     />
                   )}
               </>
+            ) : activePage === "arpeggio" ? (
+              <ArpeggioDictionaryPage
+                instrument={instrument}
+                stringCount={stringCount}
+                stringNames={stringNames}
+                markerColor={markerColor}
+                primaryColor={primaryColor}
+                onInstrumentChange={handleInstrumentChange}
+              />
             ) : activePage === "exercises" ? (
               <>
                 <ExercisesTab openedCreation={openedCreation} />

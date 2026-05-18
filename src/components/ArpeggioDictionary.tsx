@@ -3,9 +3,9 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { parseChord, INSTRUMENT_PRESETS } from '@/lib/music-theory';
 import { findVoicings, type Voicing } from '@/lib/chord-finder';
-import cavaquinhoDictRaw from '@/config/cavaquinho-dictionary.json';
+import cavaquinhoDictRaw from '@/config/arpeggio-dictionary.json';
 
-type DictType = Record<string, { chordName: string, frets: number[] }[]>;
+type DictType = Record<string, { chordName: string, frets: number[], arpeggioFrets?: number[][] }[]>;
 const cavaquinhoDict: DictType = cavaquinhoDictRaw;
 
 const DICTIONARIES: Record<string, DictType> = {
@@ -49,6 +49,18 @@ function MiniSvg({ voicing, stringCount, markerColor, primaryColor }: {
           stroke={primaryColor} strokeWidth={0.7} />
       ))}
       {sf > 1 && <text x={ml - 3} y={mt + fretH * 0.5} textAnchor="end" dominantBaseline="middle" fill={primaryColor} fontSize={6}>{sf}ª</text>}
+      {/* Arpeggio Notes */}
+      {voicing.arpeggioFrets && voicing.arpeggioFrets.map((stringFrets, s) => {
+        return stringFrets.map((fret) => {
+          if (fret === 0) {
+            return <circle key={`arp-0-${s}`} cx={sx(s)} cy={mt - 5} r={3} fill="#f97316" stroke="none" />;
+          }
+          const rel = fret - sf + 1;
+          if (rel < 1 || rel > FRETS) return null;
+          return <circle key={`arp-${fret}-${s}`} cx={sx(s)} cy={mt + (rel - 0.5) * fretH} r={Math.min(fretH, strSp) * 0.25} fill="#f97316" />;
+        });
+      })}
+      {/* Markers */}
       {voicing.frets.map((fret, s) => {
         if (fret === -1) return <text key={s} x={sx(s)} y={mt - 5} textAnchor="middle" fill={primaryColor} fontSize={7} fontWeight="bold">✕</text>;
         if (fret === 0)  return <circle key={s} cx={sx(s)} cy={mt - 5} r={3} fill="none" stroke={primaryColor} strokeWidth={0.8} />;
@@ -68,7 +80,7 @@ function MiniSvg({ voicing, stringCount, markerColor, primaryColor }: {
   );
 }
 
-export function ChordDictionary({
+export function ArpeggioDictionary({
   chordNames, instrument, stringNames, stringCount,
   markerColor, primaryColor, voicings, onVoicingSelect
 }: Props) {
@@ -109,7 +121,8 @@ export function ChordDictionary({
           barres: [],
           mutedStrings: c.frets.map((f, i) => f === -1 ? i : -1).filter(i => i !== -1),
           omitted: [],
-          fingerCount: pressed.length
+          fingerCount: pressed.length,
+          arpeggioFrets: c.arpeggioFrets
         };
       });
     }

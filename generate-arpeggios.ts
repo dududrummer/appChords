@@ -5,8 +5,11 @@ const dictPath = './src/config/cavaquinho-dictionary.json';
 const dictRaw = fs.readFileSync(dictPath, 'utf8');
 const dict = JSON.parse(dictRaw);
 
-const TUNING = ['D', 'G', 'B', 'D'];
-const tuningIndices = TUNING.map(getNoteIndex);
+// Cavaquinho standard tuning: D4, G4, B4, D5
+// Using arbitrary pitch integers where C4 = 60
+const TUNING_NOTES = ['D', 'G', 'B', 'D'];
+const TUNING_PITCHES = [62, 67, 71, 74];
+const tuningIndices = TUNING_NOTES.map(getNoteIndex);
 
 const arpeggioDict: Record<string, any[]> = {};
 
@@ -35,30 +38,52 @@ for (const [chordName, voicings] of Object.entries(dict)) {
     const start = startingFret;
     const end = Math.max(start + 3, maxFret);
     
-    const arpeggioFrets: number[][] = [[], [], [], []];
+    const candidates: { s: number, f: number, pitch: number }[] = [];
     
     for (let stringIdx = 0; stringIdx < 4; stringIdx++) {
       const openNote = tuningIndices[stringIdx];
+      const stringPitch = TUNING_PITCHES[stringIdx];
+      
       // Check open string (fret 0)
-      if (notes.has(openNote) && start <= 1) { // Maybe only include open string if region is near nut
-         // Actually, arpeggios usually include open strings if applicable and in lower positions
-         // Let's just include it if start is 1 or 2
-         if (start <= 2) {
-             arpeggioFrets[stringIdx].push(0);
-         }
+      if (notes.has(openNote) && start <= 2) {
+         candidates.push({ s: stringIdx, f: 0, pitch: stringPitch });
       }
       
       for (let fret = start; fret <= end; fret++) {
         const noteIdx = noteIndexAtFret(openNote, fret);
         if (notes.has(noteIdx)) {
-          // If this is the chord's fret, we can just leave it or still add it.
-          // Since the UI can draw arpeggio notes and chord notes, we can add it, 
-          // or we can let the UI handle the overlap. Let's add all arpeggio notes.
-          if (!arpeggioFrets[stringIdx].includes(fret)) {
-              arpeggioFrets[stringIdx].push(fret);
-          }
+          candidates.push({ s: stringIdx, f: fret, pitch: stringPitch + fret });
         }
       }
+    }
+    
+    const byPitch = new Map<number, { s: number, f: number, pitch: number }[]>();
+    for (const c of candidates) {
+      if (!byPitch.has(c.pitch)) byPitch.set(c.pitch, []);
+      byPitch.get(c.pitch)!.push(c);
+    }
+    
+    const arpeggioFrets: number[][] = [[], [], [], []];
+    
+    for (const [pitch, list] of byPitch.entries()) {
+       let best = list[0];
+       let bestScore = -100;
+       
+       for (const c of list) {
+          let score = 0;
+          // Prefer if it's the exact same string/fret used in the original chord
+          if (frets[c.s] === c.f) score += 10;
+          // Prefer closer to start fret to minimize finger stretching
+          score -= Math.abs(c.f - start);
+          if (score > bestScore) {
+             bestScore = score;
+             best = c;
+          }
+       }
+       
+       if (!arpeggioFrets[best.s].includes(best.f)) {
+           arpeggioFrets[best.s].push(best.f);
+       }
     }
     
     return {
@@ -70,4 +95,4 @@ for (const [chordName, voicings] of Object.entries(dict)) {
 }
 
 fs.writeFileSync('./src/config/arpeggio-dictionary.json', JSON.stringify(arpeggioDict, null, 2));
-console.log('Arpeggio dictionary generated successfully.');
+console.log('Arpeggio dictionary generated successfully without unisons.');
