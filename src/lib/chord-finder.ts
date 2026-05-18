@@ -8,6 +8,7 @@ export interface Voicing {
   omitted: string[];
   fingerCount: number;
   isPriority?: boolean;
+  arpeggioFrets?: number[][];
 }
 
 export interface BarreDef {

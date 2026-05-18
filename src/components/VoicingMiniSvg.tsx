@@ -5,13 +5,14 @@ interface Props {
   stringCount: number;
   markerColor?: string;
   primaryColor?: string;
+  arpeggioColor?: string;
   width?: number;
   height?: number;
 }
 
 export function VoicingMiniSvg({
   voicing, stringCount,
-  markerColor = '#000', primaryColor = '#000',
+  markerColor = '#000', primaryColor = '#000', arpeggioColor = '#f97316',
   width = 64, height = 110,
 }: Props) {
   const ml = 9, mr = 9, mt = 14, mb = 5;
@@ -40,6 +41,17 @@ export function VoicingMiniSvg({
         <text x={ml - 2} y={mt + fretH * 0.55} textAnchor="end" dominantBaseline="middle"
           fill={primaryColor} fontSize={6}>{sf}ª</text>
       )}
+      {/* Arpeggio Notes */}
+      {voicing.arpeggioFrets && voicing.arpeggioFrets.map((stringFrets, s) => {
+        return stringFrets.map((fret) => {
+          if (fret === 0) {
+            return <circle key={`arp-0-${s}`} cx={sx(s)} cy={mt - 4} r={2.5} fill={arpeggioColor} stroke="none" />;
+          }
+          const rel = fret - sf + 1;
+          if (rel < 1 || rel > FRETS) return null;
+          return <circle key={`arp-${fret}-${s}`} cx={sx(s)} cy={mt + (rel - 0.5) * fretH} r={r * 0.8} fill={arpeggioColor} />;
+        });
+      })}
       {/* Markers */}
       {voicing.frets.map((fret, s) => {
         if (fret === -1) return (

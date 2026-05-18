@@ -8,10 +8,11 @@
 import { parseChord, INSTRUMENT_PRESETS } from './music-theory';
 import { findVoicings, type Voicing } from './chord-finder';
 
-type DictEntry = { chordName: string; frets: number[] };
+type DictEntry = { chordName: string; frets: number[], arpeggioFrets?: number[][] };
 type DictType = Record<string, DictEntry[]>;
 
-import cavaquinhoDictRaw from '@/config/cavaquinho-dictionary.json';
+// Import the arpeggio dictionary which contains both chords and arpeggios
+import cavaquinhoDictRaw from '@/config/arpeggio-dictionary.json';
 
 const DICTIONARIES: Record<string, DictType> = {
   cavaquinho: cavaquinhoDictRaw as DictType,
@@ -36,6 +37,7 @@ function dictEntryToVoicing(c: DictEntry, isPriority = false): Voicing {
     omitted: [],
     fingerCount: pressed.length,
     isPriority,
+    arpeggioFrets: c.arpeggioFrets,
   };
 }
 
