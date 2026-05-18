@@ -15,7 +15,7 @@ export function VoicingMiniSvg({
   markerColor = '#000', primaryColor = '#000', arpeggioColor = '#f97316',
   width = 64, height = 110,
 }: Props) {
-  const ml = 9, mr = 9, mt = 14, mb = 5;
+  const ml = 13, mr = 13, mt = 14, mb = 5;
   const iW = width - ml - mr, iH = height - mt - mb;
   const sf = voicing.startingFret;
   const showNut = sf === 1;
@@ -57,8 +57,8 @@ export function VoicingMiniSvg({
       ))}
       {/* Fret label */}
       {sf > 1 && (
-        <text x={ml - 2} y={mt + fretH * 0.55} textAnchor="end" dominantBaseline="middle"
-          fill={primaryColor} fontSize={6}>{sf}ª</text>
+        <text x={ml - r - 1.5} y={mt + fretH * 0.55} textAnchor="end" dominantBaseline="middle"
+          fill={primaryColor} fontSize={6} fontWeight="bold">{sf}ª</text>
       )}
       {/* Barres */}
       {voicing.barres.map((b, i) => {
@@ -67,6 +67,18 @@ export function VoicingMiniSvg({
         const cy = mt + (rel - 0.5) * fretH;
         return <rect key={i} x={sx(b.startString) - r} y={cy - r}
           width={sx(b.endString) - sx(b.startString) + r * 2} height={r * 2} rx={r} fill={markerColor} />;
+      })}
+      {/* Arpeggio Notes (Drawn under base chord) */}
+      {voicing.arpeggioFrets && voicing.arpeggioFrets.map((stringFrets, s) => {
+        if (!stringFrets) return null;
+        return stringFrets.map((fret) => {
+          if (fret === 0) {
+            return <circle key={`arp-0-${s}`} cx={sx(s)} cy={mt - 4} r={2.5} fill={arpeggioColor} stroke="none" />;
+          }
+          const rel = fret - sf + 1;
+          if (rel < 1 || rel > FRETS) return null;
+          return <circle key={`arp-${fret}-${s}`} cx={sx(s)} cy={mt + (rel - 0.5) * fretH} r={r} fill={arpeggioColor} />;
+        });
       })}
       {/* Markers (Chord Notes) */}
       {voicing.frets.map((fret, s) => {
@@ -79,19 +91,6 @@ export function VoicingMiniSvg({
         const rel = fret - sf + 1;
         if (rel < 1 || rel > FRETS) return null;
         return <circle key={s} cx={sx(s)} cy={mt + (rel - 0.5) * fretH} r={r} fill={markerColor} />;
-      })}
-      {/* Arpeggio Notes (Drawn on top) */}
-      {voicing.arpeggioFrets && voicing.arpeggioFrets.map((stringFrets, s) => {
-        if (!stringFrets) return null;
-        return stringFrets.map((fret) => {
-          if (fret === 0) {
-            return <circle key={`arp-0-${s}`} cx={sx(s)} cy={mt - 4} r={2.5} fill={arpeggioColor} stroke="none" />;
-          }
-          const rel = fret - sf + 1;
-          if (rel < 1 || rel > FRETS) return null;
-          // Arpeggio notes have a slight stroke so they pop if overlaid on a black chord marker
-          return <circle key={`arp-${fret}-${s}`} cx={sx(s)} cy={mt + (rel - 0.5) * fretH} r={r} fill={arpeggioColor} stroke={markerColor} strokeWidth={1} />;
-        });
       })}
     </svg>
   );
