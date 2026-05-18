@@ -11,11 +11,23 @@ import { findVoicings, type Voicing } from './chord-finder';
 type DictEntry = { chordName: string; frets: number[], arpeggioFrets?: number[][] };
 type DictType = Record<string, DictEntry[]>;
 
-import arpeggioDictRaw from '@/config/arpeggio-dictionary.json';
+import chordDictRaw from '@/config/cavaquinho-dictionary.json';
+import arpeggioUserRaw from '@/config/arpeggio-dictionary-user.json';
 
-const DICTIONARIES: Record<string, DictType> = {
-  cavaquinho: arpeggioDictRaw as DictType,
+const CHORD_DICT: Record<string, DictType> = {
+  cavaquinho: chordDictRaw as DictType,
 };
+
+// Create a lookup for arpeggios by chord name
+const ARPEGGIO_USER_DICT: Record<string, any[]> = {};
+if (Array.isArray(arpeggioUserRaw)) {
+    for (const arp of arpeggioUserRaw) {
+        if (!ARPEGGIO_USER_DICT[arp.chordName]) {
+            ARPEGGIO_USER_DICT[arp.chordName] = [];
+        }
+        ARPEGGIO_USER_DICT[arp.chordName].push(arp);
+    }
+}
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 function getRegion(sf: number): number {
@@ -119,18 +131,43 @@ export function searchVoicings(
   });
 
   const normalizedName = parsed.displayName;
-  const activeDict = DICTIONARIES[instrument];
+  const activeDict = CHORD_DICT[instrument];
 
   // Look up dictionary entries (tries exact name + normalized name)
   const dictEntries = activeDict ? lookupDict(activeDict, chordName, normalizedName) : null;
 
+  let finalVoicings: Voicing[] = [];
+
   if (dictEntries) {
     // Dictionary voicings ONLY — no mixing with algorithmic results
-    return dictEntries.map(entry => dictEntryToVoicing(entry, true));
+    finalVoicings = dictEntries.map(entry => dictEntryToVoicing(entry, true));
+  } else {
+    // Fallback: algorithmic results only
+    finalVoicings = mergeAndGroupByRegion([], baseResults, maxPerRegion);
   }
 
-  // Fallback: algorithmic results only (for custom chords like C/B)
-  return mergeAndGroupByRegion([], baseResults, maxPerRegion);
+  // ATTACH ARPEGGIOS from the user dictionary
+  // We find the arpeggio shapes for this chord, and for each voicing, attach the one with the closest starting fret.
+  const userArps = ARPEGGIO_USER_DICT[chordName] || ARPEGGIO_USER_DICT[normalizedName];
+  if (userArps && userArps.length > 0) {
+    finalVoicings = finalVoicings.map(v => {
+        let bestArp = userArps[0];
+        let minDiff = 999;
+        for (const arp of userArps) {
+            const diff = Math.abs(v.startingFret - arp.startingFret);
+            if (diff < minDiff) {
+                minDiff = diff;
+                bestArp = arp;
+            }
+        }
+        return {
+            ...v,
+            arpeggioFrets: bestArp.arpeggioFrets
+        };
+    });
+  }
+
+  return finalVoicings;
 }
 
 // ── Public: pick the best default voicing (lowest position priority) ────────

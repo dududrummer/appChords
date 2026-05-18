@@ -43,6 +43,7 @@ export function VoicingMiniSvg({
       )}
       {/* Arpeggio Notes */}
       {voicing.arpeggioFrets && voicing.arpeggioFrets.map((stringFrets, s) => {
+        if (!stringFrets) return null;
         return stringFrets.map((fret) => {
           if (fret === 0) {
             return <circle key={`arp-0-${s}`} cx={sx(s)} cy={mt - 4} r={2.5} fill={arpeggioColor} stroke="none" />;

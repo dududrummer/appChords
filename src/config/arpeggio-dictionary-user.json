@@ -1,0 +1,5435 @@
+[
+  {
+    "chordName": "C",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 1,
+    "arpeggioFrets": [
+      [
+        2,
+        5
+      ],
+      [],
+      [
+        1
+      ],
+      [
+        2,
+        5
+      ]
+    ]
+  },
+  {
+    "chordName": "C",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 2,
+    "arpeggioFrets": [
+      [
+        2,
+        5
+      ],
+      [
+        5
+      ],
+      [],
+      [
+        2,
+        5
+      ]
+    ]
+  },
+  {
+    "chordName": "C",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 5,
+    "arpeggioFrets": [
+      [
+        5,
+        10
+      ],
+      [
+        9
+      ],
+      [],
+      [
+        5,
+        10
+      ]
+    ]
+  },
+  {
+    "chordName": "C",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [
+        10,
+        14
+      ],
+      [
+        12
+      ],
+      [],
+      [
+        10,
+        14
+      ]
+    ]
+  },
+  {
+    "chordName": "D",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 3,
+    "arpeggioFrets": [
+      [
+        4,
+        7
+      ],
+      [],
+      [
+        3
+      ],
+      [
+        4,
+        7
+      ]
+    ]
+  },
+  {
+    "chordName": "D",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 4,
+    "arpeggioFrets": [
+      [
+        4,
+        7
+      ],
+      [
+        7
+      ],
+      [],
+      [
+        4,
+        7
+      ]
+    ]
+  },
+  {
+    "chordName": "D",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 7,
+    "arpeggioFrets": [
+      [
+        7,
+        12
+      ],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "E",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 5,
+    "arpeggioFrets": [
+      [
+        6,
+        9
+      ],
+      [],
+      [
+        5
+      ],
+      [
+        6,
+        9
+      ]
+    ]
+  },
+  {
+    "chordName": "E",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 6,
+    "arpeggioFrets": [
+      [
+        6,
+        9
+      ],
+      [
+        9
+      ],
+      [],
+      [
+        6,
+        9
+      ]
+    ]
+  },
+  {
+    "chordName": "E",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 9,
+    "arpeggioFrets": [
+      [
+        9,
+        14
+      ],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "F",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 6,
+    "arpeggioFrets": [
+      [
+        7,
+        10
+      ],
+      [],
+      [
+        6
+      ],
+      [
+        7,
+        10
+      ]
+    ]
+  },
+  {
+    "chordName": "F",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 7,
+    "arpeggioFrets": [
+      [
+        7,
+        10
+      ],
+      [
+        10
+      ],
+      [],
+      [
+        7,
+        10
+      ]
+    ]
+  },
+  {
+    "chordName": "F",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [
+        10,
+        15
+      ],
+      [
+        14
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "G",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 5,
+    "arpeggioFrets": [
+      [
+        5,
+        9
+      ],
+      [
+        7
+      ],
+      [],
+      [
+        5,
+        9
+      ]
+    ]
+  },
+  {
+    "chordName": "G",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 8,
+    "arpeggioFrets": [
+      [
+        9,
+        12
+      ],
+      [],
+      [
+        8
+      ],
+      [
+        9,
+        12
+      ]
+    ]
+  },
+  {
+    "chordName": "G",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 9,
+    "arpeggioFrets": [
+      [
+        9,
+        12
+      ],
+      [
+        12
+      ],
+      [],
+      [
+        9,
+        12
+      ]
+    ]
+  },
+  {
+    "chordName": "A",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 7,
+    "arpeggioFrets": [
+      [
+        7,
+        11
+      ],
+      [
+        9
+      ],
+      [],
+      [
+        7,
+        11
+      ]
+    ]
+  },
+  {
+    "chordName": "A",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [
+        11,
+        14
+      ],
+      [],
+      [
+        10
+      ],
+      [
+        11,
+        14
+      ]
+    ]
+  },
+  {
+    "chordName": "A",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 11,
+    "arpeggioFrets": [
+      [
+        14
+      ],
+      [],
+      [],
+      [
+        11,
+        14
+      ]
+    ]
+  },
+  {
+    "chordName": "B",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 1,
+    "arpeggioFrets": [
+      [
+        1,
+        4
+      ],
+      [
+        4
+      ],
+      [],
+      [
+        1,
+        4
+      ]
+    ]
+  },
+  {
+    "chordName": "B",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 4,
+    "arpeggioFrets": [
+      [
+        4,
+        9
+      ],
+      [
+        8
+      ],
+      [],
+      [
+        4,
+        9
+      ]
+    ]
+  },
+  {
+    "chordName": "B",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 9,
+    "arpeggioFrets": [
+      [
+        9,
+        13
+      ],
+      [
+        11
+      ],
+      [],
+      [
+        9,
+        13
+      ]
+    ]
+  },
+  {
+    "chordName": "C#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 3,
+    "arpeggioFrets": [
+      [
+        3,
+        6
+      ],
+      [
+        6
+      ],
+      [],
+      [
+        3,
+        6
+      ]
+    ]
+  },
+  {
+    "chordName": "C#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 6,
+    "arpeggioFrets": [
+      [
+        6,
+        11
+      ],
+      [
+        10
+      ],
+      [],
+      [
+        6,
+        11
+      ]
+    ]
+  },
+  {
+    "chordName": "C#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 11,
+    "arpeggioFrets": [
+      [
+        11,
+        15
+      ],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "D#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 4,
+    "arpeggioFrets": [
+      [
+        5,
+        8
+      ],
+      [],
+      [
+        4
+      ],
+      [
+        5,
+        8
+      ]
+    ]
+  },
+  {
+    "chordName": "D#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 5,
+    "arpeggioFrets": [
+      [
+        5,
+        8
+      ],
+      [
+        8
+      ],
+      [],
+      [
+        5,
+        8
+      ]
+    ]
+  },
+  {
+    "chordName": "D#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 8,
+    "arpeggioFrets": [
+      [
+        8,
+        13
+      ],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "F#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 7,
+    "arpeggioFrets": [
+      [
+        8,
+        11
+      ],
+      [],
+      [
+        7
+      ],
+      [
+        8,
+        11
+      ]
+    ]
+  },
+  {
+    "chordName": "F#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 8,
+    "arpeggioFrets": [
+      [
+        8,
+        11
+      ],
+      [
+        11
+      ],
+      [],
+      [
+        8,
+        11
+      ]
+    ]
+  },
+  {
+    "chordName": "F#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 11,
+    "arpeggioFrets": [
+      [
+        11,
+        16
+      ],
+      [
+        15
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "G#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 6,
+    "arpeggioFrets": [
+      [
+        6,
+        10
+      ],
+      [
+        8
+      ],
+      [],
+      [
+        6,
+        10
+      ]
+    ]
+  },
+  {
+    "chordName": "G#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 9,
+    "arpeggioFrets": [
+      [
+        10,
+        13
+      ],
+      [],
+      [
+        9
+      ],
+      [
+        10,
+        13
+      ]
+    ]
+  },
+  {
+    "chordName": "G#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [
+        10,
+        13
+      ],
+      [
+        13
+      ],
+      [],
+      [
+        10,
+        13
+      ]
+    ]
+  },
+  {
+    "chordName": "A#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 3,
+    "arpeggioFrets": [
+      [
+        3,
+        8
+      ],
+      [
+        7
+      ],
+      [],
+      [
+        3,
+        8
+      ]
+    ]
+  },
+  {
+    "chordName": "A#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 8,
+    "arpeggioFrets": [
+      [
+        8,
+        12
+      ],
+      [
+        10
+      ],
+      [],
+      [
+        8,
+        12
+      ]
+    ]
+  },
+  {
+    "chordName": "A#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 11,
+    "arpeggioFrets": [
+      [
+        12,
+        15
+      ],
+      [],
+      [
+        11
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "C",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 1,
+    "arpeggioFrets": [
+      [],
+      [],
+      [
+        1
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "C",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 5,
+    "arpeggioFrets": [
+      [
+        5
+      ],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "C",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 9,
+    "arpeggioFrets": [
+      [],
+      [
+        9
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "C",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [
+        10,
+        14
+      ],
+      [],
+      [],
+      [
+        10,
+        14
+      ]
+    ]
+  },
+  {
+    "chordName": "D",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 3,
+    "arpeggioFrets": [
+      [],
+      [],
+      [
+        3
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "D",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 7,
+    "arpeggioFrets": [
+      [
+        7
+      ],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "D",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "E",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 5,
+    "arpeggioFrets": [
+      [],
+      [],
+      [
+        5
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "E",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 9,
+    "arpeggioFrets": [
+      [
+        9
+      ],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "E",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "F",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 6,
+    "arpeggioFrets": [
+      [],
+      [],
+      [
+        6
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "F",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [
+        10
+      ],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "F",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "G",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 8,
+    "arpeggioFrets": [
+      [],
+      [],
+      [
+        8
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "G",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 12,
+    "arpeggioFrets": [
+      [
+        12
+      ],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "G",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "A",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 7,
+    "arpeggioFrets": [
+      [
+        7,
+        11
+      ],
+      [],
+      [],
+      [
+        7,
+        11
+      ]
+    ]
+  },
+  {
+    "chordName": "A",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [],
+      [],
+      [
+        10
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "A",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 14,
+    "arpeggioFrets": [
+      [
+        14
+      ],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "B",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 4,
+    "arpeggioFrets": [
+      [
+        4
+      ],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "B",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 8,
+    "arpeggioFrets": [
+      [],
+      [
+        8
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "B",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 9,
+    "arpeggioFrets": [
+      [
+        9,
+        13
+      ],
+      [],
+      [],
+      [
+        9,
+        13
+      ]
+    ]
+  },
+  {
+    "chordName": "C#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 6,
+    "arpeggioFrets": [
+      [
+        6
+      ],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "C#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [],
+      [
+        10
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "C#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 11,
+    "arpeggioFrets": [
+      [
+        11,
+        15
+      ],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "D#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 4,
+    "arpeggioFrets": [
+      [],
+      [],
+      [
+        4
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "D#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 8,
+    "arpeggioFrets": [
+      [
+        8
+      ],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "D#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "F#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 7,
+    "arpeggioFrets": [
+      [],
+      [],
+      [
+        7
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "F#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 11,
+    "arpeggioFrets": [
+      [
+        11
+      ],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "F#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "G#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 6,
+    "arpeggioFrets": [
+      [
+        6,
+        10
+      ],
+      [],
+      [],
+      [
+        6,
+        10
+      ]
+    ]
+  },
+  {
+    "chordName": "G#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 9,
+    "arpeggioFrets": [
+      [],
+      [],
+      [
+        9
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "G#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 13,
+    "arpeggioFrets": [
+      [
+        13
+      ],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "A#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 7,
+    "arpeggioFrets": [
+      [],
+      [
+        7
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "A#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 8,
+    "arpeggioFrets": [
+      [
+        8,
+        12
+      ],
+      [],
+      [],
+      [
+        8,
+        12
+      ]
+    ]
+  },
+  {
+    "chordName": "A#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 11,
+    "arpeggioFrets": [
+      [],
+      [],
+      [
+        11
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "C - E - G#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 1,
+    "arpeggioFrets": [
+      [
+        1
+      ],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "C - E - G#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "C - E - G#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "C - E - G#",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 13,
+    "arpeggioFrets": [
+      [
+        13
+      ],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "D - F# (Gb) - A# (Bb)",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "D - F# (Gb) - A# (Bb)",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 7,
+    "arpeggioFrets": [
+      [],
+      [],
+      [
+        7
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "D - F# (Gb) - A# (Bb)",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Eb (D#) - G - B",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 4,
+    "arpeggioFrets": [
+      [
+        4
+      ],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Eb (D#) - G - B",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 8,
+    "arpeggioFrets": [
+      [],
+      [
+        8
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Eb (D#) - G - B",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Cmm",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Cmm",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Cmm",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Cmm",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 12,
+    "arpeggioFrets": [
+      [
+        12
+      ],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Dmm",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 3,
+    "arpeggioFrets": [
+      [],
+      [],
+      [
+        3,
+        7
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "Dmm",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 3,
+    "arpeggioFrets": [
+      [],
+      [
+        7
+      ],
+      [
+        3,
+        7
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "Dmm",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Emm",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Emm",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Emm",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Fm",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 6,
+    "arpeggioFrets": [
+      [
+        6,
+        10
+      ],
+      [],
+      [
+        6
+      ],
+      [
+        6,
+        10
+      ]
+    ]
+  },
+  {
+    "chordName": "Fm",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 6,
+    "arpeggioFrets": [
+      [
+        6,
+        10
+      ],
+      [
+        10
+      ],
+      [],
+      [
+        6,
+        10
+      ]
+    ]
+  },
+  {
+    "chordName": "Fm",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [
+        10,
+        15
+      ],
+      [
+        13
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Gm",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 5,
+    "arpeggioFrets": [
+      [
+        5,
+        8
+      ],
+      [
+        7
+      ],
+      [],
+      [
+        5,
+        8
+      ]
+    ]
+  },
+  {
+    "chordName": "Gm",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 8,
+    "arpeggioFrets": [
+      [
+        8,
+        12
+      ],
+      [],
+      [
+        8
+      ],
+      [
+        8,
+        12
+      ]
+    ]
+  },
+  {
+    "chordName": "Gm",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 8,
+    "arpeggioFrets": [
+      [
+        8,
+        12
+      ],
+      [
+        12
+      ],
+      [],
+      [
+        8,
+        12
+      ]
+    ]
+  },
+  {
+    "chordName": "Am",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 7,
+    "arpeggioFrets": [
+      [
+        7,
+        10
+      ],
+      [
+        9
+      ],
+      [],
+      [
+        7,
+        10
+      ]
+    ]
+  },
+  {
+    "chordName": "Am",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [
+        10,
+        14
+      ],
+      [],
+      [
+        10
+      ],
+      [
+        10,
+        14
+      ]
+    ]
+  },
+  {
+    "chordName": "Am",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [
+        14
+      ],
+      [],
+      [],
+      [
+        10,
+        14
+      ]
+    ]
+  },
+  {
+    "chordName": "Bm",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 4,
+    "arpeggioFrets": [
+      [
+        0,
+        4
+      ],
+      [
+        4
+      ],
+      [],
+      [
+        0,
+        4
+      ]
+    ]
+  },
+  {
+    "chordName": "Bm",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 4,
+    "arpeggioFrets": [
+      [
+        4,
+        9
+      ],
+      [
+        7
+      ],
+      [],
+      [
+        4,
+        9
+      ]
+    ]
+  },
+  {
+    "chordName": "Bm",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 9,
+    "arpeggioFrets": [
+      [
+        9,
+        12
+      ],
+      [
+        11
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "C#m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 2,
+    "arpeggioFrets": [
+      [
+        2,
+        6
+      ],
+      [
+        6
+      ],
+      [],
+      [
+        2,
+        6
+      ]
+    ]
+  },
+  {
+    "chordName": "C#m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 6,
+    "arpeggioFrets": [
+      [
+        6,
+        11
+      ],
+      [
+        9
+      ],
+      [],
+      [
+        6,
+        11
+      ]
+    ]
+  },
+  {
+    "chordName": "C#m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 11,
+    "arpeggioFrets": [
+      [
+        11,
+        14
+      ],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "D#m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 4,
+    "arpeggioFrets": [
+      [
+        4,
+        8
+      ],
+      [],
+      [
+        4
+      ],
+      [
+        4,
+        8
+      ]
+    ]
+  },
+  {
+    "chordName": "D#m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 4,
+    "arpeggioFrets": [
+      [
+        4,
+        8
+      ],
+      [
+        8
+      ],
+      [],
+      [
+        4,
+        8
+      ]
+    ]
+  },
+  {
+    "chordName": "D#m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 8,
+    "arpeggioFrets": [
+      [
+        8,
+        13
+      ],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "F#m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 7,
+    "arpeggioFrets": [
+      [
+        7,
+        11
+      ],
+      [],
+      [
+        7
+      ],
+      [
+        7,
+        11
+      ]
+    ]
+  },
+  {
+    "chordName": "F#m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 7,
+    "arpeggioFrets": [
+      [
+        7,
+        11
+      ],
+      [
+        11
+      ],
+      [],
+      [
+        7,
+        11
+      ]
+    ]
+  },
+  {
+    "chordName": "F#m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 11,
+    "arpeggioFrets": [
+      [
+        11,
+        16
+      ],
+      [
+        14
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "G#m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 6,
+    "arpeggioFrets": [
+      [
+        6,
+        9
+      ],
+      [
+        8
+      ],
+      [],
+      [
+        6,
+        9
+      ]
+    ]
+  },
+  {
+    "chordName": "G#m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 9,
+    "arpeggioFrets": [
+      [
+        9,
+        13
+      ],
+      [],
+      [
+        9
+      ],
+      [
+        9,
+        13
+      ]
+    ]
+  },
+  {
+    "chordName": "G#m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 9,
+    "arpeggioFrets": [
+      [
+        9,
+        13
+      ],
+      [
+        13
+      ],
+      [],
+      [
+        9,
+        13
+      ]
+    ]
+  },
+  {
+    "chordName": "A#m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 8,
+    "arpeggioFrets": [
+      [
+        8,
+        11
+      ],
+      [
+        10
+      ],
+      [],
+      [
+        8,
+        11
+      ]
+    ]
+  },
+  {
+    "chordName": "A#m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 11,
+    "arpeggioFrets": [
+      [
+        11,
+        15
+      ],
+      [],
+      [
+        11
+      ],
+      [
+        11,
+        15
+      ]
+    ]
+  },
+  {
+    "chordName": "A#m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 11,
+    "arpeggioFrets": [
+      [
+        15
+      ],
+      [],
+      [],
+      [
+        11,
+        15
+      ]
+    ]
+  },
+  {
+    "chordName": "Cm(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Cm(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Cm(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Cm(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 11,
+    "arpeggioFrets": [
+      [],
+      [
+        11
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Dm(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 3,
+    "arpeggioFrets": [
+      [],
+      [],
+      [
+        3
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "Dm(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 7,
+    "arpeggioFrets": [
+      [],
+      [
+        7
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Dm(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Em(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Em(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Em(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Fm(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Fm(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Fm(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Gm(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Gm(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 12,
+    "arpeggioFrets": [
+      [
+        12
+      ],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Gm(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Am(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Am(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Am(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Bm",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 3,
+    "arpeggioFrets": [
+      [
+        4
+      ],
+      [],
+      [
+        0,
+        3
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "Bm",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 7,
+    "arpeggioFrets": [
+      [],
+      [
+        7
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Bm",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 9,
+    "arpeggioFrets": [
+      [
+        9,
+        12
+      ],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "C#m(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "C#m(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "C#m(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "D#m(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 4,
+    "arpeggioFrets": [
+      [
+        4
+      ],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "D#m(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "D#m(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "F#m(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 7,
+    "arpeggioFrets": [
+      [],
+      [
+        7
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "F#m(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 11,
+    "arpeggioFrets": [
+      [],
+      [
+        11
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "F#m(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "G#m(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 7,
+    "arpeggioFrets": [
+      [],
+      [
+        7
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "G#m(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "G#m(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "A#m(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "A#m(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 11,
+    "arpeggioFrets": [
+      [],
+      [
+        11
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "A#m(b5)m",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 15,
+    "arpeggioFrets": [
+      [],
+      [],
+      [
+        15
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "C7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 1,
+    "arpeggioFrets": [
+      [
+        2,
+        5
+      ],
+      [
+        4
+      ],
+      [
+        1
+      ],
+      [
+        2,
+        5
+      ]
+    ]
+  },
+  {
+    "chordName": "C7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 5,
+    "arpeggioFrets": [
+      [
+        5,
+        9
+      ],
+      [
+        5
+      ],
+      [
+        5
+      ],
+      [
+        5,
+        9
+      ]
+    ]
+  },
+  {
+    "chordName": "C7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 8,
+    "arpeggioFrets": [
+      [
+        9,
+        10
+      ],
+      [
+        9
+      ],
+      [
+        8
+      ],
+      [
+        9,
+        10
+      ]
+    ]
+  },
+  {
+    "chordName": "C7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [
+        10,
+        14
+      ],
+      [
+        12
+      ],
+      [
+        12
+      ],
+      [
+        10,
+        14
+      ]
+    ]
+  },
+  {
+    "chordName": "F7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 3,
+    "arpeggioFrets": [
+      [
+        3,
+        7
+      ],
+      [
+        5
+      ],
+      [
+        5
+      ],
+      [
+        3,
+        7
+      ]
+    ]
+  },
+  {
+    "chordName": "F7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 6,
+    "arpeggioFrets": [
+      [
+        7,
+        10
+      ],
+      [
+        9
+      ],
+      [
+        6
+      ],
+      [
+        7,
+        10
+      ]
+    ]
+  },
+  {
+    "chordName": "F7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [
+        10,
+        14
+      ],
+      [
+        10
+      ],
+      [
+        10
+      ],
+      [
+        10,
+        14
+      ]
+    ]
+  },
+  {
+    "chordName": "G7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 3,
+    "arpeggioFrets": [
+      [
+        4,
+        5
+      ],
+      [
+        4
+      ],
+      [
+        3
+      ],
+      [
+        4,
+        5
+      ]
+    ]
+  },
+  {
+    "chordName": "G7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 5,
+    "arpeggioFrets": [
+      [
+        5,
+        9
+      ],
+      [
+        7
+      ],
+      [
+        7
+      ],
+      [
+        5,
+        9
+      ]
+    ]
+  },
+  {
+    "chordName": "G7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 8,
+    "arpeggioFrets": [
+      [
+        9,
+        12
+      ],
+      [
+        11
+      ],
+      [
+        8
+      ],
+      [
+        9,
+        12
+      ]
+    ]
+  },
+  {
+    "chordName": "B7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 4,
+    "arpeggioFrets": [
+      [
+        4,
+        8
+      ],
+      [
+        4
+      ],
+      [
+        4
+      ],
+      [
+        4,
+        8
+      ]
+    ]
+  },
+  {
+    "chordName": "B7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 9,
+    "arpeggioFrets": [
+      [
+        9,
+        13
+      ],
+      [
+        11
+      ],
+      [
+        11
+      ],
+      [
+        9,
+        13
+      ]
+    ]
+  },
+  {
+    "chordName": "C#7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 6,
+    "arpeggioFrets": [
+      [
+        6,
+        10
+      ],
+      [
+        6
+      ],
+      [
+        6
+      ],
+      [
+        6,
+        10
+      ]
+    ]
+  },
+  {
+    "chordName": "C#7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 9,
+    "arpeggioFrets": [
+      [
+        10,
+        11
+      ],
+      [
+        10
+      ],
+      [
+        9
+      ],
+      [
+        10,
+        11
+      ]
+    ]
+  },
+  {
+    "chordName": "C#7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 11,
+    "arpeggioFrets": [
+      [
+        11,
+        15
+      ],
+      [
+        13
+      ],
+      [
+        13
+      ],
+      [
+        11,
+        15
+      ]
+    ]
+  },
+  {
+    "chordName": "C7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 1,
+    "arpeggioFrets": [
+      [],
+      [
+        4
+      ],
+      [
+        1
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "C7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 5,
+    "arpeggioFrets": [
+      [
+        5
+      ],
+      [
+        5
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "C7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 9,
+    "arpeggioFrets": [
+      [
+        9,
+        10
+      ],
+      [
+        9
+      ],
+      [],
+      [
+        9
+      ]
+    ]
+  },
+  {
+    "chordName": "C7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [
+        10,
+        14
+      ],
+      [
+        12
+      ],
+      [
+        13
+      ],
+      [
+        10,
+        14
+      ]
+    ]
+  },
+  {
+    "chordName": "F7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 3,
+    "arpeggioFrets": [
+      [
+        3,
+        7
+      ],
+      [
+        5
+      ],
+      [
+        6
+      ],
+      [
+        3,
+        7
+      ]
+    ]
+  },
+  {
+    "chordName": "F7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 6,
+    "arpeggioFrets": [
+      [],
+      [
+        9
+      ],
+      [
+        6
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "F7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [
+        10
+      ],
+      [
+        10
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "G7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 4,
+    "arpeggioFrets": [
+      [
+        4,
+        5
+      ],
+      [
+        4
+      ],
+      [],
+      [
+        4
+      ]
+    ]
+  },
+  {
+    "chordName": "G7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 5,
+    "arpeggioFrets": [
+      [
+        5,
+        9
+      ],
+      [
+        7
+      ],
+      [
+        8
+      ],
+      [
+        5,
+        9
+      ]
+    ]
+  },
+  {
+    "chordName": "G7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 8,
+    "arpeggioFrets": [
+      [],
+      [
+        11
+      ],
+      [
+        8
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "B7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 4,
+    "arpeggioFrets": [
+      [
+        4
+      ],
+      [
+        4
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "B7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 9,
+    "arpeggioFrets": [
+      [
+        9,
+        13
+      ],
+      [
+        11
+      ],
+      [
+        12
+      ],
+      [
+        9,
+        13
+      ]
+    ]
+  },
+  {
+    "chordName": "C#7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 6,
+    "arpeggioFrets": [
+      [
+        6
+      ],
+      [
+        6
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "C#7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [
+        10,
+        11
+      ],
+      [
+        10
+      ],
+      [],
+      [
+        10
+      ]
+    ]
+  },
+  {
+    "chordName": "C#7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 11,
+    "arpeggioFrets": [
+      [
+        11,
+        15
+      ],
+      [
+        13
+      ],
+      [
+        14
+      ],
+      [
+        11,
+        15
+      ]
+    ]
+  },
+  {
+    "chordName": "C7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 1,
+    "arpeggioFrets": [
+      [],
+      [
+        4
+      ],
+      [
+        1
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "C7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 4,
+    "arpeggioFrets": [
+      [
+        5
+      ],
+      [
+        4,
+        9
+      ],
+      [
+        5
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "C7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 9,
+    "arpeggioFrets": [
+      [
+        9,
+        10
+      ],
+      [
+        9
+      ],
+      [],
+      [
+        9,
+        10
+      ]
+    ]
+  },
+  {
+    "chordName": "C7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [
+        10,
+        14
+      ],
+      [
+        12
+      ],
+      [],
+      [
+        10,
+        14
+      ]
+    ]
+  },
+  {
+    "chordName": "D7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 3,
+    "arpeggioFrets": [
+      [],
+      [
+        6
+      ],
+      [
+        3
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "D7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 6,
+    "arpeggioFrets": [
+      [
+        7
+      ],
+      [
+        6,
+        11
+      ],
+      [
+        7
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "D7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 11,
+    "arpeggioFrets": [
+      [
+        11,
+        12
+      ],
+      [
+        11
+      ],
+      [],
+      [
+        11,
+        12
+      ]
+    ]
+  },
+  {
+    "chordName": "E7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 5,
+    "arpeggioFrets": [
+      [],
+      [
+        8
+      ],
+      [
+        5
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "E7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 8,
+    "arpeggioFrets": [
+      [
+        9
+      ],
+      [
+        8,
+        13
+      ],
+      [
+        9
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "E7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 13,
+    "arpeggioFrets": [
+      [
+        13,
+        14
+      ],
+      [
+        13
+      ],
+      [],
+      [
+        13,
+        14
+      ]
+    ]
+  },
+  {
+    "chordName": "F7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 6,
+    "arpeggioFrets": [
+      [],
+      [
+        9
+      ],
+      [
+        6
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "F7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 9,
+    "arpeggioFrets": [
+      [
+        10
+      ],
+      [
+        9,
+        14
+      ],
+      [
+        10
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "G7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 8,
+    "arpeggioFrets": [
+      [],
+      [
+        11
+      ],
+      [
+        8
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "G7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 11,
+    "arpeggioFrets": [
+      [
+        12
+      ],
+      [
+        11,
+        16
+      ],
+      [
+        12
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "A7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 6,
+    "arpeggioFrets": [
+      [
+        6,
+        7
+      ],
+      [
+        6
+      ],
+      [],
+      [
+        6,
+        7
+      ]
+    ]
+  },
+  {
+    "chordName": "A7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [],
+      [
+        13
+      ],
+      [
+        10
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "B7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 3,
+    "arpeggioFrets": [
+      [
+        4
+      ],
+      [
+        3,
+        8
+      ],
+      [
+        4
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "B7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 8,
+    "arpeggioFrets": [
+      [
+        8,
+        9
+      ],
+      [
+        8
+      ],
+      [],
+      [
+        8,
+        9
+      ]
+    ]
+  },
+  {
+    "chordName": "C#7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 5,
+    "arpeggioFrets": [
+      [
+        6
+      ],
+      [
+        5,
+        10
+      ],
+      [
+        6
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "C#7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [
+        10,
+        11
+      ],
+      [
+        10
+      ],
+      [],
+      [
+        10,
+        11
+      ]
+    ]
+  },
+  {
+    "chordName": "C#7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 11,
+    "arpeggioFrets": [
+      [
+        11,
+        15
+      ],
+      [
+        13
+      ],
+      [],
+      [
+        11,
+        15
+      ]
+    ]
+  },
+  {
+    "chordName": "D#7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 4,
+    "arpeggioFrets": [
+      [],
+      [
+        7
+      ],
+      [
+        4
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "D#7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 7,
+    "arpeggioFrets": [
+      [
+        8
+      ],
+      [
+        7,
+        12
+      ],
+      [
+        8
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "D#7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 12,
+    "arpeggioFrets": [
+      [
+        12,
+        13
+      ],
+      [
+        12
+      ],
+      [],
+      [
+        12,
+        13
+      ]
+    ]
+  },
+  {
+    "chordName": "F#7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 7,
+    "arpeggioFrets": [
+      [],
+      [
+        10
+      ],
+      [
+        7
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "F#7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [
+        11
+      ],
+      [
+        10,
+        15
+      ],
+      [
+        11
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "G#7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 5,
+    "arpeggioFrets": [
+      [
+        5,
+        6
+      ],
+      [
+        5
+      ],
+      [],
+      [
+        5,
+        6
+      ]
+    ]
+  },
+  {
+    "chordName": "G#7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 9,
+    "arpeggioFrets": [
+      [],
+      [
+        12
+      ],
+      [
+        9
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "A#7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 7,
+    "arpeggioFrets": [
+      [
+        7,
+        8
+      ],
+      [
+        7
+      ],
+      [],
+      [
+        7,
+        8
+      ]
+    ]
+  },
+  {
+    "chordName": "A#7M",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 11,
+    "arpeggioFrets": [
+      [],
+      [
+        14
+      ],
+      [
+        11
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "C7",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 5,
+    "arpeggioFrets": [
+      [
+        5,
+        8
+      ],
+      [
+        5
+      ],
+      [
+        5
+      ],
+      [
+        5,
+        8
+      ]
+    ]
+  },
+  {
+    "chordName": "C7",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 8,
+    "arpeggioFrets": [
+      [
+        8,
+        10
+      ],
+      [
+        9
+      ],
+      [
+        8
+      ],
+      [
+        8,
+        10
+      ]
+    ]
+  },
+  {
+    "chordName": "C7",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [
+        10,
+        14
+      ],
+      [
+        12
+      ],
+      [
+        11
+      ],
+      [
+        10,
+        14
+      ]
+    ]
+  },
+  {
+    "chordName": "F7",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [
+        10,
+        13
+      ],
+      [
+        10
+      ],
+      [
+        10
+      ],
+      [
+        10,
+        13
+      ]
+    ]
+  },
+  {
+    "chordName": "G7",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 8,
+    "arpeggioFrets": [
+      [
+        9,
+        12
+      ],
+      [
+        10
+      ],
+      [
+        8
+      ],
+      [
+        9,
+        12
+      ]
+    ]
+  },
+  {
+    "chordName": "B7",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 4,
+    "arpeggioFrets": [
+      [
+        4,
+        7
+      ],
+      [
+        4
+      ],
+      [
+        4
+      ],
+      [
+        4,
+        7
+      ]
+    ]
+  },
+  {
+    "chordName": "B7",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 9,
+    "arpeggioFrets": [
+      [
+        9,
+        13
+      ],
+      [
+        11
+      ],
+      [
+        10
+      ],
+      [
+        9,
+        13
+      ]
+    ]
+  },
+  {
+    "chordName": "C#7",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 6,
+    "arpeggioFrets": [
+      [
+        6,
+        9
+      ],
+      [
+        6
+      ],
+      [
+        6
+      ],
+      [
+        6,
+        9
+      ]
+    ]
+  },
+  {
+    "chordName": "C#7",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 9,
+    "arpeggioFrets": [
+      [
+        9,
+        11
+      ],
+      [
+        10
+      ],
+      [
+        9
+      ],
+      [
+        9,
+        11
+      ]
+    ]
+  },
+  {
+    "chordName": "C#7",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 11,
+    "arpeggioFrets": [
+      [
+        11,
+        15
+      ],
+      [
+        13
+      ],
+      [
+        12
+      ],
+      [
+        11,
+        15
+      ]
+    ]
+  },
+  {
+    "chordName": "Cmm7",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 4,
+    "arpeggioFrets": [
+      [
+        4
+      ],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Cmm7",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Cmm7",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 11,
+    "arpeggioFrets": [
+      [
+        12
+      ],
+      [
+        11
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Fmm7",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [],
+      [],
+      [
+        10
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "Bmm7",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 3,
+    "arpeggioFrets": [
+      [
+        4,
+        7
+      ],
+      [],
+      [
+        3
+      ],
+      [
+        4
+      ]
+    ]
+  },
+  {
+    "chordName": "Bmm7",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [],
+      [
+        11
+      ],
+      [
+        10
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "C#mm7",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "C#mm7",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "C#mm7",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 11,
+    "arpeggioFrets": [
+      [
+        12
+      ],
+      [
+        11,
+        14
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Cmm7",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Cmm7",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 12,
+    "arpeggioFrets": [
+      [
+        12
+      ],
+      [],
+      [],
+      [
+        12
+      ]
+    ]
+  },
+  {
+    "chordName": "Fmm7",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [],
+      [],
+      [
+        10
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "Bmm7",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 3,
+    "arpeggioFrets": [
+      [
+        4
+      ],
+      [],
+      [
+        3
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "C#mm7",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "C#mm7",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "C#mm7",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 11,
+    "arpeggioFrets": [
+      [],
+      [
+        11,
+        14
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Cm7(b5)m7b5",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Cm7(b5)m7b5",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 7,
+    "arpeggioFrets": [
+      [
+        7
+      ],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Cm7(b5)m7b5",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Fm7(b5)m7b5",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [],
+      [
+        10
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Bm7(b5)m7b5",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 3,
+    "arpeggioFrets": [
+      [
+        3,
+        7
+      ],
+      [],
+      [
+        3
+      ],
+      [
+        3,
+        7
+      ]
+    ]
+  },
+  {
+    "chordName": "Bm7(b5)m7b5",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [],
+      [
+        10
+      ],
+      [
+        10
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "C#m7(b5)m7b5",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 6,
+    "arpeggioFrets": [
+      [],
+      [],
+      [
+        6
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "C#m7(b5)m7b5",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "C#m7(b5)m7b5",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 12,
+    "arpeggioFrets": [
+      [
+        12
+      ],
+      [],
+      [],
+      [
+        12
+      ]
+    ]
+  },
+  {
+    "chordName": "Cº - Ebº (D#º) - Gbº (F#) - Aºdim",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Cº - Ebº (D#º) - Gbº (F#) - Aºdim",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Cº - Ebº (D#º) - Gbº (F#) - Aºdim",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 7,
+    "arpeggioFrets": [
+      [],
+      [
+        7,
+        10,
+        7,
+        10
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Cº - Ebº (D#º) - Gbº (F#) - Aºdim",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [],
+      [
+        10,
+        10,
+        10
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "C#º (Dbº) - Eº - Gº - Bbº (A#º)dim",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 6,
+    "arpeggioFrets": [
+      [],
+      [],
+      [
+        6,
+        6,
+        6
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "C#º (Dbº) - Eº - Gº - Bbº (A#º)dim",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 0,
+    "arpeggioFrets": [
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "C#º (Dbº) - Eº - Gº - Bbº (A#º)dim",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 12,
+    "arpeggioFrets": [
+      [
+        12,
+        12,
+        12
+      ],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "chordName": "Dº - Fº - Abº (G#º) - Bºdim",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 3,
+    "arpeggioFrets": [
+      [
+        3,
+        3,
+        3
+      ],
+      [],
+      [
+        3,
+        6,
+        3,
+        6
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "Dº - Fº - Abº (G#º) - Bºdim",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 6,
+    "arpeggioFrets": [
+      [],
+      [
+        7,
+        7,
+        7
+      ],
+      [
+        6,
+        6,
+        6
+      ],
+      []
+    ]
+  },
+  {
+    "chordName": "Dº - Fº - Abº (G#º) - Bºdim",
+    "frets": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "startingFret": 10,
+    "arpeggioFrets": [
+      [],
+      [
+        10,
+        10,
+        10
+      ],
+      [],
+      []
+    ]
+  }
+]
