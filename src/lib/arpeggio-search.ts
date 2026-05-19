@@ -5,29 +5,29 @@
  * Priority system: dictionary voicings (from diagramas/jsons) come first,
  * sorted by lowest position. Algorithmic fallback for chords not in dictionary.
  */
-import { parseChord, INSTRUMENT_PRESETS } from './music-theory';
+import { parseChord, INSTRUMENT_PRESETS, getNoteIndex, noteIndexAtFret } from './music-theory';
 import { findVoicings, type Voicing } from './chord-finder';
 
 type DictEntry = { chordName: string; frets: number[], arpeggioFrets?: number[][] };
 type DictType = Record<string, DictEntry[]>;
 
 import chordDictRaw from '@/config/cavaquinho-dictionary.json';
-import arpeggioUserRaw from '@/config/arpeggio-dictionary-user.json';
+import shapeDictRaw from '@/config/arpeggio-shapes.json';
 
 const CHORD_DICT: Record<string, DictType> = {
   cavaquinho: chordDictRaw as DictType,
 };
 
-// Create a lookup for arpeggios by chord name
-const ARPEGGIO_USER_DICT: Record<string, any[]> = {};
-if (Array.isArray(arpeggioUserRaw)) {
-    for (const arp of arpeggioUserRaw) {
-        if (!ARPEGGIO_USER_DICT[arp.chordName]) {
-            ARPEGGIO_USER_DICT[arp.chordName] = [];
-        }
-        ARPEGGIO_USER_DICT[arp.chordName].push(arp);
-    }
-}
+const QUALITY_MAP: Record<string, string> = {
+  'Maior': '',
+  'Menor': 'm',
+  'Dominante 7': '7',
+  'Maior com 7ª': '7M',
+  'Menor com 7ª': 'm7',
+  'Meio Diminuto': 'm7b5',
+  'Diminuto': 'dim',
+  'Aumentado': '+'
+};
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 function getRegion(sf: number): number {
@@ -37,9 +37,29 @@ function getRegion(sf: number): number {
   return 4;
 }
 
-function dictEntryToVoicing(c: DictEntry, isPriority = false): Voicing {
+const TUNING_MIDI = [62, 67, 71, 74]; // D G B D (cavaquinho)
+
+function dictEntryToVoicing(c: DictEntry, isPriority = false, tuning?: string[], rootNoteIdx?: number): Voicing {
   const pressed = c.frets.filter(f => f > 0);
   const startingFret = pressed.length > 0 ? Math.min(...pressed) : 1;
+  
+  let rootString: number | undefined;
+  let rootFret: number | undefined;
+  
+  if (tuning && rootNoteIdx !== undefined) {
+    // Find which string has the root note at the fret pressed
+    for (let s = 0; s < c.frets.length; s++) {
+      const f = c.frets[s];
+      if (f < 0) continue;
+      const openIdx = getNoteIndex(tuning[s]);
+      if (openIdx !== -1 && noteIndexAtFret(openIdx, f) === rootNoteIdx) {
+        rootString = s;
+        rootFret = f;
+        break;
+      }
+    }
+  }
+  
   return {
     frets: c.frets,
     startingFret,
@@ -49,6 +69,8 @@ function dictEntryToVoicing(c: DictEntry, isPriority = false): Voicing {
     fingerCount: pressed.length,
     isPriority,
     arpeggioFrets: c.arpeggioFrets,
+    rootString,
+    rootFret,
   };
 }
 
@@ -140,30 +162,73 @@ export function searchVoicings(
 
   if (dictEntries) {
     // Dictionary voicings ONLY — no mixing with algorithmic results
-    finalVoicings = dictEntries.map(entry => dictEntryToVoicing(entry, true));
+    finalVoicings = dictEntries.map(entry => dictEntryToVoicing(entry, true, tuning, parsed.noteIndices[0]));
   } else {
-    // Fallback: algorithmic results only
-    finalVoicings = mergeAndGroupByRegion([], baseResults, maxPerRegion);
+    // Fallback: algorithmic results only — compute rootString for each
+    finalVoicings = mergeAndGroupByRegion([], baseResults, maxPerRegion).map(v => {
+      let rootString: number | undefined;
+      let rootFret: number | undefined;
+      for (let s = 0; s < v.frets.length; s++) {
+        const f = v.frets[s];
+        if (f < 0) continue;
+        const openIdx = getNoteIndex(tuning[s]);
+        if (openIdx !== -1 && noteIndexAtFret(openIdx, f) === parsed.noteIndices[0]) {
+          rootString = s;
+          rootFret = f;
+          break;
+        }
+      }
+      return { ...v, rootString, rootFret };
+    });
   }
 
-  // ATTACH ARPEGGIOS from the user dictionary
-  // We find the arpeggio shapes for this chord, and for each voicing, attach the one with the closest starting fret.
-  const userArps = ARPEGGIO_USER_DICT[chordName] || ARPEGGIO_USER_DICT[normalizedName];
-  if (userArps && userArps.length > 0) {
+  // ATTACH ARPEGGIOS using the dynamic shapes dictionary
+  // Key insight: we anchor the shape at the chord's rootString/rootFret,
+  // then pick the shape whose rootString matches the chord's rootString.
+  const qKey = QUALITY_MAP[parsed.qualityName];
+  const shapes: any[] = qKey !== undefined ? (shapeDictRaw as Record<string, any[]>)[qKey] || [] : [];
+
+  if (shapes.length > 0) {
     finalVoicings = finalVoicings.map(v => {
-        let bestArp = userArps[0];
-        let minDiff = 999;
-        for (const arp of userArps) {
-            const diff = Math.abs(v.startingFret - arp.startingFret);
-            if (diff < minDiff) {
-                minDiff = diff;
-                bestArp = arp;
-            }
+      // The chord tells us WHERE the root is
+      if (v.rootString === undefined || v.rootFret === undefined) return v;
+
+      const chordRootString = v.rootString;
+      const chordRootFret = v.rootFret;
+
+      // Find shapes whose rootString matches the chord's rootString
+      const candidates = shapes.filter(s => s.rootString === chordRootString);
+      const pool = candidates.length > 0 ? candidates : shapes;
+
+      let bestArp: number[][] | null = null;
+      let minDiff = 999;
+
+      for (const shape of pool) {
+        // Transpose: the shape's root fret offset becomes chordRootFret
+        const arpeggioFrets: number[][] = shape.relativeFrets.map(
+          (arr: number[]) => arr.map((f: number) => f + chordRootFret)
+        );
+
+        // Verify no negative frets
+        const hasNeg = arpeggioFrets.some((arr: number[]) => arr.some((f: number) => f < 0));
+        if (hasNeg) continue;
+
+        // Score: how close are arpeggio frets to chord frets
+        let diff = 0;
+        for (let s = 0; s < 4; s++) {
+          if (arpeggioFrets[s].length === 0) continue;
+          const arpMin = Math.min(...arpeggioFrets[s]);
+          diff += Math.abs(v.startingFret - arpMin);
         }
-        return {
-            ...v,
-            arpeggioFrets: bestArp.arpeggioFrets
-        };
+
+        if (diff < minDiff) {
+          minDiff = diff;
+          bestArp = arpeggioFrets;
+        }
+      }
+
+      if (bestArp) return { ...v, arpeggioFrets: bestArp };
+      return v;
     });
   }
 

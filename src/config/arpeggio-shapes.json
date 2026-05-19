@@ -1,0 +1,4134 @@
+{
+  "7": [
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          0,
+          3
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0,
+          3
+        ]
+      ],
+      "originalRoot": "C"
+    },
+    {
+      "name": "Arpejo",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -2,
+          0
+        ],
+        [
+          -1
+        ],
+        [
+          -2
+        ],
+        [
+          -2,
+          0
+        ]
+      ],
+      "originalRoot": "C"
+    },
+    {
+      "name": "Arpejo Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [
+          2
+        ],
+        [
+          1
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "C"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          0,
+          3
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0,
+          3
+        ]
+      ],
+      "originalRoot": "F"
+    },
+    {
+      "name": "Arpejo no Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [
+          1,
+          4
+        ],
+        [
+          2
+        ],
+        [
+          0
+        ],
+        [
+          1,
+          4
+        ]
+      ],
+      "originalRoot": "G"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          0,
+          3
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0,
+          3
+        ]
+      ],
+      "originalRoot": "B"
+    },
+    {
+      "name": "Arpejo Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [
+          2
+        ],
+        [
+          1
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "B"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          0,
+          3
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0,
+          3
+        ]
+      ],
+      "originalRoot": "C#"
+    },
+    {
+      "name": "Arpejo",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -2,
+          0
+        ],
+        [
+          -1
+        ],
+        [
+          -2
+        ],
+        [
+          -2,
+          0
+        ]
+      ],
+      "originalRoot": "C#"
+    },
+    {
+      "name": "Arpejo Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [
+          2
+        ],
+        [
+          1
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "C#"
+    }
+  ],
+  "": [
+    {
+      "name": "Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [
+          1,
+          4
+        ],
+        [],
+        [
+          0
+        ],
+        [
+          1,
+          4
+        ]
+      ],
+      "originalRoot": "C"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          -3,
+          0
+        ],
+        [
+          0
+        ],
+        [],
+        [
+          -3,
+          0
+        ]
+      ],
+      "originalRoot": "C"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -5,
+          0
+        ],
+        [
+          -1
+        ],
+        [],
+        [
+          -5,
+          0
+        ]
+      ],
+      "originalRoot": "C"
+    },
+    {
+      "name": "Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [
+          2
+        ],
+        [],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "C"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [
+          1,
+          4
+        ],
+        [],
+        [
+          0
+        ],
+        [
+          1,
+          4
+        ]
+      ],
+      "originalRoot": "D"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          -3,
+          0
+        ],
+        [
+          0
+        ],
+        [],
+        [
+          -3,
+          0
+        ]
+      ],
+      "originalRoot": "D"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -5,
+          0
+        ],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "D"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [
+          1,
+          4
+        ],
+        [],
+        [
+          0
+        ],
+        [
+          1,
+          4
+        ]
+      ],
+      "originalRoot": "E"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          -3,
+          0
+        ],
+        [
+          0
+        ],
+        [],
+        [
+          -3,
+          0
+        ]
+      ],
+      "originalRoot": "E"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -5,
+          0
+        ],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "E"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [
+          1,
+          4
+        ],
+        [],
+        [
+          0
+        ],
+        [
+          1,
+          4
+        ]
+      ],
+      "originalRoot": "F"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          -3,
+          0
+        ],
+        [
+          0
+        ],
+        [],
+        [
+          -3,
+          0
+        ]
+      ],
+      "originalRoot": "F"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -5,
+          0
+        ],
+        [
+          -1
+        ],
+        [],
+        []
+      ],
+      "originalRoot": "F"
+    },
+    {
+      "name": "Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [
+          2
+        ],
+        [],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "G"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [
+          1,
+          4
+        ],
+        [],
+        [
+          0
+        ],
+        [
+          1,
+          4
+        ]
+      ],
+      "originalRoot": "G"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          -3,
+          0
+        ],
+        [
+          0
+        ],
+        [],
+        [
+          -3,
+          0
+        ]
+      ],
+      "originalRoot": "G"
+    },
+    {
+      "name": "Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [
+          2
+        ],
+        [],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "A"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [
+          1,
+          4
+        ],
+        [],
+        [
+          0
+        ],
+        [
+          1,
+          4
+        ]
+      ],
+      "originalRoot": "A"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [],
+        [],
+        [
+          -3,
+          0
+        ]
+      ],
+      "originalRoot": "A"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          -3,
+          0
+        ],
+        [
+          0
+        ],
+        [],
+        [
+          -3,
+          0
+        ]
+      ],
+      "originalRoot": "B"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -5,
+          0
+        ],
+        [
+          -1
+        ],
+        [],
+        [
+          -5,
+          0
+        ]
+      ],
+      "originalRoot": "B"
+    },
+    {
+      "name": "Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [
+          2
+        ],
+        [],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "B"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          -3,
+          0
+        ],
+        [
+          0
+        ],
+        [],
+        [
+          -3,
+          0
+        ]
+      ],
+      "originalRoot": "C#"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -5,
+          0
+        ],
+        [
+          -1
+        ],
+        [],
+        [
+          -5,
+          0
+        ]
+      ],
+      "originalRoot": "C#"
+    },
+    {
+      "name": "Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "C#"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [
+          1,
+          4
+        ],
+        [],
+        [
+          0
+        ],
+        [
+          1,
+          4
+        ]
+      ],
+      "originalRoot": "D#"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          -3,
+          0
+        ],
+        [
+          0
+        ],
+        [],
+        [
+          -3,
+          0
+        ]
+      ],
+      "originalRoot": "D#"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -5,
+          0
+        ],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "D#"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [
+          1,
+          4
+        ],
+        [],
+        [
+          0
+        ],
+        [
+          1,
+          4
+        ]
+      ],
+      "originalRoot": "F#"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          -3,
+          0
+        ],
+        [
+          0
+        ],
+        [],
+        [
+          -3,
+          0
+        ]
+      ],
+      "originalRoot": "F#"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -5,
+          0
+        ],
+        [
+          -1
+        ],
+        [],
+        []
+      ],
+      "originalRoot": "F#"
+    },
+    {
+      "name": "Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [
+          2
+        ],
+        [],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "G#"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [
+          1,
+          4
+        ],
+        [],
+        [
+          0
+        ],
+        [
+          1,
+          4
+        ]
+      ],
+      "originalRoot": "G#"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          -3,
+          0
+        ],
+        [
+          0
+        ],
+        [],
+        [
+          -3,
+          0
+        ]
+      ],
+      "originalRoot": "G#"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -5,
+          0
+        ],
+        [
+          -1
+        ],
+        [],
+        [
+          -5,
+          0
+        ]
+      ],
+      "originalRoot": "A#"
+    },
+    {
+      "name": "Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [
+          2
+        ],
+        [],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "A#"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [
+          1,
+          4
+        ],
+        [],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "A#"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [],
+        [],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "C"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "C"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [
+          0
+        ],
+        [],
+        []
+      ],
+      "originalRoot": "C"
+    },
+    {
+      "name": "Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [],
+        [],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "C"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [],
+        [],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "D"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "D"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "D"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [],
+        [],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "E"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "E"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "E"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [],
+        [],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "F"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "F"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "F"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [],
+        [],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "G"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "G"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "G"
+    },
+    {
+      "name": "Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [],
+        [],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "A"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [],
+        [],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "A"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "A"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "B"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [
+          0
+        ],
+        [],
+        []
+      ],
+      "originalRoot": "B"
+    },
+    {
+      "name": "Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [],
+        [],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "B"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "C#"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [
+          0
+        ],
+        [],
+        []
+      ],
+      "originalRoot": "C#"
+    },
+    {
+      "name": "Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "C#"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [],
+        [],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "D#"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "D#"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "D#"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [],
+        [],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "F#"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "F#"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "F#"
+    },
+    {
+      "name": "Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [],
+        [],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "G#"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [],
+        [],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "G#"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "G#"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [
+          0
+        ],
+        [],
+        []
+      ],
+      "originalRoot": "A#"
+    },
+    {
+      "name": "Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [],
+        [],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "A#"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [],
+        [],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "A#"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "C - E - G#"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "C - E - G#"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "C - E - G#"
+    },
+    {
+      "name": "Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "C - E - G#"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "D - F# (Gb) - A# (Bb)"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "D - F# (Gb) - A# (Bb)"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "D - F# (Gb) - A# (Bb)"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Eb (D#) - G - B"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [
+          0
+        ],
+        [],
+        []
+      ],
+      "originalRoot": "Eb (D#) - G - B"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Eb (D#) - G - B"
+    }
+  ],
+  "m": [
+    {
+      "name": "Shape de Dm",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Cm"
+    },
+    {
+      "name": "Shape de Am",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Cm"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Cm"
+    },
+    {
+      "name": "Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Cm"
+    },
+    {
+      "name": "Shape de Dm",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [
+          0,
+          4
+        ],
+        []
+      ],
+      "originalRoot": "Dm"
+    },
+    {
+      "name": "Shape de Am",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [
+          0
+        ],
+        [
+          -4,
+          0
+        ],
+        []
+      ],
+      "originalRoot": "Dm"
+    },
+    {
+      "name": "Shape de Gm para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Dm"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Em"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Em"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Em"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [],
+        [
+          0
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "F"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          -4,
+          0
+        ],
+        [
+          0
+        ],
+        [],
+        [
+          -4,
+          0
+        ]
+      ],
+      "originalRoot": "F"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -5,
+          0
+        ],
+        [
+          -2
+        ],
+        [],
+        []
+      ],
+      "originalRoot": "F"
+    },
+    {
+      "name": "Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          3
+        ],
+        [
+          2
+        ],
+        [],
+        [
+          0,
+          3
+        ]
+      ],
+      "originalRoot": "G"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [],
+        [
+          0
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "G"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          -4,
+          0
+        ],
+        [
+          0
+        ],
+        [],
+        [
+          -4,
+          0
+        ]
+      ],
+      "originalRoot": "G"
+    },
+    {
+      "name": "Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          3
+        ],
+        [
+          2
+        ],
+        [],
+        [
+          0,
+          3
+        ]
+      ],
+      "originalRoot": "A"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [],
+        [
+          0
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "A"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [],
+        [],
+        [
+          -4,
+          0
+        ]
+      ],
+      "originalRoot": "A"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          -4,
+          0
+        ],
+        [
+          0
+        ],
+        [],
+        [
+          -4,
+          0
+        ]
+      ],
+      "originalRoot": "B"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -5,
+          0
+        ],
+        [
+          -2
+        ],
+        [],
+        [
+          -5,
+          0
+        ]
+      ],
+      "originalRoot": "B"
+    },
+    {
+      "name": "Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          3
+        ],
+        [
+          2
+        ],
+        [],
+        []
+      ],
+      "originalRoot": "B"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          -4,
+          0
+        ],
+        [
+          0
+        ],
+        [],
+        [
+          -4,
+          0
+        ]
+      ],
+      "originalRoot": "C#"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -5,
+          0
+        ],
+        [
+          -2
+        ],
+        [],
+        [
+          -5,
+          0
+        ]
+      ],
+      "originalRoot": "C#"
+    },
+    {
+      "name": "Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          3
+        ],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "C#"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [],
+        [
+          0
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "D#"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          -4,
+          0
+        ],
+        [
+          0
+        ],
+        [],
+        [
+          -4,
+          0
+        ]
+      ],
+      "originalRoot": "D#"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -5,
+          0
+        ],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "D#"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [],
+        [
+          0
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "F#"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          -4,
+          0
+        ],
+        [
+          0
+        ],
+        [],
+        [
+          -4,
+          0
+        ]
+      ],
+      "originalRoot": "F#"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -5,
+          0
+        ],
+        [
+          -2
+        ],
+        [],
+        []
+      ],
+      "originalRoot": "F#"
+    },
+    {
+      "name": "Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          3
+        ],
+        [
+          2
+        ],
+        [],
+        [
+          0,
+          3
+        ]
+      ],
+      "originalRoot": "G#"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [],
+        [
+          0
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "G#"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          -4,
+          0
+        ],
+        [
+          0
+        ],
+        [],
+        [
+          -4,
+          0
+        ]
+      ],
+      "originalRoot": "G#"
+    },
+    {
+      "name": "Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          3
+        ],
+        [
+          2
+        ],
+        [],
+        [
+          0,
+          3
+        ]
+      ],
+      "originalRoot": "A#"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [],
+        [
+          0
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "A#"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [],
+        [],
+        [
+          -4,
+          0
+        ]
+      ],
+      "originalRoot": "A#"
+    },
+    {
+      "name": "Shape de Dm",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Cm(b5)"
+    },
+    {
+      "name": "Shape de Am",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Cm(b5)"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Cm(b5)"
+    },
+    {
+      "name": "Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [
+          0
+        ],
+        [],
+        []
+      ],
+      "originalRoot": "Cm(b5)"
+    },
+    {
+      "name": "Shape de Dm",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "Dm(b5)"
+    },
+    {
+      "name": "Shape de Am",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [
+          0
+        ],
+        [],
+        []
+      ],
+      "originalRoot": "Dm(b5)"
+    },
+    {
+      "name": "Shape de Gm para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Dm(b5)"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Em(b5)"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Em(b5)"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Em(b5)"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Fm(b5)"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Fm(b5)"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Fm(b5)"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Gm(b5)"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Gm(b5)"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Gm(b5)"
+    },
+    {
+      "name": "Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Am(b5)"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Am(b5)"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Am(b5)"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 2,
+      "relativeFrets": [
+        [
+          4
+        ],
+        [],
+        [
+          0,
+          3
+        ],
+        []
+      ],
+      "originalRoot": "B"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [
+          0
+        ],
+        [],
+        []
+      ],
+      "originalRoot": "B"
+    },
+    {
+      "name": "Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          3
+        ],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "B"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "C#m(b5)"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "C#m(b5)"
+    },
+    {
+      "name": "Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "C#m(b5)"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "D#m(b5)"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "D#m(b5)"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "D#m(b5)"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [
+          0
+        ],
+        [],
+        []
+      ],
+      "originalRoot": "F#m(b5)"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [
+          0
+        ],
+        [],
+        []
+      ],
+      "originalRoot": "F#m(b5)"
+    },
+    {
+      "name": "Shape de G para TRÁS",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "F#m(b5)"
+    },
+    {
+      "name": "Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [
+          0
+        ],
+        [],
+        []
+      ],
+      "originalRoot": "G#m(b5)"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "G#m(b5)"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "G#m(b5)"
+    },
+    {
+      "name": "Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "A#m(b5)"
+    },
+    {
+      "name": "Shape de D",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [
+          0
+        ],
+        [],
+        []
+      ],
+      "originalRoot": "A#m(b5)"
+    },
+    {
+      "name": "Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "A#m(b5)"
+    }
+  ],
+  "7M": [
+    {
+      "name": "Arpejo no Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [
+          1,
+          4
+        ],
+        [
+          3
+        ],
+        [
+          0
+        ],
+        [
+          1,
+          4
+        ]
+      ],
+      "originalRoot": "C"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "C"
+    },
+    {
+      "name": "Arpejo",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -1,
+          0
+        ],
+        [
+          -1
+        ],
+        [
+          -2
+        ],
+        [
+          -1,
+          0
+        ]
+      ],
+      "originalRoot": "C"
+    },
+    {
+      "name": "Arpejo Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [
+          2
+        ],
+        [
+          2
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "C"
+    },
+    {
+      "name": "Arpejo Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [
+          2
+        ],
+        [
+          2
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "F"
+    },
+    {
+      "name": "Arpejo no Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [
+          1,
+          4
+        ],
+        [
+          3
+        ],
+        [
+          0
+        ],
+        [
+          1,
+          4
+        ]
+      ],
+      "originalRoot": "F"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "F"
+    },
+    {
+      "name": "Arpejo",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -1,
+          0
+        ],
+        [
+          -1
+        ],
+        [
+          -2
+        ],
+        [
+          -1,
+          0
+        ]
+      ],
+      "originalRoot": "G"
+    },
+    {
+      "name": "Arpejo Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [
+          2
+        ],
+        [
+          2
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "G"
+    },
+    {
+      "name": "Arpejo no Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [
+          1,
+          4
+        ],
+        [
+          3
+        ],
+        [
+          0
+        ],
+        [
+          1,
+          4
+        ]
+      ],
+      "originalRoot": "G"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "B"
+    },
+    {
+      "name": "Arpejo Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [
+          2
+        ],
+        [
+          2
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "B"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "C#"
+    },
+    {
+      "name": "Arpejo",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -1,
+          0
+        ],
+        [
+          -1
+        ],
+        [
+          -2
+        ],
+        [
+          -1,
+          0
+        ]
+      ],
+      "originalRoot": "C#"
+    },
+    {
+      "name": "Arpejo Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [
+          2
+        ],
+        [
+          2
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "C#"
+    },
+    {
+      "name": "Arpejo no Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [],
+        [
+          3
+        ],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "C"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [],
+        []
+      ],
+      "originalRoot": "C"
+    },
+    {
+      "name": "Arpejo",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -1,
+          0
+        ],
+        [
+          -1
+        ],
+        [],
+        [
+          -1
+        ]
+      ],
+      "originalRoot": "C"
+    },
+    {
+      "name": "Arpejo Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "C"
+    },
+    {
+      "name": "Arpejo Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "F"
+    },
+    {
+      "name": "Arpejo no Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [],
+        [
+          3
+        ],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "F"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [],
+        []
+      ],
+      "originalRoot": "F"
+    },
+    {
+      "name": "Arpejo",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -1,
+          0
+        ],
+        [
+          -1
+        ],
+        [],
+        [
+          -1
+        ]
+      ],
+      "originalRoot": "G"
+    },
+    {
+      "name": "Arpejo Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "G"
+    },
+    {
+      "name": "Arpejo no Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [],
+        [
+          3
+        ],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "G"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [],
+        []
+      ],
+      "originalRoot": "B"
+    },
+    {
+      "name": "Arpejo Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "B"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 1,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [],
+        []
+      ],
+      "originalRoot": "C#"
+    },
+    {
+      "name": "Arpejo",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -1,
+          0
+        ],
+        [
+          -1
+        ],
+        [],
+        [
+          -1
+        ]
+      ],
+      "originalRoot": "C#"
+    },
+    {
+      "name": "Arpejo Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "C#"
+    },
+    {
+      "name": "Arpejo no Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [],
+        [
+          3
+        ],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "C"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [
+          -1,
+          4
+        ],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "C"
+    },
+    {
+      "name": "Arpejo",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -1,
+          0
+        ],
+        [
+          -1
+        ],
+        [],
+        [
+          -1,
+          0
+        ]
+      ],
+      "originalRoot": "C"
+    },
+    {
+      "name": "Arpejo Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [
+          2
+        ],
+        [],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "C"
+    },
+    {
+      "name": "Arpejo no Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [],
+        [
+          3
+        ],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "D"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [
+          -1,
+          4
+        ],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "D"
+    },
+    {
+      "name": "Arpejo",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -1,
+          0
+        ],
+        [
+          -1
+        ],
+        [],
+        [
+          -1,
+          0
+        ]
+      ],
+      "originalRoot": "D"
+    },
+    {
+      "name": "Arpejo no Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [],
+        [
+          3
+        ],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "E"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [
+          -1,
+          4
+        ],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "E"
+    },
+    {
+      "name": "Arpejo",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -1,
+          0
+        ],
+        [
+          -1
+        ],
+        [],
+        [
+          -1,
+          0
+        ]
+      ],
+      "originalRoot": "E"
+    },
+    {
+      "name": "Arpejo no Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [],
+        [
+          3
+        ],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "F"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [
+          -1,
+          4
+        ],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "F"
+    },
+    {
+      "name": "Arpejo no Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [],
+        [
+          3
+        ],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "G"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [
+          -1,
+          4
+        ],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "G"
+    },
+    {
+      "name": "Arpejo",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -1,
+          0
+        ],
+        [
+          -1
+        ],
+        [],
+        [
+          -1,
+          0
+        ]
+      ],
+      "originalRoot": "A"
+    },
+    {
+      "name": "Arpejo no Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [],
+        [
+          3
+        ],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "A"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [
+          -1,
+          4
+        ],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "B"
+    },
+    {
+      "name": "Arpejo",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -1,
+          0
+        ],
+        [
+          -1
+        ],
+        [],
+        [
+          -1,
+          0
+        ]
+      ],
+      "originalRoot": "B"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [
+          -1,
+          4
+        ],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "C#"
+    },
+    {
+      "name": "Arpejo",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -1,
+          0
+        ],
+        [
+          -1
+        ],
+        [],
+        [
+          -1,
+          0
+        ]
+      ],
+      "originalRoot": "C#"
+    },
+    {
+      "name": "Arpejo Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [
+          2
+        ],
+        [],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "C#"
+    },
+    {
+      "name": "Arpejo no Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [],
+        [
+          3
+        ],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "D#"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [
+          -1,
+          4
+        ],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "D#"
+    },
+    {
+      "name": "Arpejo",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -1,
+          0
+        ],
+        [
+          -1
+        ],
+        [],
+        [
+          -1,
+          0
+        ]
+      ],
+      "originalRoot": "D#"
+    },
+    {
+      "name": "Arpejo no Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [],
+        [
+          3
+        ],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "F#"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [
+          -1,
+          4
+        ],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "F#"
+    },
+    {
+      "name": "Arpejo",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -1,
+          0
+        ],
+        [
+          -1
+        ],
+        [],
+        [
+          -1,
+          0
+        ]
+      ],
+      "originalRoot": "G#"
+    },
+    {
+      "name": "Arpejo no Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [],
+        [
+          3
+        ],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "G#"
+    },
+    {
+      "name": "Arpejo",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          -1,
+          0
+        ],
+        [
+          -1
+        ],
+        [],
+        [
+          -1,
+          0
+        ]
+      ],
+      "originalRoot": "A#"
+    },
+    {
+      "name": "Arpejo no Shape de D",
+      "rootString": 2,
+      "relativeFrets": [
+        [],
+        [
+          3
+        ],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "A#"
+    }
+  ],
+  "m7": [
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Cm"
+    },
+    {
+      "name": "Arpejo",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Cm"
+    },
+    {
+      "name": "Arpejo Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [
+          -1
+        ],
+        [],
+        []
+      ],
+      "originalRoot": "Cm"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "Fm"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          3
+        ],
+        [],
+        [
+          -1
+        ],
+        [
+          0
+        ]
+      ],
+      "originalRoot": "Bm"
+    },
+    {
+      "name": "Arpejo Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [
+          0
+        ],
+        [
+          -1
+        ],
+        []
+      ],
+      "originalRoot": "Bm"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "C#m"
+    },
+    {
+      "name": "Arpejo",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "C#m"
+    },
+    {
+      "name": "Arpejo Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [
+          -1,
+          2
+        ],
+        [],
+        []
+      ],
+      "originalRoot": "C#m"
+    },
+    {
+      "name": "Arpejo",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Cm"
+    },
+    {
+      "name": "Arpejo Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [],
+        [],
+        [
+          0
+        ]
+      ],
+      "originalRoot": "Cm"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "Fm"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [],
+        [
+          -1
+        ],
+        []
+      ],
+      "originalRoot": "Bm"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "C#m"
+    },
+    {
+      "name": "Arpejo",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "C#m"
+    },
+    {
+      "name": "Arpejo Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [
+          0,
+          3
+        ],
+        [],
+        []
+      ],
+      "originalRoot": "C#m"
+    }
+  ],
+  "m7b5": [
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Cm7(b5)"
+    },
+    {
+      "name": "Arpejo",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Cm7(b5)"
+    },
+    {
+      "name": "Arpejo Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Cm7(b5)"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [
+          0
+        ],
+        [],
+        []
+      ],
+      "originalRoot": "Fm7(b5)"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          4
+        ],
+        [],
+        [
+          0
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "originalRoot": "Bm7(b5)"
+    },
+    {
+      "name": "Arpejo Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "Bm7(b5)"
+    },
+    {
+      "name": "Arpejo no Shape de A",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [
+          0
+        ],
+        []
+      ],
+      "originalRoot": "C#m7(b5)"
+    },
+    {
+      "name": "Arpejo",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "C#m7(b5)"
+    },
+    {
+      "name": "Arpejo Shape de G para FRENTE",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0
+        ],
+        [],
+        [],
+        [
+          0
+        ]
+      ],
+      "originalRoot": "C#m7(b5)"
+    }
+  ],
+  "dim": [
+    {
+      "name": "Casa",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Cº - Ebº (D#º) - Gbº (F#) - Aº"
+    },
+    {
+      "name": "Casa",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "Cº - Ebº (D#º) - Gbº (F#) - Aº"
+    },
+    {
+      "name": "Casa",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [
+          0,
+          3,
+          0,
+          3
+        ],
+        [],
+        []
+      ],
+      "originalRoot": "Cº - Ebº (D#º) - Gbº (F#) - Aº"
+    },
+    {
+      "name": "Casa",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [
+          0,
+          0,
+          0
+        ],
+        [],
+        []
+      ],
+      "originalRoot": "Cº - Ebº (D#º) - Gbº (F#) - Aº"
+    },
+    {
+      "name": "Casa",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [
+          0,
+          0,
+          0
+        ],
+        []
+      ],
+      "originalRoot": "C#º (Dbº) - Eº - Gº - Bbº (A#º)"
+    },
+    {
+      "name": "Casa",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "C#º (Dbº) - Eº - Gº - Bbº (A#º)"
+    },
+    {
+      "name": "Casa",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          0,
+          0
+        ],
+        [],
+        [],
+        []
+      ],
+      "originalRoot": "C#º (Dbº) - Eº - Gº - Bbº (A#º)"
+    },
+    {
+      "name": "Casa",
+      "rootString": 0,
+      "relativeFrets": [
+        [
+          0,
+          0,
+          0
+        ],
+        [],
+        [
+          0,
+          3,
+          0,
+          3
+        ],
+        []
+      ],
+      "originalRoot": "Dº - Fº - Abº (G#º) - Bº"
+    },
+    {
+      "name": "Casa",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          -1,
+          -1,
+          -1
+        ],
+        []
+      ],
+      "originalRoot": "Dº - Fº - Abº (G#º) - Bº"
+    },
+    {
+      "name": "Casa",
+      "rootString": 0,
+      "relativeFrets": [
+        [],
+        [
+          0,
+          0,
+          0
+        ],
+        [],
+        []
+      ],
+      "originalRoot": "Dº - Fº - Abº (G#º) - Bº"
+    }
+  ]
+}

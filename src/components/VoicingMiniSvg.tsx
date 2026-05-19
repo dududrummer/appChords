@@ -6,13 +6,14 @@ interface Props {
   markerColor?: string;
   primaryColor?: string;
   arpeggioColor?: string;
+  rootColor?: string;
   width?: number;
   height?: number;
 }
 
 export function VoicingMiniSvg({
   voicing, stringCount,
-  markerColor = '#000', primaryColor = '#000', arpeggioColor = '#f97316',
+  markerColor = '#000', primaryColor = '#000', arpeggioColor = '#f97316', rootColor = '#dc2626',
   width = 64, height = 110,
 }: Props) {
   const ml = 13, mr = 13, mt = 14, mb = 5;
@@ -90,7 +91,8 @@ export function VoicingMiniSvg({
         );
         const rel = fret - sf + 1;
         if (rel < 1 || rel > FRETS) return null;
-        return <circle key={s} cx={sx(s)} cy={mt + (rel - 0.5) * fretH} r={r} fill={markerColor} />;
+        const isRoot = s === voicing.rootString && fret === voicing.rootFret;
+        return <circle key={s} cx={sx(s)} cy={mt + (rel - 0.5) * fretH} r={r} fill={isRoot ? rootColor : markerColor} />;
       })}
     </svg>
   );

@@ -9,6 +9,8 @@ export interface Voicing {
   fingerCount: number;
   isPriority?: boolean;
   arpeggioFrets?: number[][];
+  rootString?: number; // which string (0-indexed) carries the root note
+  rootFret?: number;   // fret of the root note on rootString
 }
 
 export interface BarreDef {
