@@ -18,16 +18,49 @@ const CHORD_DICT: Record<string, DictType> = {
   cavaquinho: chordDictRaw as DictType,
 };
 
+// Maps parsed.qualityName (Portuguese) → quality key in arpeggio-shapes.json
 const QUALITY_MAP: Record<string, string> = {
-  'Maior': '',
-  'Menor': 'm',
-  'Dominante 7': '7',
-  'Maior com 7ª': '7M',
-  'Menor com 7ª': 'm7',
-  'Meio Diminuto': 'm7b5',
-  'Diminuto': 'dim',
-  'Aumentado': '+'
+  // Major variants
+  'Maior':                    '',
+  'Maior com b5':             '(b5)',
+  'Maior com 5ª Aumentada':   '+',
+  // Minor variants
+  'Menor':                    'm',
+  'Menor com b5':             'm(b5)',
+  // Seventh variants (dominant)
+  'Dominante 7':              '7',
+  // Major seventh variants
+  'Maior com 7ª':             '7M',
+  'Maior 7 com 5# Aumentada': '7M#5',
+  'Maior 7 com 5b Diminuta':  '7Mb5',
+  // Minor seventh variants
+  'Menor com 7ª':             'm7',
+  'Menor com 7ª Maior':       'm7M',
+  'Meio Diminuto':            'm7b5',
+  // Diminished
+  'Diminuto':                 'dim',
+  'Aumentado':                '+',
 };
+
+/**
+ * Determine chord direction relative to root.
+ * Returns 'frente' if more chord notes fall ABOVE the root fret,
+ * 'tras' if more fall below, 'neutral' if balanced.
+ */
+function chordDirection(v: Voicing): 'frente' | 'tras' | 'neutral' {
+  if (v.rootFret === undefined) return 'neutral';
+  let above = 0, below = 0;
+  for (let s = 0; s < v.frets.length; s++) {
+    if (s === v.rootString) continue; // skip root string itself
+    const f = v.frets[s];
+    if (f <= 0) continue; // open or muted
+    if (f > v.rootFret!) above++;
+    else if (f < v.rootFret!) below++;
+  }
+  if (above > below) return 'frente';
+  if (below > above) return 'tras';
+  return 'neutral';
+}
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 function getRegion(sf: number): number {
@@ -182,38 +215,47 @@ export function searchVoicings(
     });
   }
 
-  // ATTACH ARPEGGIOS using the dynamic shapes dictionary
-  // Key insight: we anchor the shape at the chord's rootString/rootFret,
-  // then pick the shape whose rootString matches the chord's rootString.
+  // ATTACH ARPEGGIOS using the shape dictionary with direction logic
+  // 1. Map quality name → shape key
+  // 2. Filter by rootString match (which string has the fundamental)
+  // 3. Prefer shape direction that matches the chord's note distribution
   const qKey = QUALITY_MAP[parsed.qualityName];
   const shapes: any[] = qKey !== undefined ? (shapeDictRaw as Record<string, any[]>)[qKey] || [] : [];
 
   if (shapes.length > 0) {
     finalVoicings = finalVoicings.map(v => {
-      // The chord tells us WHERE the root is
       if (v.rootString === undefined || v.rootFret === undefined) return v;
 
       const chordRootString = v.rootString;
-      const chordRootFret = v.rootFret;
+      const chordRootFret   = v.rootFret;
+      const dir             = chordDirection(v); // 'frente' | 'tras' | 'neutral'
 
-      // Find shapes whose rootString matches the chord's rootString
-      const candidates = shapes.filter(s => s.rootString === chordRootString);
-      const pool = candidates.length > 0 ? candidates : shapes;
+      // Priority 1: same rootString + matching direction
+      // Priority 2: same rootString + neutral/any direction
+      // Priority 3: any shape with matching direction
+      // Priority 4: any shape
+      const byRoot    = shapes.filter(s => s.rootString === chordRootString);
+      const pool: any[] = [
+        ...byRoot.filter(s => s.direction === dir),
+        ...byRoot.filter(s => s.direction === 'neutral' || s.direction !== dir),
+        ...shapes.filter(s => s.rootString !== chordRootString && s.direction === dir),
+        ...shapes.filter(s => s.rootString !== chordRootString),
+      ];
 
       let bestArp: number[][] | null = null;
       let minDiff = 999;
 
       for (const shape of pool) {
-        // Transpose: the shape's root fret offset becomes chordRootFret
+        // Transpose relative frets to absolute using the chord's rootFret
         const arpeggioFrets: number[][] = shape.relativeFrets.map(
           (arr: number[]) => arr.map((f: number) => f + chordRootFret)
         );
 
-        // Verify no negative frets
+        // Skip if any fret goes negative
         const hasNeg = arpeggioFrets.some((arr: number[]) => arr.some((f: number) => f < 0));
         if (hasNeg) continue;
 
-        // Score: how close are arpeggio frets to chord frets
+        // Score: closeness of arpeggio center to chord center
         let diff = 0;
         for (let s = 0; s < 4; s++) {
           if (arpeggioFrets[s].length === 0) continue;
@@ -225,6 +267,8 @@ export function searchVoicings(
           minDiff = diff;
           bestArp = arpeggioFrets;
         }
+        // Take the first valid match from the priority pool
+        if (bestArp) break;
       }
 
       if (bestArp) return { ...v, arpeggioFrets: bestArp };

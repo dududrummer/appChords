@@ -1,104 +1,116 @@
+/**
+ * build_shape_arpeggios.ts
+ * Reads the new arpejos.json (with explicit fundamental + arpeggio fields)
+ * and generates arpeggio-shapes.json keyed by quality, with rootString and direction.
+ *
+ * JSON string ordering (1=D high, 2=B, 3=G, 4=D low) → our internal 0-indexed (0=D low, 3=D high):
+ *   JSON "1" → idx 3  (D aguda, MIDI 74)
+ *   JSON "2" → idx 2  (B,       MIDI 71)
+ *   JSON "3" → idx 1  (G,       MIDI 67)
+ *   JSON "4" → idx 0  (D grave, MIDI 62)
+ */
 import fs from 'fs';
 import path from 'path';
-import { getNoteIndex, CHORD_FORMULAS } from './src/lib/music-theory';
 
-const TUNING_MIDI = [62, 67, 71, 74]; // D, G, B, D
+const INPUT  = path.resolve('diagramas/Shapes e arpejos/arpejos.json');
+const OUTPUT = path.resolve('src/config/arpeggio-shapes.json');
 
-function getChordNotes(root: string, quality: string): number[] {
-    const rootIdx = getNoteIndex(root);
-    if (!CHORD_FORMULAS[quality]) return [];
-    return CHORD_FORMULAS[quality].intervals.map(interval => (rootIdx + interval) % 12);
+// Map JSON string number → our 0-indexed string
+const STR_MAP: Record<number, number> = { 1: 3, 2: 2, 3: 1, 4: 0 };
+
+// Map quality code in JSON → internal quality key (matches CHORD_FORMULAS)
+const QUALITY_MAP: Record<string, string> = {
+  'X':        '',
+  'Xm':       'm',
+  'X7':       '7',
+  'X7M':      '7M',
+  'Xm7':      'm7',
+  'Xm7M':     'm7M',
+  'Xm7(b5)':  'm7b5',
+  'Xm(b5)':   'm(b5)',
+  'Xº':       'dim',
+  'Xdim':     'dim',
+  'X(b5)':    '(b5)',
+  'X(#5)':    '+',
+  'X7M(#5)':  '7M#5',
+  'X7M(b5)':  '7Mb5',
+};
+
+interface Shape {
+  name: string;
+  rootString: number;      // 0-indexed internal
+  rootFretOnRef: number;   // absolute fret on the reference note used in JSON
+  relativeFrets: number[][];
+  direction: 'frente' | 'tras' | 'neutral';
 }
 
-function processShapes() {
-    const inputPath = path.resolve('diagramas/Shapes e arpejos/arpejos.json');
-    const rawData = JSON.parse(fs.readFileSync(inputPath, 'utf8'));
+function detectDirection(name: string): 'frente' | 'tras' | 'neutral' {
+  const lower = name.toLowerCase();
+  if (lower.includes('frente')) return 'frente';
+  if (lower.includes('tras') || lower.includes('trás')) return 'tras';
+  return 'neutral';
+}
 
-    // Map: Quality -> Array of Shapes
-    // Shape: { name: string, rootString: number, rootFret: number, frets: number[][] }
-    const shapeDictionary: Record<string, any[]> = {};
-    
-    for (const diag of rawData.diagramas) {
-        if (!diag.casas || !diag.tom) continue;
-        
-        let root = diag.tom.split(' ou ')[0].trim();
-        let quality = '';
-        if (diag.tituloFonte.includes('MAIOR') && !diag.tituloFonte.includes('7') && !diag.tituloFonte.includes('(#5)')) quality = '';
-        else if (diag.tituloFonte.includes('MENOR') && !diag.tituloFonte.includes('7') && !diag.tituloFonte.includes('(b5)')) quality = 'm';
-        else if (diag.tituloFonte.includes('X7') && !diag.tituloFonte.includes('M')) quality = '7';
-        else if (diag.tituloFonte.includes('X7M')) quality = '7M';
-        else if (diag.tituloFonte.includes('Xm7(b5)')) quality = 'm7b5';
-        else if (diag.tituloFonte.includes('Xm7')) quality = 'm7';
-        else if (diag.tituloFonte.includes('Xº')) quality = 'dim';
-        else if (diag.tituloFonte.includes('X(#5)')) quality = '+';
-        else if (diag.tituloFonte.includes('Xm(b5)')) quality = 'm(b5)';
-        else if (diag.tituloFonte.includes('Xm7M')) quality = 'm7M';
-        
-        const validNotes = getChordNotes(root, quality);
-        if (validNotes.length === 0) continue;
+function main() {
+  const raw = JSON.parse(fs.readFileSync(INPUT, 'utf8'));
+  const arpeggios: any[] = raw.arpeggios;
 
-        const resolvedFrets: number[][] = [[], [], [], []];
-        let usedStrings = new Set<number>();
-        
-        for (const fretsArray of diag.casas) {
-            let possibleStrings = [];
-            for (let s = 0; s < 4; s++) {
-                if (usedStrings.has(s)) continue;
-                let allValid = true;
-                for (const fret of fretsArray) {
-                    const pitch = TUNING_MIDI[s] + fret;
-                    if (!validNotes.includes(pitch % 12)) {
-                        allValid = false; break;
-                    }
-                }
-                if (allValid) possibleStrings.push(s);
-            }
-            if (possibleStrings.length > 0) {
-                resolvedFrets[possibleStrings[0]] = fretsArray;
-                usedStrings.add(possibleStrings[0]);
-            }
-        }
+  // Result: quality → array of Shape
+  const result: Record<string, Shape[]> = {};
 
-        // Find the ROOT note in these frets to anchor the shape
-        const rootNoteClass = getNoteIndex(root);
-        let rootString = -1;
-        let rootFret = -1;
-
-        // Try to find the root note that is visually the "bass" of the shape
-        // Usually, the lowest pitched root note is the anchor.
-        for (let s = 0; s < 4; s++) {
-            for (const f of resolvedFrets[s]) {
-                if ((TUNING_MIDI[s] + f) % 12 === rootNoteClass) {
-                    if (rootString === -1 || TUNING_MIDI[s] + f < TUNING_MIDI[rootString] + rootFret) {
-                        rootString = s;
-                        rootFret = f;
-                    }
-                }
-            }
-        }
-        
-        // If we couldn't find the root in the arpeggio, maybe it's implied. 
-        // We will just calculate relative offsets from the first fret found.
-        if (rootString === -1) {
-            rootString = 0;
-            rootFret = resolvedFrets.flat().filter(f => f >= 0)[0] || 0;
-        }
-
-        // Store relative shape
-        const relativeFrets = resolvedFrets.map(arr => arr.map(f => f - rootFret));
-
-        if (!shapeDictionary[quality]) shapeDictionary[quality] = [];
-        
-        shapeDictionary[quality].push({
-            name: diag.shape || `Shape_${quality}_${rootString}`,
-            rootString,
-            relativeFrets,
-            originalRoot: root
-        });
+  for (const entry of arpeggios) {
+    const qualityKey = QUALITY_MAP[entry.quality];
+    if (qualityKey === undefined) {
+      console.warn(`  [skip] Unknown quality: ${entry.quality} in ${entry.name}`);
+      continue;
     }
 
-    fs.writeFileSync('./src/config/arpeggio-shapes.json', JSON.stringify(shapeDictionary, null, 2));
-    console.log("Shapes extracted and saved!");
+    const fundJsonStr: number = entry.fundamental?.string;
+    const fundFret: number    = entry.fundamental?.fret;
+    if (fundJsonStr === undefined || fundFret === undefined) {
+      console.warn(`  [skip] Missing fundamental in ${entry.name}`);
+      continue;
+    }
+
+    const rootString = STR_MAP[fundJsonStr];
+    if (rootString === undefined) {
+      console.warn(`  [skip] Bad string number ${fundJsonStr} in ${entry.name}`);
+      continue;
+    }
+
+    // Build 4-element array of fret-arrays (our 0-indexed)
+    const absoluteFrets: number[][] = [[], [], [], []];
+    const arpObj: Record<string, number[]> = entry.arpeggio || {};
+    for (const [jsonStrStr, frets] of Object.entries(arpObj)) {
+      const jsonStr = parseInt(jsonStrStr, 10);
+      const idx = STR_MAP[jsonStr];
+      if (idx !== undefined && Array.isArray(frets)) {
+        absoluteFrets[idx] = frets as number[];
+      }
+    }
+
+    // Convert to relative frets (relative to the fundamental fret)
+    const relativeFrets = absoluteFrets.map(arr => arr.map(f => f - fundFret));
+
+    const direction = detectDirection(entry.name);
+
+    const shape: Shape = {
+      name: entry.name,
+      rootString,
+      rootFretOnRef: fundFret,
+      relativeFrets,
+      direction,
+    };
+
+    if (!result[qualityKey]) result[qualityKey] = [];
+    result[qualityKey].push(shape);
+  }
+
+  const counts = Object.entries(result).map(([k, v]) => `${k || 'major'}(${v.length})`).join(', ');
+  console.log(`Shapes built: ${counts}`);
+
+  fs.writeFileSync(OUTPUT, JSON.stringify(result, null, 2), 'utf8');
+  console.log(`Saved → ${OUTPUT}`);
 }
 
-processShapes();
+main();
