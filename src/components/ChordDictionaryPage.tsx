@@ -150,8 +150,9 @@ export function ChordDictionaryPage({
                   className="rounded-lg border-2 border-border bg-white dark:bg-zinc-900 hover:border-primary/50 transition-all hover:scale-105"
                   title={`Traste ${v.startingFret}: ${v.frets.map(f => f === -1 ? 'X' : f).join('-')}`}
                 >
+                  {/* Strip arpeggioFrets: chord dictionary shows only the chord shape + root in red */}
                   <VoicingMiniSvg
-                    voicing={v}
+                    voicing={{ ...v, arpeggioFrets: undefined }}
                     stringCount={activeTuning.length}
                     markerColor={markerColor}
                     primaryColor={primaryColor}
