@@ -18,28 +18,22 @@ const CHORD_DICT: Record<string, DictType> = {
   cavaquinho: chordDictRaw as DictType,
 };
 
-// Maps parsed.qualityName (Portuguese) → quality key in arpeggio-shapes.json
+// Maps parsed.qualityName (Portuguese, as returned by parseChord) → quality key in arpeggio-shapes.json
 const QUALITY_MAP: Record<string, string> = {
-  // Major variants
-  'Maior':                    '',
-  'Maior com b5':             '(b5)',
-  'Maior com 5ª Aumentada':   '+',
-  // Minor variants
-  'Menor':                    'm',
-  'Menor com b5':             'm(b5)',
-  // Seventh variants (dominant)
-  'Dominante 7':              '7',
-  // Major seventh variants
-  'Maior com 7ª':             '7M',
-  'Maior 7 com 5# Aumentada': '7M#5',
-  'Maior 7 com 5b Diminuta':  '7Mb5',
-  // Minor seventh variants
-  'Menor com 7ª':             'm7',
-  'Menor com 7ª Maior':       'm7M',
-  'Meio Diminuto':            'm7b5',
-  // Diminished
-  'Diminuto':                 'dim',
-  'Aumentado':                '+',
+  'Maior':           '',
+  'Maior b5':        '(b5)',
+  'Maior #5':        '+',
+  'Aumentado':       '+',
+  'Menor':           'm',
+  'Menor b5':        'm(b5)',
+  'Dominante 7':     '7',
+  'Maior 7':         '7M',
+  'Maior 7M #5':     '7M#5',
+  'Maior 7M b5':     '7Mb5',
+  'Menor 7':         'm7',
+  'Menor com Maior 7': 'm7M',
+  'Menor 7b5 (ø)':  'm7b5',
+  'Diminuto':        'dim',
 };
 
 /**
@@ -224,50 +218,46 @@ export function searchVoicings(
 
   if (shapes.length > 0) {
     finalVoicings = finalVoicings.map(v => {
-      if (v.rootString === undefined || v.rootFret === undefined) return v;
+      const dir = chordDirection(v);
 
+      // Resolve root anchor: prefer voicing's detected root, else estimate from startingFret
       const chordRootString = v.rootString;
-      const chordRootFret   = v.rootFret;
-      const dir             = chordDirection(v); // 'frente' | 'tras' | 'neutral'
+      const chordRootFret   = v.rootFret ?? v.startingFret;
 
-      // Priority 1: same rootString + matching direction
-      // Priority 2: same rootString + neutral/any direction
-      // Priority 3: any shape with matching direction
-      // Priority 4: any shape
-      const byRoot    = shapes.filter(s => s.rootString === chordRootString);
-      const pool: any[] = [
-        ...byRoot.filter(s => s.direction === dir),
-        ...byRoot.filter(s => s.direction === 'neutral' || s.direction !== dir),
-        ...shapes.filter(s => s.rootString !== chordRootString && s.direction === dir),
-        ...shapes.filter(s => s.rootString !== chordRootString),
-      ];
+      let pool: any[];
+      if (chordRootString !== undefined) {
+        // Anchored by root string + direction priority
+        const byRoot = shapes.filter(s => s.rootString === chordRootString);
+        pool = [
+          ...byRoot.filter(s => s.direction === dir),
+          ...byRoot.filter(s => s.direction !== dir),
+          ...shapes.filter(s => s.rootString !== chordRootString && s.direction === dir),
+          ...shapes.filter(s => s.rootString !== chordRootString),
+        ];
+      } else {
+        // No root found: fallback — best proximity by starting fret
+        pool = [
+          ...shapes.filter(s => s.direction === dir),
+          ...shapes,
+        ];
+      }
 
       let bestArp: number[][] | null = null;
       let minDiff = 999;
 
       for (const shape of pool) {
-        // Transpose relative frets to absolute using the chord's rootFret
         const arpeggioFrets: number[][] = shape.relativeFrets.map(
           (arr: number[]) => arr.map((f: number) => f + chordRootFret)
         );
-
-        // Skip if any fret goes negative
         const hasNeg = arpeggioFrets.some((arr: number[]) => arr.some((f: number) => f < 0));
         if (hasNeg) continue;
 
-        // Score: closeness of arpeggio center to chord center
         let diff = 0;
         for (let s = 0; s < 4; s++) {
           if (arpeggioFrets[s].length === 0) continue;
-          const arpMin = Math.min(...arpeggioFrets[s]);
-          diff += Math.abs(v.startingFret - arpMin);
+          diff += Math.abs(v.startingFret - Math.min(...arpeggioFrets[s]));
         }
-
-        if (diff < minDiff) {
-          minDiff = diff;
-          bestArp = arpeggioFrets;
-        }
-        // Take the first valid match from the priority pool
+        if (diff < minDiff) { minDiff = diff; bestArp = arpeggioFrets; }
         if (bestArp) break;
       }
 
