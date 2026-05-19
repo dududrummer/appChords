@@ -12,6 +12,7 @@ import { parseChord, INSTRUMENT_PRESETS } from '@/lib/music-theory';
 import { searchVoicings } from '@/lib/arpeggio-search';
 import type { Voicing } from '@/lib/chord-finder';
 import { VoicingMiniSvg } from './VoicingMiniSvg';
+import { DiagramLegend } from './DiagramLegend';
 import { CreationSavePanel } from './CreationSavePanel';
 import type { SavedCreation } from '@/lib/creations';
 import { useAuth } from '@/lib/auth-context';
@@ -138,11 +139,14 @@ export function ArpeggioDictionaryPage({
 
         {/* Voicing grid */}
         {voicings.length > 0 && (
-          <div className="space-y-2">
-            <Label className="text-xs text-muted-foreground">
-              Diagramas de posições disponíveis
-            </Label>
-            <div className="flex flex-wrap gap-4 pt-2">
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <Label className="text-xs text-muted-foreground">
+                Diagramas de posições disponíveis
+              </Label>
+              <DiagramLegend showArpeggio={true} />
+            </div>
+            <div className="flex flex-wrap gap-4 pt-1">
               {voicings.map((v, i) => (
                 <div
                   key={i}

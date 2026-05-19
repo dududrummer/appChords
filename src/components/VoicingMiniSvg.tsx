@@ -86,9 +86,12 @@ export function VoicingMiniSvg({
         if (fret === -1) return (
           <text key={s} x={sx(s)} y={mt - 4} textAnchor="middle" fill={primaryColor} fontSize={7} fontWeight="bold">✕</text>
         );
-        if (fret === 0) return (
-          <circle key={s} cx={sx(s)} cy={mt - 4} r={2.5} fill="none" stroke={primaryColor} strokeWidth={0.8} />
-        );
+        if (fret === 0) {
+          const isRoot = s === voicing.rootString && voicing.rootFret === 0;
+          return isRoot
+            ? <circle key={s} cx={sx(s)} cy={mt - 4} r={3} fill={rootColor} />
+            : <circle key={s} cx={sx(s)} cy={mt - 4} r={2.5} fill="none" stroke={primaryColor} strokeWidth={0.8} />;
+        }
         const rel = fret - sf + 1;
         if (rel < 1 || rel > FRETS) return null;
         const isRoot = s === voicing.rootString && fret === voicing.rootFret;
